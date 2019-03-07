@@ -1,0 +1,32 @@
+{
+    "name": "thegreenwebfoundation/greencheck",
+    "type": "library",
+    "version":"1.0",
+    "description": "The Green Web Foundation Greencheck package",
+    "homepage": "http://www.thegreenwebfoundation.org",
+    "authors": [
+        {"name": "Arend-Jan Tetteroo", "email": "aj@arendjantetteroo.nl"}
+    ],
+     "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.zendframework.com/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zend-validator": "~2.0",
+        "doctrine/orm": "~2.3",
+        "symfony/validator": "~2.3|3.*|4.*",
+        "symfony/yaml": "~2.3|3.*|4.*",
+        "gedmo/doctrine-extensions": "~2.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "doctrine/data-fixtures": "dev-master"
+    },
+    "minimum-stability" : "stable",
+    "autoload": {
+        "psr-4": { "TGWF\\Greencheck\\": "src/" }
+    }
+}

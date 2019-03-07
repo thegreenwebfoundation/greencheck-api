@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The Green Web Foundation Api Service - Welcome!</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" type="text/css">
+  <link rel="stylesheet" href="/roots.css" type="text/css">
+  <link rel="stylesheet" href="/tgwf.css" type="text/css">
+  <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a href="#" class="brand"><span class='Grey'>The <span class='Green'>Green Web</span> Foundation</span> Api Service</a>
+      <ul class="nav">
+        <li class="active"><a href="http://adminnew.thegreenwebfoundation.org/">Home</a></li>
+        <li><a href="http://www.thegreenwebfoundation.org/" target='_blank'>About</a></li>
+        <li><a href="mailto:support@thegreenwebfoundation.org">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <h1>The Green Web Foundation Api Service</h1>
+
+  <h2>Currently available services</h2>
+  <ul>
+    <li>
+      Greencheck api service: With the Green Web Foundation greencheck api service it is possible to check if a website is green against our Green Web database.
+    </li>
+  </ul>
+
+  <div class='well'>
+    <h2>Example</h2>
+    <form id="greencheck" enctype="application/x-www-form-urlencoded" action="" method="post"><dl class="zend_form">
+        <dt id="url-label"><label for="url" class="required">Website</label></dt>
+        <dd id="url-element">
+          <input type="text" name="url" id="url" value="" size="50"></dd>
+        <dt id="submit-label">&nbsp;</dt><dd id="submit-element">
+          <input type="submit" name="submit" id="submit" value="Check"></dd></dl>
+    </form>
+
+    <!--<img src="http://127.0.0.1:8000/greencheckimage/www.nu.nl">-->
+    <h2>Results</h2>
+    <div id='output'><p>Fill in a website and click the check button to check it</p></div>
+  </div>
+
+  <h2>Usage</h2>
+  <p>The greencheck api service can be used by calling the /greencheck/{url} script at this url. <a href='http://api.thegreenwebfoundation.org/greencheck/'>http://api.thegreenwebfoundation.org/greencheck/{url}</a>
+  </p><p>
+    The greencheck api service expects only one parameter : "url".
+
+    This should be the url of a website without the "http://" part, so just "www.example.com".
+  <pre>
+http://api.thegreenwebfoundation.org/greencheck/www.example.com
+</pre>
+
+  This url parameter is checked and the result is returned to the calling script.
+
+  The result contains a couple of fields:
+  </p>
+  <ul>
+    <li>If the url was not valid, then only an error field is returned</li>
+    <li>For a correct url, both the url and the green field are returned. Green is either true or false.
+      For websites that are hosted on a known hosting provider
+      we return a "hostedby" and "hostedbywebsite" with either the Name and website of the hosting provider.</li>
+  </ul>
+
+  <p>Looking up "www.thegreenwebfoundation.org" with the greencheck api</p>
+  <pre>
+  http://api.thegreenwebfoundation.org/greencheck/www.thegreenwebfoundation.org
+</pre>
+  <p>returns the following json result</p>
+  <pre>{
+"green":true,
+"url":"www.thegreenwebfoundation.org",
+"hostedby":"LEASEWEB",
+"hostedbywebsite":"www.leaseweb.com"
+}
+</pre>
+
+  <h2>Jquery example</h2>
+  <p>View the source of this webpage to see how you can call the greencheck api service by using jquery</p>
+
+  <h2>The Green Web add-ons</h2>
+  There are add-ons that use this api, available at The Green Web Foundation webiste, called <a href='http://www.thegreenwebfoundation.org/add-ons'>The Green Web</a>.
+  It shows you for every website you visit if it is green, and if so the hosting party.
+
+  <h2>Widgets</h2>
+  In the future, we will add some widgets to this page, so that you can easily put a greencheck widget on your site,
+  without the need to code it yourself
+  <footer>
+    <br /><br />
+    <p style="text-align:center;">Hosted by <a href='http://www.leaseweb.com'>LeaseWeb</a></p>
+    <p style="text-align:center;"><a href='http://www.thegreenwebfoundation.org'>&copy; The Green Web Foundation 2011-2019</a></p>
+  </footer>
+</div>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<script>
+    $(function() {
+        $('#greencheck').submit(function() {
+            var url = $('#url').val();
+            $.getJSON('/greencheck/'+ url, {} , function(data) {
+                var response = data;
+                if(response.error){
+                    $('#output').html('<p class="alert alert-error">' + response.error +'</p>');
+                    return;
+                }
+                if(response.green == true) {
+                    var output = '<div class="alert alert-success">' + response.url + ' was checked and found';
+                    output = output +  ' green';
+                } else {
+                    var output = '<div class="alert alert-warning">' + response.url + ' was checked and found';
+                    output = output + ' not green';
+                }
+                if(response.hostedby) {
+                    output = output + '<br />This website is hosted by ' + "<a href='http://" +
+                        response.hostedbywebsite + "'>" + response.hostedby + '</a>';
+                }
+                output = output + "<br />";
+
+                $('#output').append(output);
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

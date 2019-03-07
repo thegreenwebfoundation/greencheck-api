@@ -1,0 +1,17 @@
+# Override these values for debugging when developing
+parameters:
+  greencheck:
+    mock:             true # Set to true to mock the result if you just want to test the queue without setting up a database
+    greencheck:
+      cachetime:        7200 # Standard cachetime is 2 hours
+      cache:            true
+      cachetype:        redis
+      result:
+        cachetime:    3600 # Result cached for one hour
+        cache:        true
+      hostbynamelookups:
+        cachetime:     86400 # Hostname lookups cached for 1 day
+        cache:         true
+      aslookups:
+        cachetime:     86400 # As lookups cached for one day
+        cache:         true

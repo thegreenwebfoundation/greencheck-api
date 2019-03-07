@@ -1,0 +1,4 @@
+symfony_rollbar:
+  enable: true
+  rollbar:
+    access_token: '%env(ROLLBAR_ACCESS_TOKEN)%'

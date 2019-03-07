@@ -1,0 +1,15 @@
+liuggio_stats_d_client:
+    connection:
+        host: '%env(STATS_D_HOST)%'
+        port: '%env(STATS_D_PORT)%'
+        protocol: '%env(STATS_D_PROTOCOL)%'
+        reduce_packet: true
+        fail_silently: true
+    enable_collector: false
+    monolog:
+        enable: false
+        prefix: 'log'
+        formatter:
+            context_logging: true # if you want additional packets for context, default is false.
+            extra_logging: true   # if you want additional packets for extra, default is false.
+            words: 2              # the number of the word in the stats key, default is 2.

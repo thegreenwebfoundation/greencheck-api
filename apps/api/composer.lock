@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d3ed32b8466c1d85540b7ec1d6cda3b8",
+    "content-hash": "2cc0761bb8f19525db7004f2c70dd74e",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -4623,12 +4623,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-stdlib.git",
-                "reference": "04e09d7f961b2271b0e1cbbb6f5f53ad23cf8562"
+                "reference": "66536006722aff9e62d1b331025089b7ec71c065"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packages.zendframework.com/composer/zendframework-zend-stdlib-3.2.1-90faf1.zip",
-                "reference": "04e09d7f961b2271b0e1cbbb6f5f53ad23cf8562",
+                "url": "https://api.github.com/repos/zendframework/zend-stdlib/zipball/66536006722aff9e62d1b331025089b7ec71c065",
+                "reference": "66536006722aff9e62d1b331025089b7ec71c065",
                 "shasum": "36f654611fab0d6fe1ea1c72184a43f9810ce7c8"
             },
             "require": {
@@ -4700,12 +4700,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-validator.git",
-                "reference": "8595c1b101bcf61b739b758cab21e5d108d0d6b9"
+                "reference": "64c33668e5fa2d39c6289a878f927ea2b0850c30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packages.zendframework.com/composer/zendframework-zend-validator-2.12.0-6260b3.zip",
-                "reference": "8595c1b101bcf61b739b758cab21e5d108d0d6b9",
+                "url": "https://api.github.com/repos/zendframework/zend-validator/zipball/64c33668e5fa2d39c6289a878f927ea2b0850c30",
+                "reference": "64c33668e5fa2d39c6289a878f927ea2b0850c30",
                 "shasum": "d7375f9f5b6b2d31435f2f788511606332887461"
             },
             "require": {

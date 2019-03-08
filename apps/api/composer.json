@@ -22,10 +22,6 @@
         {
             "type": "path",
             "url": "../../packages/greencheck"
-        },
-        {
-             "type": "composer",
-             "url": "https://packages.zendframework.com/"
         }
     ],
     "minimum-stability" : "stable",

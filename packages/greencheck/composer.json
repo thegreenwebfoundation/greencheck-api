@@ -7,12 +7,6 @@
     "authors": [
         {"name": "Arend-Jan Tetteroo", "email": "aj@arendjantetteroo.nl"}
     ],
-     "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packages.zendframework.com/"
-        }
-    ],
     "require": {
         "php": ">=5.3.3",
         "zendframework/zend-validator": "~2.0",

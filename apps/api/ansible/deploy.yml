@@ -6,7 +6,7 @@
   become: no
 
   vars:
-    project_root: "/home/deploy/api.thegreenwebfoundation.org"
+    project_root: "/var/www/api.thegreenwebfoundation.org"
     project_git_repo: "git@github.com:thegreenwebfoundation/thegreenwebfoundation.git"
     project_deploy_strategy: git
     project_version: "master"
@@ -40,7 +40,7 @@
     project_has_composer: yes
 
     project_post_build_commands:
-      - "mkdir -p apps/api/var/cache"
+      - "mkdir -p apps/api/var/cache/prod"
       - "mkdir -p apps/api/var/log"
       - "chmod 777 -R apps/api/var"
 

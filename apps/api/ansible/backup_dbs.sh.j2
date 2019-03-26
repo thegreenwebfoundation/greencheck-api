@@ -1,0 +1,23 @@
+mysqldump --quick --single-transaction -u backup greencheck \
+    --ignore-table=greencheck.greencheck \
+    --ignore-table=greencheck.greencheck_2014 \
+    --ignore-table=greencheck.greencheck_2015 \
+    --ignore-table=greencheck.greencheck_2013 \
+    --ignore-table=greencheck.greencheck_2012 \
+    | gzip > dump.small_tables.sql.gz
+
+
+# scp local file to tilaa box
+scp dump.small_tables.sql.gz {{ backup_user}}@{{ backup_host }}
+rm dump.small_tables.sql.gz
+
+# then repeat for each year
+for YEAR_TABLE in greencheck_2015 greencheck_2014 greencheck_2013 greencheck_2012 
+do
+    mysqldump --quick --single-transaction -u backup greencheck $YEAR_TABLE | gzip > dump.$YEAR_TABLE.sql.gz
+    scp dump.$YEAR_TABLE.sql.gz {{ backup_user}}@{{ backup_host }}
+    rm dump.$YEAR_TABLE.sql.gz
+done 
+
+# then finally, the monster
+# mysql -u backup < backup.greencheck.sql

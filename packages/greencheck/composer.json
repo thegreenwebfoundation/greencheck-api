@@ -2,6 +2,7 @@
     "name": "thegreenwebfoundation/greencheck",
     "type": "library",
     "version":"1.0",
+    "license": "Apache-2.0",
     "description": "The Green Web Foundation Greencheck package",
     "homepage": "http://www.thegreenwebfoundation.org",
     "authors": [

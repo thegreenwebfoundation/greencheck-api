@@ -1,23 +1,31 @@
+backup_and_shift () {
+    mysqldump --quick --single-transaction -u backup greencheck $1 | gzip > dumps/$1.sql.gz
+    scp dumps/$1.sql.gz {{ backup_user }}@{{ backup_host }}
+}
+
+# set up our datbase dump directory
+mkdir -p ./dumps
+
+echo "dumping greencheck tables 2012 through 2015 to dumps dir"
 mysqldump --quick --single-transaction -u backup greencheck \
     --ignore-table=greencheck.greencheck \
+    --ignore-table=greencheck.greencheck_2012 \
+    --ignore-table=greencheck.greencheck_2013 \
     --ignore-table=greencheck.greencheck_2014 \
     --ignore-table=greencheck.greencheck_2015 \
-    --ignore-table=greencheck.greencheck_2013 \
-    --ignore-table=greencheck.greencheck_2012 \
-    | gzip > dump.small_tables.sql.gz
+    | gzip > dumps/small_tables.sql.gz
 
 
-# scp local file to tilaa box
-scp dump.small_tables.sql.gz {{ backup_user}}@{{ backup_host }}
-rm dump.small_tables.sql.gz
+# scp local file to the tilaa box
+scp dumps/small_tables.sql.gz {{ backup_user}}@{{ backup_host }}
 
-# then repeat for each year
-for YEAR_TABLE in greencheck_2015 greencheck_2014 greencheck_2013 greencheck_2012 
+# then call backup_and_shift for each year
+for YEAR_TABLE in greencheck_2015 greencheck_2014 greencheck_2013 greencheck_2012 greencheck
 do
-    mysqldump --quick --single-transaction -u backup greencheck $YEAR_TABLE | gzip > dump.$YEAR_TABLE.sql.gz
-    scp dump.$YEAR_TABLE.sql.gz {{ backup_user}}@{{ backup_host }}
-    rm dump.$YEAR_TABLE.sql.gz
-done 
+    backup_and_shift $YEAR_TABLE
+done
 
-# then finally, the monster
-# mysql -u backup < backup.greencheck.sql
+rsync -vazuk dumps/ {{ backup_user}}@{{ backup_host }}:/backup/mysql/dumps/
+
+# remove all the files we've just copied to our backup destination
+rm -rf ./dumps

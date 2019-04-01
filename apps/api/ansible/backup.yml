@@ -7,6 +7,8 @@
 
   vars:
     db_pass: "{{ lookup('env','MYSQL_PASSWORD') }}"
+    backup_user: "{{ lookup('env','BACKUP_USER') }}"
+    backup_host: "{{ lookup('env','BACKUP_HOST') }}"
 
   tasks:
   - name: add the .my.cnf file to access without needing a password
@@ -14,13 +16,8 @@
       src: my.cnf.j2
       dest: /home/deploy/.my.cnf
 
-    
   - name: add the bash script to dump the databases
     template:
       src: backup_dbs.sh.j2
       dest: /home/deploy/backup_dbs.sh
       mode: "u=rwx,g=r,o=r"
-
-
-  - name: dump the small databases (all apart from the greencheck ones)
-    command: bash /home/deploy/backup_dbs.sh

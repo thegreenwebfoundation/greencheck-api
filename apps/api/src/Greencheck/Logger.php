@@ -31,6 +31,12 @@ class Logger
      */
     private $logger;
 
+    /**
+     * Logger constructor.
+     * @param EntityManagerInterface $entityManager
+     * @param Client $redis
+     * @param LoggerInterface $logger
+     */
     public function __construct(
         EntityManagerInterface $entityManager,
         Client $redis,
@@ -74,7 +80,7 @@ class Logger
         } else {
             $ip = 0;
         }
-        $ip = $this->gcip->inet_ptod($ip);
+        $ip = GreencheckIp::convertIpPresentationToDecimal($ip);
 
         $gc = new Greencheck();
         $gc->setIdGreencheck($match['id']);
@@ -121,8 +127,6 @@ class Logger
 
         $store = new RedisRuleStoreSLD($this->redis);
         $manageSLD = new ManageSLD($store);
-
-        $this->gcip = new GreencheckIp();
 
         $meta = $store->getMeta();
         $now = time();

@@ -66,18 +66,19 @@ class Checker
     }
 
     /**
-     * Get the worload from the job and run the greencheck.
+     * Run the greencheck on the workload.
      *
-     * @param object $job The job to handle
+     * @param array $workload The job to handle
      *
-     * @return string Serialized string of result
+     * @return array
      */
     public function greencheck($workload)
     {
         $time_start = microtime(true);
 
+        // Make sure we only pass UTF8 urls down to the checker
+        $url = mb_convert_encoding($workload['url'], 'UTF-8', 'UTF-8');
         $key = $workload['key'];
-        $url = $workload['url'];
         $ip = $workload['ip'];
         $blind = false;
         if (isset($workload['blind'])) {
@@ -137,7 +138,7 @@ class Checker
             }
 
             $result = ['green' => $resultobject->isGreen(),
-                'url' => $resultobject->getCheckedUrl(),
+                'url' => mb_convert_encoding($resultobject->getCheckedUrl(), 'UTF-8', 'UTF-8'),
                 'data' => $resultobject->isData(), ];
             if ('85.17.167.138' == $resultobject->getIpAddress()) {
                 $result['icon'] = 'green';

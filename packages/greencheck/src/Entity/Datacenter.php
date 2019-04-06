@@ -2,6 +2,9 @@
 
 namespace TGWF\Greencheck\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 /**
  * TGWF\Greencheck\Entity\Datacenter.
  */
@@ -53,12 +56,12 @@ class Datacenter
     private $greengrid;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
      */
     private $hostingproviders;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
      */
     private $certificates;
 
@@ -67,8 +70,8 @@ class Datacenter
      */
     public function __construct()
     {
-        $this->hostingproviders = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->certificates = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->hostingproviders = new ArrayCollection();
+        $this->certificates = new ArrayCollection();
     }
 
     /**
@@ -276,11 +279,11 @@ class Datacenter
     /**
      * Add hostingproviders.
      *
-     * @param TGWF\Greencheck\Entity\DatacenterHostingprovider $hostingproviders
+     * @param DatacenterHostingprovider $hostingproviders
      *
      * @return Datacenter
      */
-    public function addHostingprovider(\TGWF\Greencheck\Entity\DatacenterHostingprovider $hostingproviders)
+    public function addHostingprovider(DatacenterHostingprovider $hostingproviders)
     {
         $this->hostingproviders[] = $hostingproviders;
 
@@ -290,9 +293,9 @@ class Datacenter
     /**
      * Remove hostingproviders.
      *
-     * @param TGWF\Greencheck\Entity\DatacenterHostingprovider $hostingproviders
+     * @param DatacenterHostingprovider $hostingproviders
      */
-    public function removeHostingprovider(\TGWF\Greencheck\Entity\DatacenterHostingprovider $hostingproviders)
+    public function removeHostingprovider(DatacenterHostingprovider $hostingproviders)
     {
         $this->hostingproviders->removeElement($hostingproviders);
     }
@@ -300,7 +303,7 @@ class Datacenter
     /**
      * Get hostingproviders.
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getHostingproviders()
     {
@@ -310,11 +313,11 @@ class Datacenter
     /**
      * Add certificates.
      *
-     * @param TGWF\Greencheck\Entity\DatacenterCertificate $certificates
+     * @param DatacenterCertificate $certificates
      *
      * @return Datacenter
      */
-    public function addCertificate(\TGWF\Greencheck\Entity\DatacenterCertificate $certificates)
+    public function addCertificate(DatacenterCertificate $certificates)
     {
         $this->certificates[] = $certificates;
 
@@ -324,9 +327,9 @@ class Datacenter
     /**
      * Remove certificates.
      *
-     * @param TGWF\Greencheck\Entity\DatacenterCertificate $certificates
+     * @param DatacenterCertificate $certificates
      */
-    public function removeCertificate(\TGWF\Greencheck\Entity\DatacenterCertificate $certificates)
+    public function removeCertificate(DatacenterCertificate $certificates)
     {
         $this->certificates->removeElement($certificates);
     }
@@ -334,7 +337,7 @@ class Datacenter
     /**
      * Get certificates.
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getCertificates()
     {

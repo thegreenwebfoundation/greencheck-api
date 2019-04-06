@@ -16,101 +16,110 @@ class SitecheckResult
     /**
      * @var string url, the checked url
      */
-    protected $_checkedUrl = null;
+    private $checkedUrl;
 
     /**
-     * @var datetime date, the date the url was checked
+     * @var \DateTime, the date the url was checked
      */
-    protected $_checkedAt = null;
+    private $checkedAt;
 
     /**
      * Is the checked url green or not.
      *
      * @var bool
      */
-    protected $_green = false;
+    private $green = false;
 
     /**
      * Is data available for the domain of the checked url.
      *
      * @var bool
      */
-    protected $_data = true;
+    private $data = true;
 
     /**
      * Is data available for the domain of the checked url.
      *
      * @var bool
      */
-    protected $_cached = false;
+    private $cached = false;
 
     /**
      * Hosting provider id, null if no green hoster.
      *
      * @var int
      */
-    protected $_idHostingProvider = null;
+    private $idHostingProvider = null;
 
     /**
      * Hosting provider.
      *
-     * @var Zend_Db_Table_Row
+     * @var Hostingprovider
      */
-    protected $_HostingProvider = null;
+    private $hostingProvider = null;
 
     /**
      * Is this result powered by a green energy provider.
      *
-     * @var type
+     * @var bool
      */
-    protected $_poweredby = false;
+    private $poweredby = false;
 
     /**
      * Energy provider.
      *
-     * @var Zend_Db_Table_Row
+     * @todo remove?
+     *
+     * @var
      */
-    protected $_EnergyProvider = null;
+    private $energyProvider;
 
     /**
      * Organisation name for energy output.
      *
      * @var string
      */
-    protected $_organisation = null;
+    private $organisation;
 
     /**
      * Ip belonging to the checked url.
      *
-     * @var string
+     * @var array
      */
-    protected $_ip = null;
+    private $ip;
 
     /**
      * Array describing how the result was matched.
      *
      * @var array
      */
-    protected $_matchtype = [];
+    private $matchtype = [];
+
+    private $calledfrom;
 
     /**
      * Setup the sitecheck result object.
      *
      * @param string $url
+     * @param $ip
+     * @throws \Exception
      */
     public function __construct($url, $ip)
     {
-        $this->_checkedUrl = $url;
-        $this->_ip = $ip;
-        $this->_checkedAt = new \DateTime('now');
+        $this->checkedUrl = $url;
+        $this->ip = $ip;
+        $this->checkedAt = new \DateTime('now');
     }
 
     /**
      * Rgister on what was matched.
+     * @param $id
+     * @param $type
+     * @param string $identifier
      */
     public function setMatch($id, $type, $identifier = '')
     {
-        $this->_matchtype = ['id' => $id, 'type' => $type, 'identifier' => $identifier];
+        $this->matchtype = ['id' => $id, 'type' => $type, 'identifier' => $identifier];
     }
 
     /**
@@ -118,7 +127,7 @@ class SitecheckResult
      */
     public function getMatch()
     {
-        return $this->_matchtype;
+        return $this->matchtype;
     }
 
     /**
@@ -128,7 +137,7 @@ class SitecheckResult
      */
     public function isGreen()
     {
-        return $this->_green;
+        return $this->green;
     }
 
     /**
@@ -138,7 +147,7 @@ class SitecheckResult
      */
     public function getCheckedUrl()
     {
-        return $this->_checkedUrl;
+        return $this->checkedUrl;
     }
 
     /**
@@ -148,7 +157,7 @@ class SitecheckResult
      */
     public function getCheckedAt()
     {
-        return $this->_checkedAt;
+        return $this->checkedAt;
     }
 
     /**
@@ -158,7 +167,7 @@ class SitecheckResult
      */
     public function setCheckedAt($date)
     {
-        $this->_checkedAt = $date;
+        $this->checkedAt = $date;
     }
 
     /**
@@ -168,7 +177,7 @@ class SitecheckResult
      */
     public function setGreen($green)
     {
-        $this->_green = $green;
+        $this->green = $green;
     }
 
     /**
@@ -176,7 +185,7 @@ class SitecheckResult
      */
     public function isData()
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
@@ -186,7 +195,7 @@ class SitecheckResult
      */
     public function setData($data)
     {
-        $this->_data = $data;
+        $this->data = $data;
     }
 
     /**
@@ -194,7 +203,7 @@ class SitecheckResult
      */
     public function isCached()
     {
-        return $this->_cached;
+        return $this->cached;
     }
 
     /**
@@ -204,7 +213,7 @@ class SitecheckResult
      */
     public function setCached($cached)
     {
-        $this->_cached = $cached;
+        $this->cached = $cached;
     }
 
     /**
@@ -214,7 +223,7 @@ class SitecheckResult
      */
     public function setHostingProviderId($id)
     {
-        $this->_idHostingProvider = $id;
+        $this->idHostingProvider = $id;
     }
 
     /**
@@ -224,7 +233,7 @@ class SitecheckResult
      */
     public function getHostingProviderId()
     {
-        return $this->_idHostingProvider;
+        return $this->idHostingProvider;
     }
 
     /**
@@ -234,11 +243,7 @@ class SitecheckResult
      */
     public function isHostingProvider()
     {
-        if (!is_null($this->_idHostingProvider)) {
-            return true;
-        }
-
-        return false;
+        return $this->idHostingProvider !== null;
     }
 
     /**
@@ -248,7 +253,7 @@ class SitecheckResult
      */
     public function setHostingProvider($hp)
     {
-        $this->_HostingProvider = $hp;
+        $this->hostingProvider = $hp;
     }
 
     /**
@@ -258,7 +263,7 @@ class SitecheckResult
      */
     public function getHostingProvider()
     {
-        return $this->_HostingProvider;
+        return $this->hostingProvider;
     }
 
     /**
@@ -268,11 +273,11 @@ class SitecheckResult
      */
     public function getIpAddress($type = 'ipv4')
     {
-        if (isset($this->_ip[$type])) {
-            return $this->_ip[$type];
+        if (isset($this->ip[$type])) {
+            return $this->ip[$type];
         }
 
-        return $this->_ip['ipv4'];
+        return $this->ip['ipv4'];
     }
 
     /**
@@ -282,48 +287,68 @@ class SitecheckResult
      */
     public function isPoweredBy()
     {
-        return $this->_poweredby;
+        return $this->poweredby;
     }
 
+    /**
+     * @param $provider
+     * @param $organisation
+     */
     public function setPoweredBy($provider, $organisation)
     {
-        $this->_poweredby = true;
-        $this->_EnergyProvider = $provider;
-        $this->_organisation = $organisation;
+        $this->poweredby = true;
+        $this->energyProvider = $provider;
+        $this->organisation = $organisation;
     }
 
+    /**
+     * @return bool
+     */
     public function getEnergyProviderId()
     {
         if ($this->isPoweredBy()) {
-            return $this->_EnergyProvider->getId();
+            return $this->energyProvider->getId();
         }
 
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getEnergyProvider()
     {
         if ($this->isPoweredBy()) {
-            return $this->_EnergyProvider;
+            return $this->energyProvider;
         }
 
         return false;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getOrganisation()
     {
         if ($this->isPoweredBy()) {
-            return $this->_organisation;
+            return $this->organisation;
         }
 
         return false;
     }
 
+    /**
+     * @param $called
+     */
     public function setCalledFrom($called)
     {
         $this->calledfrom = $called;
     }
 
+    /**
+     * @param $key
+     * @return bool
+     */
     public function getCalledFrom($key)
     {
         if (isset($this->calledfrom[$key])) {

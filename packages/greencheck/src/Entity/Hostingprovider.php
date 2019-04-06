@@ -2,6 +2,7 @@
 
 namespace TGWF\Greencheck\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -226,7 +227,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Add asnumbers.
      *
-     * @param TGWF\AdminBundle\Entity\GreencheckAs $asnumbers
+     * @param GreencheckAs $asnumbers
      */
     public function addGreencheckAs(GreencheckAs $asnumbers)
     {
@@ -236,7 +237,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Get asnumbers.
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAsnumbers()
     {
@@ -246,7 +247,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Add iprecords.
      *
-     * @param TGWF\AdminBundle\Entity\GreencheckIp $iprecords
+     * @param GreencheckIp $iprecords
      */
     public function addGreencheckIp(GreencheckIp $iprecords)
     {
@@ -256,7 +257,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Get iprecords.
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getIprecords()
     {
@@ -297,7 +298,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Add greencheckrecords.
      *
-     * @param TGWF\AdminBundle\Entity\Greencheck $greencheckrecords
+     * @param Greencheck $greencheckrecords
      */
     public function addGreencheck(Greencheck $greencheckrecords)
     {
@@ -307,7 +308,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Get greencheckrecords.
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getGreencheckrecords()
     {
@@ -317,7 +318,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Get asnumbersapprove.
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAsnumbersapprove()
     {
@@ -327,7 +328,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Get iprecordsapprove.
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getIprecordsapprove()
     {
@@ -337,7 +338,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Add datacenter.
      *
-     * @param TGWF\AdminBundle\Entity\Datacenter $datacenter
+     * @param Datacenter $datacenter
      */
     public function addDatacenter(Datacenter $datacenter)
     {
@@ -347,7 +348,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Get datacenters.
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getDatacenters()
     {
@@ -357,7 +358,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Add datacenters.
      *
-     * @param TGWF\AdminBundle\Entity\DatacenterHostingprovider $datacenters
+     * @param DatacenterHostingprovider $datacenters
      */
     public function addDatacenterHostingprovider(DatacenterHostingprovider $datacenters)
     {
@@ -427,7 +428,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Add certificates.
      *
-     * @param TGWF\AdminBundle\Entity\Certificate $certificates
+     * @param HostingproviderCertificate $certificates
      *
      * @return Hostingprovider
      */
@@ -441,7 +442,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Get certificates.
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getCertificates()
     {
@@ -451,7 +452,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Remove certificates.
      *
-     * @param TGWF\AdminBundle\Entity\Certificate $certificates
+     * @param HostingproviderCertificate $certificates
      */
     public function removeCertificate(HostingproviderCertificate $certificates)
     {
@@ -461,7 +462,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Add asnumbers.
      *
-     * @param TGWF\AdminBundle\Entity\GreencheckAs $asnumbers
+     * @param GreencheckAs $asnumbers
      *
      * @return Hostingprovider
      */
@@ -475,7 +476,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Remove asnumbers.
      *
-     * @param TGWF\AdminBundle\Entity\GreencheckAs $asnumbers
+     * @param GreencheckAs $asnumbers
      */
     public function removeAsnumber(GreencheckAs $asnumbers)
     {
@@ -485,7 +486,7 @@ class Hostingprovider implements \ArrayAccess
     /**
      * Add iprecords.
      *
-     * @param TGWF\AdminBundle\Entity\GreencheckIp $iprecords
+     * @param GreencheckIp $iprecords
      *
      * @return Hostingprovider
      */

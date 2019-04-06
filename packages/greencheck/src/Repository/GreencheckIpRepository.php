@@ -38,8 +38,7 @@ class GreencheckIpRepository extends EntityRepository
      */
     public function checkIp($ip)
     {
-        $gc = new GreencheckIp();
-        $ip = $gc->inet_ptod($ip);
+        $ip = GreencheckIp::convertIpPresentationToDecimal($ip);
 
         $qb = $this->createQueryBuilder('i');
 

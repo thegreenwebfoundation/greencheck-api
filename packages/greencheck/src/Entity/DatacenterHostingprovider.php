@@ -28,12 +28,12 @@ class DatacenterHostingprovider
     private $approved_at;
 
     /**
-     * @var TGWF\Greencheck\Entity\Datacenter
+     * @var Datacenter
      */
     private $datacenter;
 
     /**
-     * @var TGWF\Greencheck\Entity\Hostingprovider
+     * @var Hostingprovider
      */
     private $hostingprovider;
 
@@ -122,11 +122,11 @@ class DatacenterHostingprovider
     /**
      * Set datacenter.
      *
-     * @param TGWF\Greencheck\Entity\Datacenter $datacenter
+     * @param Datacenter $datacenter
      *
      * @return DatacenterHostingprovider
      */
-    public function setDatacenter(\TGWF\Greencheck\Entity\Datacenter $datacenter = null)
+    public function setDatacenter(Datacenter $datacenter = null)
     {
         $this->datacenter = $datacenter;
 
@@ -136,7 +136,7 @@ class DatacenterHostingprovider
     /**
      * Get datacenter.
      *
-     * @return TGWF\Greencheck\Entity\Datacenter
+     * @return Datacenter
      */
     public function getDatacenter()
     {
@@ -146,11 +146,11 @@ class DatacenterHostingprovider
     /**
      * Set hostingprovider.
      *
-     * @param TGWF\Greencheck\Entity\Hostingprovider $hostingprovider
+     * @param Hostingprovider $hostingprovider
      *
      * @return DatacenterHostingprovider
      */
-    public function setHostingprovider(\TGWF\Greencheck\Entity\Hostingprovider $hostingprovider = null)
+    public function setHostingprovider(Hostingprovider $hostingprovider = null)
     {
         $this->hostingprovider = $hostingprovider;
 
@@ -160,7 +160,7 @@ class DatacenterHostingprovider
     /**
      * Get hostingprovider.
      *
-     * @return TGWF\Greencheck\Entity\Hostingprovider
+     * @return Hostingprovider
      */
     public function getHostingprovider()
     {

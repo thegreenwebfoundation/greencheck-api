@@ -36,14 +36,14 @@ class GreencheckUrl
     protected $url;
 
     /**
-     * @var date
+     * @var \DateTime
      *
      * @ORM\Column(name="datum_begin", type="date", nullable=false)
      */
     protected $datumBegin;
 
     /**
-     * @var date
+     * @var \DateTime
      *
      * @ORM\Column(name="datum_eind", type="date", nullable=false)
      */
@@ -102,7 +102,7 @@ class GreencheckUrl
     /**
      * Set datumBegin.
      *
-     * @param date $datumBegin
+     * @param \DateTime $datumBegin
      */
     public function setDatumBegin($datumBegin)
     {
@@ -112,7 +112,7 @@ class GreencheckUrl
     /**
      * Get datumBegin.
      *
-     * @return date
+     * @return \DateTime
      */
     public function getDatumBegin()
     {
@@ -122,7 +122,7 @@ class GreencheckUrl
     /**
      * Set datumEind.
      *
-     * @param date $datumEind
+     * @param \DateTime $datumEind
      */
     public function setDatumEind($datumEind)
     {
@@ -132,7 +132,7 @@ class GreencheckUrl
     /**
      * Get datumEind.
      *
-     * @return date
+     * @return \DateTime
      */
     public function getDatumEind()
     {

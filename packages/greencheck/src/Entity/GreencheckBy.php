@@ -27,7 +27,7 @@ class GreencheckBy
     private $id;
 
     /**
-     * @var datetime
+     * @var \DateTime
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
@@ -56,7 +56,7 @@ class GreencheckBy
 
     public function __construct()
     {
-        $date = new \DateTime('now');
+        $date = (new \DateTime('now'));
         $date->setTime($date->format('H'), $date->format('i'), '0');
         $this->setDatum($date);
     }
@@ -74,7 +74,7 @@ class GreencheckBy
     /**
      * Set datum.
      *
-     * @param datetime $datum
+     * @param \DateTime $datum
      */
     public function setDatum($datum)
     {
@@ -84,7 +84,7 @@ class GreencheckBy
     /**
      * Get datum.
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getDatum()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace TGWF\Greencheck\Entity;
+namespace TGWF\Greencheck\Repository;
 
 use Doctrine\ORM\EntityRepository;
 

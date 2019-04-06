@@ -38,7 +38,7 @@ class DatacenterCertificate
     private $energyprovider;
 
     /**
-     * @var TGWF\Greencheck\Entity\Datacenter
+     * @var Datacenter
      */
     private $datacenter;
 
@@ -175,11 +175,11 @@ class DatacenterCertificate
     /**
      * Set datacenter.
      *
-     * @param TGWF\Greencheck\Entity\Datacenter $datacenter
+     * @param Datacenter $datacenter
      *
      * @return DatacenterCertificate
      */
-    public function setDatacenter(\TGWF\Greencheck\Entity\Datacenter $datacenter = null)
+    public function setDatacenter(Datacenter $datacenter = null)
     {
         $this->datacenter = $datacenter;
 
@@ -189,7 +189,7 @@ class DatacenterCertificate
     /**
      * Get datacenter.
      *
-     * @return TGWF\Greencheck\Entity\Datacenter
+     * @return Datacenter
      */
     public function getDatacenter()
     {

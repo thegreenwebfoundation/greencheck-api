@@ -85,11 +85,12 @@ class GreencheckIp
      * Set ipStart.
      *
      * @param string $ipStart
+     * @return GreencheckIp
      */
     public function setIpStart($ipStart)
     {
         $this->ipStart = $ipStart;
-        $this->ipStartLong = $this->inet_ptod($ipStart);
+        $this->ipStartLong = GreencheckIp::convertIpPresentationToDecimal($ipStart);
 
         return $this;
     }
@@ -102,7 +103,7 @@ class GreencheckIp
     public function getIpStart()
     {
         if (is_null($this->ipStart)) {
-            $this->ipStart = $this->inet_dtop($this->ipStartLong);
+            $this->ipStart = GreencheckIp::convertIpDecimalToPresentation($this->ipStartLong);
         }
 
         return $this->ipStart;
@@ -112,11 +113,12 @@ class GreencheckIp
      * Set ipEind.
      *
      * @param string $ipEind
+     * @return GreencheckIp
      */
     public function setIpEind($ipEind)
     {
         $this->ipEind = $ipEind;
-        $this->ipEindLong = $this->inet_ptod($ipEind);
+        $this->ipEindLong = self::convertIpPresentationToDecimal($ipEind);
 
         return $this;
     }
@@ -129,7 +131,7 @@ class GreencheckIp
     public function getIpEind()
     {
         if (is_null($this->ipEind)) {
-            $this->ipEind = $this->inet_dtop($this->ipEindLong);
+            $this->ipEind = self::convertIpDecimalToPresentation($this->ipEindLong);
         }
 
         return $this->ipEind;
@@ -216,7 +218,7 @@ class GreencheckIp
     /**
      * Set hostingprovider.
      *
-     * @param TGWF\Greencheck\Entity\Hostingprovider $hostingprovider
+     * @param Hostingprovider $hostingprovider
      */
     public function setHostingprovider(Hostingprovider $hostingprovider)
     {
@@ -226,7 +228,7 @@ class GreencheckIp
     /**
      * Get hostingprovider.
      *
-     * @return TGWF\Greencheck\Entity\Hostingprovider
+     * @return Hostingprovider
      */
     public function getHostingprovider()
     {
@@ -250,20 +252,20 @@ class GreencheckIp
     /**
      * Convert an IP address from presentation to decimal(39,0) format suitable for storage in MySQL.
      *
-     * @param string $ip_address An IP address in IPv4, IPv6 or decimal notation
+     * @param string $ipPresentation An IP address in IPv4, IPv6 or decimal notation
      *
      * @return string The IP address in decimal notation
      */
-    public function inet_ptod($ip_address)
+    public static function convertIpPresentationToDecimal($ipPresentation)
     {
         // IPv4 address
-        if (false === strpos($ip_address, ':') && false !== strpos($ip_address, '.')) {
-            $ip_address = '::'.$ip_address;
+        if (false === strpos($ipPresentation, ':') && false !== strpos($ipPresentation, '.')) {
+            $ipPresentation = '::'.$ipPresentation;
         }
 
         // IPv6 address
-        if (false !== strpos($ip_address, ':')) {
-            $network = inet_pton($ip_address);
+        if (false !== strpos($ipPresentation, ':')) {
+            $network = inet_pton($ipPresentation);
             $parts = unpack('N*', $network);
 
             foreach ($parts as &$part) {
@@ -285,32 +287,32 @@ class GreencheckIp
         }
 
         // Decimal address
-        return $ip_address;
+        return $ipPresentation;
     }
 
     /**
      * Convert an IP address from decimal format to presentation format.
      *
-     * @param string $decimal An IP address in IPv4, IPv6 or decimal notation
+     * @param string $ipDecimal An IP address in IPv4, IPv6 or decimal notation
      *
      * @return string The IP address in presentation format
      */
-    public function inet_dtop($decimal)
+    public static function convertIpDecimalToPresentation($ipDecimal)
     {
         // IPv4 or IPv6 format
-        if (false !== strpos($decimal, ':') || false !== strpos($decimal, '.')) {
-            return $decimal;
+        if (false !== strpos($ipDecimal, ':') || false !== strpos($ipDecimal, '.')) {
+            return $ipDecimal;
         }
 
         // Decimal format
         $parts = [];
-        $parts[1] = bcdiv($decimal, '79228162514264337593543950336', 0);
-        $decimal = bcsub($decimal, bcmul($parts[1], '79228162514264337593543950336'));
-        $parts[2] = bcdiv($decimal, '18446744073709551616', 0);
-        $decimal = bcsub($decimal, bcmul($parts[2], '18446744073709551616'));
-        $parts[3] = bcdiv($decimal, '4294967296', 0);
-        $decimal = bcsub($decimal, bcmul($parts[3], '4294967296'));
-        $parts[4] = $decimal;
+        $parts[1] = bcdiv($ipDecimal, '79228162514264337593543950336', 0);
+        $ipDecimal = bcsub($ipDecimal, bcmul($parts[1], '79228162514264337593543950336'));
+        $parts[2] = bcdiv($ipDecimal, '18446744073709551616', 0);
+        $ipDecimal = bcsub($ipDecimal, bcmul($parts[2], '18446744073709551616'));
+        $parts[3] = bcdiv($ipDecimal, '4294967296', 0);
+        $ipDecimal = bcsub($ipDecimal, bcmul($parts[3], '4294967296'));
+        $parts[4] = $ipDecimal;
 
         foreach ($parts as &$part) {
             if (1 == bccomp($part, '2147483647')) {

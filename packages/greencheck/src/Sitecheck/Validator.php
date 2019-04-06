@@ -23,7 +23,7 @@ class Validator
     protected $errorMessages = null;
 
     /**
-     * @var Zend\Validator\Hostname
+     * @var Hostname
      */
     protected $validator = null;
 

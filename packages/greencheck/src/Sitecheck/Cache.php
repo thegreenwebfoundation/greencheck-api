@@ -2,6 +2,9 @@
 
 namespace TGWF\Greencheck\Sitecheck;
 
+use Doctrine\Common\Cache\ApcCache;
+use Doctrine\Common\Cache\MemcacheCache;
+use Doctrine\Common\Cache\RedisCache;
 use TGWF\Greencheck\Cache\DisabledCache;
 
 /**
@@ -23,19 +26,19 @@ class Cache
     /**
      * @var array
      */
-    protected $_cache = null;
+    protected $cache;
 
     /**
      * @var array
      */
-    protected $_config = null;
+    protected $config;
 
     /**
      * Cache is enabled by default.
      *
      * @var bool
      */
-    protected $_disable = false;
+    protected $disabled = false;
 
     /**
      * Construct the sitecheck.
@@ -44,9 +47,9 @@ class Cache
      */
     public function __construct($config)
     {
-        $this->_config = $config;
+        $this->config = $config;
 
-        if (false == $config['greencheck']['cache']) {
+        if (false == $this->config['greencheck']['cache']) {
             $this->disableCache();
         }
 
@@ -54,62 +57,69 @@ class Cache
         $this->setCache('default');
     }
 
+    /**
+     * @param string $key
+     * @return mixed
+     */
     public function getTTL($key = 'default')
     {
-        $config = $this->_config;
-        if ('default' != $key && isset($config['greencheck'][$key])) {
-            $lifetime = $config['greencheck'][$key]['cachetime'];
-        } else {
-            $lifetime = $config['greencheck']['cachetime'];
+        if ('default' !== $key && isset($this->config['greencheck'][$key])) {
+            return $this->config['greencheck'][$key]['cachetime'];
         }
 
-        return $lifetime;
+        return $this->config['greencheck']['cachetime'];
     }
 
+    /**
+     * @param string $key
+     * @return bool
+     */
     public function getCacheEnabled($key = 'default')
     {
         if ($this->isDisabled()) {
             return false;
         }
 
-        $config = $this->_config;
-        if ('default' != $key && isset($config['greencheck'][$key])) {
-            $caching = $config['greencheck'][$key]['cache'];
-        } else {
-            $caching = $config['greencheck']['cache'];
+        if ('default' !== $key && isset($this->config['greencheck'][$key])) {
+            return $this->config['greencheck'][$key]['cache'];
         }
 
-        return $caching;
+        return $this->config['greencheck']['cache'];
     }
 
+    /**
+     * @return string
+     */
     public function getCacheType()
     {
-        $config = $this->_config;
-        if (isset($config['greencheck']['cachetype'])) {
-            $cachetype = $config['greencheck']['cachetype'];
-        } else {
-            $cachetype = 'apc';
+        if (isset($this->config['greencheck']['cachetype'])) {
+            return $this->config['greencheck']['cachetype'];
         }
-
-        return $cachetype;
+        return 'apc';
     }
 
+    /**
+     * @todo Inject these dependencies in the constructor instead
+     *
+     * @param $cachetype
+     * @return ApcCache|MemcacheCache|RedisCache
+     */
     public function getCacheDriver($cachetype)
     {
         if ('memcache' == $cachetype) {
             $memcache = new \Memcache();
             $memcache->connect('127.0.0.1', 11211);
 
-            $cache = new \Doctrine\Common\Cache\MemcacheCache();
+            $cache = new MemcacheCache();
             $cache->setMemcache($memcache);
         } elseif ('redis' == $cachetype) {
             $redis = new \Redis();
             $redis->connect('127.0.0.1', 6379);
 
-            $cache = new \Doctrine\Common\Cache\RedisCache();
+            $cache = new RedisCache();
             $cache->setRedis($redis);
         } else {
-            $cache = new \Doctrine\Common\Cache\ApcCache();
+            $cache = new ApcCache();
         }
 
         $cache->setNamespace('tgwf_greencheck');
@@ -133,47 +143,69 @@ class Cache
         return $cache;
     }
 
+    /**
+     *
+     */
     public function disableCache()
     {
-        $this->_disable = true;
+        $this->disabled = true;
     }
 
+    /**
+     * @return bool
+     */
     public function isDisabled()
     {
-        return $this->_disable;
+        return $this->disabled;
     }
 
+    /**
+     * @param $key
+     */
     public function resetCache($key)
     {
-        if (isset($this->_cache[$key])) {
-            $cache = $this->_cache[$key];
+        if (isset($this->cache[$key])) {
+            $cache = $this->cache[$key];
             // clear all
             $cache->deleteAll();
         }
     }
 
+    /**
+     * @param $key
+     * @param null $cache
+     */
     public function setCache($key, $cache = null)
     {
         if (!is_null($cache)) {
-            $this->_cache[$key] = $cache;
+            $this->cache[$key] = $cache;
         } else {
-            $this->_cache[$key] = $this->setupCache($key);
+            $this->cache[$key] = $this->setupCache($key);
         }
     }
 
+    /**
+     * @param string $key
+     * @return mixed|DisabledCache
+     */
     public function getCache($key = 'default')
     {
-        if (!isset($this->_cache[$key])) {
+        if (!isset($this->cache[$key])) {
             $this->setCache($key);
         }
 
-        if ($this->_disable) {
+        if ($this->disabled) {
             return new DisabledCache();
         }
 
-        return $this->_cache[$key];
+        return $this->cache[$key];
     }
 
+    /**
+     * @param $cache
+     * @param $key
+     * @param $data
+     */
     public function setItem($cache, $key, $data)
     {
         $ttl = $this->getTTL($cache);

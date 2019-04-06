@@ -62,7 +62,7 @@ class Greencheck
     private $ip;
 
     /**
-     * @var datetime
+     * @var \DateTime
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
@@ -195,7 +195,7 @@ class Greencheck
     /**
      * Set datum.
      *
-     * @param datetime $datum
+     * @param \DateTime $datum
      */
     public function setDatum($datum)
     {
@@ -205,7 +205,7 @@ class Greencheck
     /**
      * Get datum.
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getDatum()
     {
@@ -250,25 +250,5 @@ class Greencheck
     public function getTld()
     {
         return $this->tld;
-    }
-
-    /**
-     * Set hostingprovider.
-     *
-     * @param Hostingprovider $hostingprovider
-     */
-    public function setHostingprovider(Hostingprovider $hostingprovider)
-    {
-        $this->hostingprovider = $hostingprovider;
-    }
-
-    /**
-     * Get hostingprovider.
-     *
-     * @return Hostingprovider
-     */
-    public function getHostingprovider()
-    {
-        return $this->hostingprovider;
     }
 }

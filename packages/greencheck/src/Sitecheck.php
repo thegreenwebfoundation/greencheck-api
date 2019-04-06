@@ -2,6 +2,7 @@
 
 namespace TGWF\Greencheck;
 
+use TGWF\Greencheck\Entity\GreencheckIp;
 use TGWF\Greencheck\Sitecheck\Validator;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints\Ip;
@@ -246,10 +247,10 @@ class Sitecheck
     /**
      * Check if we have data for the tld of this url.
      *
-     * @param string                     $url
-     * @param Greencheck_SitecheckResult $result
+     * @param string          $url
+     * @param SitecheckResult $result
      *
-     * @return Greencheck_SitecheckResult
+     * @return SitecheckResult
      */
     public function checkTld($url, $result)
     {
@@ -281,7 +282,7 @@ class Sitecheck
     /**
      * Get all tld's for which we have data.
      *
-     * @return <type>
+     * @return array
      */
     public function getCountryTlds()
     {
@@ -295,7 +296,7 @@ class Sitecheck
     /**
      * Log the request to the logtable, for clientlist and statistics.
      *
-     * @param Greencheck_SitecheckResult $result
+     * @param SitecheckResult $result
      */
     public function logResult($result)
     {
@@ -311,7 +312,6 @@ class Sitecheck
             $match['type'] = 'none';
         }
 
-        $gcip = new Entity\GreencheckIp();
         if ($result->getIpAddress()) {
             $ip = $result->getIpAddress();
         } elseif ($result->getIpAddress('ipv6')) {
@@ -319,7 +319,7 @@ class Sitecheck
         } else {
             $ip = 0;
         }
-        $ip = $gcip->inet_ptod($ip);
+        $ip = GreencheckIp::convertIpPresentationToDecimal($ip);
 
         $gc = new Entity\Greencheck();
         $gc->setIdGreencheck($match['id']);
@@ -335,7 +335,7 @@ class Sitecheck
         $gc->setIp($ip);
 
         $gcby = new Entity\GreencheckBy();
-        $gcby->setCheckedBy($gcip->inet_ptod($result->getCalledFrom('checked_by')));
+        $gcby->setCheckedBy(GreencheckIp::convertIpPresentationToDecimal($result->getCalledFrom('checked_by')));
         $gcby->setCheckedThrough($result->getCalledFrom('checked_through'));
         $gcby->setCheckedBrowser($result->getCalledFrom('checked_browser'));
 

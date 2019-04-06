@@ -19,19 +19,23 @@ namespace TGWF\Greencheck\Sitecheck;
 class Aschecker
 {
     /**
-     * @var Sitecheck\Cache
+     * @var Cache
      */
     protected $cache = null;
 
     /**
      * Construct the sitecheck.
      */
-    public function __construct($cache)
+    public function __construct(Cache $cache)
     {
         // Setup the cache
         $this->cache = $cache;
     }
 
+    /**
+     * @param $asoutput
+     * @return mixed
+     */
     private function parseAsOutput($asoutput)
     {
         $data = explode('|', str_replace('"', '', $asoutput['txt']));
@@ -47,6 +51,12 @@ class Aschecker
         return $result;
     }
 
+    /**
+     * @param $output
+     * @param $ip
+     * @param $type
+     * @return array|mixed|null
+     */
     private function getAsFromOutput($output, $ip, $type)
     {
         $result = [];
@@ -141,6 +151,10 @@ class Aschecker
         return $result;
     }
 
+    /**
+     * @param $ip
+     * @return string
+     */
     private function ipv4ToReverseDnsAdressNotation($ip)
     {
         $ip_arr = explode('.', $ip);
@@ -148,6 +162,10 @@ class Aschecker
         return $ip_arr[3].'.'.$ip_arr[2].'.'.$ip_arr[1].'.'.$ip_arr[0];
     }
 
+    /**
+     * @param $ipaddr
+     * @return string
+     */
     private function ipv6ToReverseDnsAdressNotation($ipaddr)
     {
         $addr = inet_pton($ipaddr);
@@ -162,6 +180,10 @@ class Aschecker
         return $ipv6;
     }
 
+    /**
+     * @param string $key
+     * @return mixed|\TGWF\Greencheck\Cache\DisabledCache
+     */
     private function getCache($key = 'default')
     {
         return $this->cache->getCache($key);

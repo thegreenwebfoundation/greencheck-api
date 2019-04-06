@@ -91,7 +91,7 @@ class HostingproviderCertificate
      *
      * @param string $url
      *
-     * @return Certificate
+     * @return self
      */
     public function setUrl($url)
     {
@@ -113,9 +113,9 @@ class HostingproviderCertificate
     /**
      * Set valid_from.
      *
-     * @param datetime $validFrom
+     * @param \DateTime $validFrom
      *
-     * @return Certificate
+     * @return self
      */
     public function setValidFrom($validFrom)
     {
@@ -127,7 +127,7 @@ class HostingproviderCertificate
     /**
      * Get valid_from.
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getValidFrom()
     {
@@ -137,9 +137,9 @@ class HostingproviderCertificate
     /**
      * Set valid_to.
      *
-     * @param datetime $validTo
+     * @param \DateTime $validTo
      *
-     * @return Certificate
+     * @return self
      */
     public function setValidTo($validTo)
     {
@@ -151,7 +151,7 @@ class HostingproviderCertificate
     /**
      * Get valid_to.
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getValidTo()
     {
@@ -163,7 +163,7 @@ class HostingproviderCertificate
      *
      * @param string $mainenergytype
      *
-     * @return Certificate
+     * @return self
      */
     public function setMainenergytype($mainenergytype)
     {
@@ -190,7 +190,7 @@ class HostingproviderCertificate
      *
      * @param string $energyprovider
      *
-     * @return Certificate
+     * @return self
      */
     public function setEnergyprovider($energyprovider)
     {
@@ -212,9 +212,9 @@ class HostingproviderCertificate
     /**
      * Set hostingprovider.
      *
-     * @param TGWF\Greencheck\Entity\Hostingprovider $hostingprovider
+     * @param Hostingprovider $hostingprovider
      *
-     * @return Certificate
+     * @return self
      */
     public function setHostingprovider($hostingprovider = null)
     {
@@ -226,7 +226,7 @@ class HostingproviderCertificate
     /**
      * Get hostingprovider.
      *
-     * @return TGWF\Greencheck\Entity\Hostingprovider
+     * @return Hostingprovider
      */
     public function getHostingprovider()
     {

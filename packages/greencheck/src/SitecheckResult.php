@@ -153,7 +153,7 @@ class SitecheckResult
     /**
      * Get the checked url.
      *
-     * @return string
+     * @return \DateTime
      */
     public function getCheckedAt()
     {
@@ -163,7 +163,7 @@ class SitecheckResult
     /**
      * Get the checked url.
      *
-     * @return string
+     * @return \DateTime
      */
     public function setCheckedAt($date)
     {

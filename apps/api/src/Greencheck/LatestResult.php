@@ -54,7 +54,12 @@ class LatestResult
             $this->hostingProviderName = false;
         }
 
-        $this->date = $result->getCheckedAt()->format('Y-m-d\TH:i:sP');
+        if ($result->getCheckedAt()) {
+            $this->date = $result->getCheckedAt()->format('Y-m-d\TH:i:sP');
+        } else {
+            $this->date = (new \DateTime())->format('Y-m-d\TH:i:sP');
+        }
+
         $this->url = $result->getCheckedUrl();
         $this->green = $result->isGreen();
     }

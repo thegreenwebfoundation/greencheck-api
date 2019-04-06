@@ -5,7 +5,7 @@ namespace TGWF\Greencheck\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TGWF\Greencheck\Entity\GreencheckUrl
+ * TGWF\Greencheck\Entity\GreencheckUrl.
  *
  * @ORM\Table(name="greencheck_url")
  * @ORM\Entity(repositoryClass="TGWF\Greencheck\Repository\GreencheckUrlRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class GreencheckUrl
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -22,39 +22,37 @@ class GreencheckUrl
     protected $id;
 
     /**
-     * @var integer $idCleanbit
+     * @var int
      *
      * @ORM\Column(name="id_cleanbit", type="integer", nullable=true)
      */
     protected $idCleanbit;
 
     /**
-     * @var string $url
+     * @var string
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=false)
      */
     protected $url;
 
     /**
-     * @var date $datumBegin
+     * @var date
      *
      * @ORM\Column(name="datum_begin", type="date", nullable=false)
      */
     protected $datumBegin;
 
     /**
-     * @var date $datumEind
+     * @var date
      *
      * @ORM\Column(name="datum_eind", type="date", nullable=false)
      */
     protected $datumEind;
 
-
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -62,9 +60,9 @@ class GreencheckUrl
     }
 
     /**
-     * Set idCleanbit
+     * Set idCleanbit.
      *
-     * @param integer $idCleanbit
+     * @param int $idCleanbit
      */
     public function setIdCleanbit($idCleanbit)
     {
@@ -72,9 +70,9 @@ class GreencheckUrl
     }
 
     /**
-     * Get idCleanbit
+     * Get idCleanbit.
      *
-     * @return integer
+     * @return int
      */
     public function getIdCleanbit()
     {
@@ -82,7 +80,7 @@ class GreencheckUrl
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
      */
@@ -92,7 +90,7 @@ class GreencheckUrl
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
@@ -102,7 +100,7 @@ class GreencheckUrl
     }
 
     /**
-     * Set datumBegin
+     * Set datumBegin.
      *
      * @param date $datumBegin
      */
@@ -112,7 +110,7 @@ class GreencheckUrl
     }
 
     /**
-     * Get datumBegin
+     * Get datumBegin.
      *
      * @return date
      */
@@ -122,7 +120,7 @@ class GreencheckUrl
     }
 
     /**
-     * Set datumEind
+     * Set datumEind.
      *
      * @param date $datumEind
      */
@@ -132,7 +130,7 @@ class GreencheckUrl
     }
 
     /**
-     * Get datumEind
+     * Get datumEind.
      *
      * @return date
      */

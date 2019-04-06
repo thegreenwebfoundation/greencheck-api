@@ -2,30 +2,28 @@
 
 namespace TGWF\Greencheck\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * TGWF\Greencheck\Entity\DatacenterHostingprovider
+ * TGWF\Greencheck\Entity\DatacenterHostingprovider.
  */
 class DatacenterHostingprovider
 {
     /**
-     * @var integer $id
+     * @var int
      */
     private $id;
 
     /**
-     * @var boolean $approved
+     * @var bool
      */
     private $approved;
 
     /**
-     * @var \DateTime $created_at
+     * @var \DateTime
      */
     private $created_at;
 
     /**
-     * @var \DateTime $approved_at
+     * @var \DateTime
      */
     private $approved_at;
 
@@ -39,11 +37,10 @@ class DatacenterHostingprovider
      */
     private $hostingprovider;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -51,22 +48,23 @@ class DatacenterHostingprovider
     }
 
     /**
-     * Set approved
+     * Set approved.
      *
-     * @param boolean $approved
+     * @param bool $approved
+     *
      * @return DatacenterHostingprovider
      */
     public function setApproved($approved)
     {
         $this->approved = $approved;
-    
+
         return $this;
     }
 
     /**
-     * Get approved
+     * Get approved.
      *
-     * @return boolean
+     * @return bool
      */
     public function getApproved()
     {
@@ -74,20 +72,21 @@ class DatacenterHostingprovider
     }
 
     /**
-     * Set created_at
+     * Set created_at.
      *
      * @param \DateTime $createdAt
+     *
      * @return DatacenterHostingprovider
      */
     public function setCreatedAt($createdAt)
     {
         $this->created_at = $createdAt;
-    
+
         return $this;
     }
 
     /**
-     * Get created_at
+     * Get created_at.
      *
      * @return \DateTime
      */
@@ -97,20 +96,21 @@ class DatacenterHostingprovider
     }
 
     /**
-     * Set approved_at
+     * Set approved_at.
      *
      * @param \DateTime $approvedAt
+     *
      * @return DatacenterHostingprovider
      */
     public function setApprovedAt($approvedAt)
     {
         $this->approved_at = $approvedAt;
-    
+
         return $this;
     }
 
     /**
-     * Get approved_at
+     * Get approved_at.
      *
      * @return \DateTime
      */
@@ -120,20 +120,21 @@ class DatacenterHostingprovider
     }
 
     /**
-     * Set datacenter
+     * Set datacenter.
      *
      * @param TGWF\Greencheck\Entity\Datacenter $datacenter
+     *
      * @return DatacenterHostingprovider
      */
     public function setDatacenter(\TGWF\Greencheck\Entity\Datacenter $datacenter = null)
     {
         $this->datacenter = $datacenter;
-    
+
         return $this;
     }
 
     /**
-     * Get datacenter
+     * Get datacenter.
      *
      * @return TGWF\Greencheck\Entity\Datacenter
      */
@@ -143,20 +144,21 @@ class DatacenterHostingprovider
     }
 
     /**
-     * Set hostingprovider
+     * Set hostingprovider.
      *
      * @param TGWF\Greencheck\Entity\Hostingprovider $hostingprovider
+     *
      * @return DatacenterHostingprovider
      */
     public function setHostingprovider(\TGWF\Greencheck\Entity\Hostingprovider $hostingprovider = null)
     {
         $this->hostingprovider = $hostingprovider;
-    
+
         return $this;
     }
 
     /**
-     * Get hostingprovider
+     * Get hostingprovider.
      *
      * @return TGWF\Greencheck\Entity\Hostingprovider
      */

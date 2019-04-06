@@ -1,10 +1,11 @@
 <?php
+
 namespace TGWF\Greencheck;
 
 use TGWF\Greencheck\Entity\Hostingprovider;
 
 /**
- * Sitecheck Result class
+ * Sitecheck Result class.
  *
  * The sitecheck result class is a storage container for the results the greencheck returns.
  *
@@ -23,89 +24,97 @@ class SitecheckResult
     protected $_checkedAt = null;
 
     /**
-     * Is the checked url green or not
-     * @var boolean
+     * Is the checked url green or not.
+     *
+     * @var bool
      */
     protected $_green = false;
 
     /**
-     * Is data available for the domain of the checked url
-     * @var boolean
+     * Is data available for the domain of the checked url.
+     *
+     * @var bool
      */
     protected $_data = true;
 
     /**
-     * Is data available for the domain of the checked url
-     * @var boolean
+     * Is data available for the domain of the checked url.
+     *
+     * @var bool
      */
     protected $_cached = false;
 
     /**
-     * Hosting provider id, null if no green hoster
+     * Hosting provider id, null if no green hoster.
+     *
      * @var int
      */
     protected $_idHostingProvider = null;
-    
+
     /**
-     * Hosting provider
+     * Hosting provider.
+     *
      * @var Zend_Db_Table_Row
      */
     protected $_HostingProvider = null;
 
     /**
-     * Is this result powered by a green energy provider
+     * Is this result powered by a green energy provider.
+     *
      * @var type
      */
     protected $_poweredby = false;
-    
+
     /**
-     * Energy provider
+     * Energy provider.
+     *
      * @var Zend_Db_Table_Row
      */
     protected $_EnergyProvider = null;
 
     /**
-     * Organisation name for energy output
-     * @var String
+     * Organisation name for energy output.
+     *
+     * @var string
      */
     protected $_organisation = null;
-    
+
     /**
-     * Ip belonging to the checked url
+     * Ip belonging to the checked url.
+     *
      * @var string
      */
     protected $_ip = null;
 
     /**
-     * Array describing how the result was matched
+     * Array describing how the result was matched.
      *
      * @var array
      */
-    protected $_matchtype = array();
+    protected $_matchtype = [];
 
     /**
-     * Setup the sitecheck result object
+     * Setup the sitecheck result object.
      *
-     * @param  string $url
-     * @return void
+     * @param string $url
      */
     public function __construct($url, $ip)
     {
         $this->_checkedUrl = $url;
         $this->_ip = $ip;
-        $this->_checkedAt  = new \DateTime('now');
+        $this->_checkedAt = new \DateTime('now');
     }
 
     /**
-     * Rgister on what was matched
+     * Rgister on what was matched.
      */
     public function setMatch($id, $type, $identifier = '')
     {
-        $this->_matchtype = array('id' => $id, 'type' => $type, 'identifier' => $identifier);
+        $this->_matchtype = ['id' => $id, 'type' => $type, 'identifier' => $identifier];
     }
 
     /**
-     * return the match
+     * return the match.
      */
     public function getMatch()
     {
@@ -114,7 +123,8 @@ class SitecheckResult
 
     /**
      * Is the checked url green?
-     * @return boolean
+     *
+     * @return bool
      */
     public function isGreen()
     {
@@ -122,7 +132,8 @@ class SitecheckResult
     }
 
     /**
-     * Get the checked url
+     * Get the checked url.
+     *
      * @return string
      */
     public function getCheckedUrl()
@@ -131,7 +142,8 @@ class SitecheckResult
     }
 
     /**
-     * Get the checked url
+     * Get the checked url.
+     *
      * @return string
      */
     public function getCheckedAt()
@@ -140,7 +152,8 @@ class SitecheckResult
     }
 
     /**
-     * Get the checked url
+     * Get the checked url.
+     *
      * @return string
      */
     public function setCheckedAt($date)
@@ -149,8 +162,9 @@ class SitecheckResult
     }
 
     /**
-     * Set the green variable
-     * @param boolean $green
+     * Set the green variable.
+     *
+     * @param bool $green
      */
     public function setGreen($green)
     {
@@ -158,7 +172,7 @@ class SitecheckResult
     }
 
     /**
-     * Return data variable
+     * Return data variable.
      */
     public function isData()
     {
@@ -166,8 +180,9 @@ class SitecheckResult
     }
 
     /**
-     * Set the data variable
-     * @param boolean $data
+     * Set the data variable.
+     *
+     * @param bool $data
      */
     public function setData($data)
     {
@@ -175,7 +190,7 @@ class SitecheckResult
     }
 
     /**
-     * Return cached variable
+     * Return cached variable.
      */
     public function isCached()
     {
@@ -183,8 +198,9 @@ class SitecheckResult
     }
 
     /**
-     * Set the data variable
-     * @param boolean $cached
+     * Set the data variable.
+     *
+     * @param bool $cached
      */
     public function setCached($cached)
     {
@@ -192,7 +208,8 @@ class SitecheckResult
     }
 
     /**
-     * Set the hosting provider id
+     * Set the hosting provider id.
+     *
      * @param int $id
      */
     public function setHostingProviderId($id)
@@ -201,7 +218,8 @@ class SitecheckResult
     }
 
     /**
-     * Get the hosting provider id
+     * Get the hosting provider id.
+     *
      * @return int
      */
     public function getHostingProviderId()
@@ -211,18 +229,21 @@ class SitecheckResult
 
     /**
      * Is the checked url hosted by a hosting provider?
-     * @return boolean
+     *
+     * @return bool
      */
     public function isHostingProvider()
     {
         if (!is_null($this->_idHostingProvider)) {
             return true;
         }
+
         return false;
     }
 
     /**
-     * Set the hosting provider
+     * Set the hosting provider.
+     *
      * @param Hostingprovider $hp
      */
     public function setHostingProvider($hp)
@@ -231,7 +252,8 @@ class SitecheckResult
     }
 
     /**
-     * Get the hosting provider
+     * Get the hosting provider.
+     *
      * @return Hostingprovider
      */
     public function getHostingProvider()
@@ -240,7 +262,8 @@ class SitecheckResult
     }
 
     /**
-     * Get the ip adress
+     * Get the ip adress.
+     *
      * @return string
      */
     public function getIpAddress($type = 'ipv4')
@@ -248,59 +271,65 @@ class SitecheckResult
         if (isset($this->_ip[$type])) {
             return $this->_ip[$type];
         }
+
         return $this->_ip['ipv4'];
     }
-    
+
     /**
      * Is the company of the checked url powered by a green energy provider?
-     * @return boolean
+     *
+     * @return bool
      */
     public function isPoweredBy()
     {
         return $this->_poweredby;
     }
-    
+
     public function setPoweredBy($provider, $organisation)
     {
-        $this->_poweredby       = true;
-        $this->_EnergyProvider  = $provider;
-        $this->_organisation    = $organisation;
+        $this->_poweredby = true;
+        $this->_EnergyProvider = $provider;
+        $this->_organisation = $organisation;
     }
-    
+
     public function getEnergyProviderId()
     {
         if ($this->isPoweredBy()) {
             return $this->_EnergyProvider->getId();
         }
+
         return false;
     }
-    
+
     public function getEnergyProvider()
     {
         if ($this->isPoweredBy()) {
             return $this->_EnergyProvider;
         }
+
         return false;
     }
-    
+
     public function getOrganisation()
     {
         if ($this->isPoweredBy()) {
             return $this->_organisation;
         }
+
         return false;
     }
-    
+
     public function setCalledFrom($called)
     {
         $this->calledfrom = $called;
     }
-    
+
     public function getCalledFrom($key)
     {
         if (isset($this->calledfrom[$key])) {
             return $this->calledfrom[$key];
         }
+
         return false;
     }
 }

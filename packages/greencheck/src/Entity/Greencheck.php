@@ -5,7 +5,7 @@ namespace TGWF\Greencheck\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TGWF\GreencheckAdminBundle\Entity\Greencheck
+ * TGWF\GreencheckAdminBundle\Entity\Greencheck.
  *
  * @ORM\Table(name="greencheck",indexes={
  *  @ORM\Index(name="green", columns={"green"}),
@@ -15,11 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-
 class Greencheck
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -28,65 +27,65 @@ class Greencheck
     private $id;
 
     /**
-     * @var integer $idGreencheck
+     * @var int
      *
      * @ORM\Column(name="id_greencheck", type="integer", nullable=false)
      */
     private $idGreencheck;
 
     /**
-     * @var integer $idHp
+     * @var int
      *
      * @ORM\Column(name="id_hp", type="integer", nullable=true)
      */
     private $idHp;
 
     /**
-     * @var string $type
+     * @var string
      *
      * @ORM\Column(name="type", type="string", nullable=false)
      */
     private $type;
 
     /**
-     * @var string $url
+     * @var string
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=false)
      */
     private $url;
 
     /**
-     * @var integer $ip
+     * @var int
      *
      * @ORM\Column(name="ip", type="integer", nullable=false)
      */
     private $ip;
 
     /**
-     * @var datetime $datum
+     * @var datetime
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
     private $datum;
 
     /**
-     * @var string $green
+     * @var string
      *
      * @ORM\Column(name="green", type="string", nullable=false)
      */
     private $green;
 
     /**
-      * @var string $tld
-      *
-      * @ORM\Column(name="tld", type="string", length=64, nullable=true)
-      */
+     * @var string
+     *
+     * @ORM\Column(name="tld", type="string", length=64, nullable=true)
+     */
     private $tld;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -94,9 +93,9 @@ class Greencheck
     }
 
     /**
-     * Set idHp
+     * Set idHp.
      *
-     * @param integer $idHp
+     * @param int $idHp
      */
     public function setIdHp($idHp)
     {
@@ -104,9 +103,9 @@ class Greencheck
     }
 
     /**
-     * Get idHp
+     * Get idHp.
      *
-     * @return integer
+     * @return int
      */
     public function getIdHp()
     {
@@ -114,9 +113,9 @@ class Greencheck
     }
 
     /**
-     * Set idGreencheck
+     * Set idGreencheck.
      *
-     * @param integer $idGreencheck
+     * @param int $idGreencheck
      */
     public function setIdGreencheck($idGreencheck)
     {
@@ -124,9 +123,9 @@ class Greencheck
     }
 
     /**
-     * Get idGreencheck
+     * Get idGreencheck.
      *
-     * @return integer
+     * @return int
      */
     public function getIdGreencheck()
     {
@@ -134,7 +133,7 @@ class Greencheck
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
      */
@@ -144,7 +143,7 @@ class Greencheck
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -154,7 +153,7 @@ class Greencheck
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
      */
@@ -164,7 +163,7 @@ class Greencheck
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
@@ -174,9 +173,9 @@ class Greencheck
     }
 
     /**
-     * Set ip
+     * Set ip.
      *
-     * @param integer $ip
+     * @param int $ip
      */
     public function setIp($ip)
     {
@@ -184,9 +183,9 @@ class Greencheck
     }
 
     /**
-     * Get ip
+     * Get ip.
      *
-     * @return integer
+     * @return int
      */
     public function getIp()
     {
@@ -194,7 +193,7 @@ class Greencheck
     }
 
     /**
-     * Set datum
+     * Set datum.
      *
      * @param datetime $datum
      */
@@ -204,7 +203,7 @@ class Greencheck
     }
 
     /**
-     * Get datum
+     * Get datum.
      *
      * @return datetime
      */
@@ -214,7 +213,7 @@ class Greencheck
     }
 
     /**
-     * Set green
+     * Set green.
      *
      * @param string $green
      */
@@ -224,7 +223,7 @@ class Greencheck
     }
 
     /**
-     * Get green
+     * Get green.
      *
      * @return string
      */
@@ -234,7 +233,7 @@ class Greencheck
     }
 
     /**
-     * Set tld
+     * Set tld.
      *
      * @param string $tld
      */
@@ -244,7 +243,7 @@ class Greencheck
     }
 
     /**
-     * Get tld
+     * Get tld.
      *
      * @return string
      */
@@ -254,7 +253,7 @@ class Greencheck
     }
 
     /**
-     * Set hostingprovider
+     * Set hostingprovider.
      *
      * @param Hostingprovider $hostingprovider
      */
@@ -264,7 +263,7 @@ class Greencheck
     }
 
     /**
-     * Get hostingprovider
+     * Get hostingprovider.
      *
      * @return Hostingprovider
      */

@@ -2,43 +2,40 @@
 
 namespace TGWF\Greencheck\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * TGWF\Greencheck\Entity\GreencheckDaily
+ * TGWF\Greencheck\Entity\GreencheckDaily.
  */
 class GreencheckDaily
 {
     /**
-     * @var integer $id
+     * @var int
      */
     private $id;
 
     /**
-     * @var \DateTime $datum
+     * @var \DateTime
      */
     private $datum;
 
     /**
-     * @var string $checkedThrough
+     * @var string
      */
     private $checkedThrough;
 
     /**
-     * @var integer $count
+     * @var int
      */
     private $count;
 
     /**
-     * @var integer $ips
+     * @var int
      */
     private $ips;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -46,20 +43,21 @@ class GreencheckDaily
     }
 
     /**
-     * Set datum
+     * Set datum.
      *
      * @param \DateTime $datum
+     *
      * @return GreencheckDaily
      */
     public function setDatum($datum)
     {
         $this->datum = $datum;
-    
+
         return $this;
     }
 
     /**
-     * Get datum
+     * Get datum.
      *
      * @return \DateTime
      */
@@ -69,20 +67,21 @@ class GreencheckDaily
     }
 
     /**
-     * Set checkedThrough
+     * Set checkedThrough.
      *
      * @param string $checkedThrough
+     *
      * @return GreencheckDaily
      */
     public function setCheckedThrough($checkedThrough)
     {
         $this->checkedThrough = $checkedThrough;
-    
+
         return $this;
     }
 
     /**
-     * Get checkedThrough
+     * Get checkedThrough.
      *
      * @return string
      */
@@ -92,22 +91,23 @@ class GreencheckDaily
     }
 
     /**
-     * Set count
+     * Set count.
      *
-     * @param integer $count
+     * @param int $count
+     *
      * @return GreencheckDaily
      */
     public function setCount($count)
     {
         $this->count = $count;
-    
+
         return $this;
     }
 
     /**
-     * Get count
+     * Get count.
      *
-     * @return integer
+     * @return int
      */
     public function getCount()
     {
@@ -115,22 +115,23 @@ class GreencheckDaily
     }
 
     /**
-     * Set ips
+     * Set ips.
      *
-     * @param integer $ips
+     * @param int $ips
+     *
      * @return GreencheckDaily
      */
     public function setIps($ips)
     {
         $this->ips = $ips;
-    
+
         return $this;
     }
 
     /**
-     * Get ips
+     * Get ips.
      *
-     * @return integer
+     * @return int
      */
     public function getIps()
     {

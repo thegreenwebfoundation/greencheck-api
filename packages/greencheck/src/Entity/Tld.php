@@ -2,28 +2,25 @@
 
 namespace TGWF\Greencheck\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * TGWF\Greencheck\Entity\Tld
+ * TGWF\Greencheck\Entity\Tld.
  */
 class Tld
 {
     /**
-     * @var integer $id
+     * @var int
      */
     private $id;
 
     /**
-     * @var string $tld
+     * @var string
      */
     private $tld;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -31,20 +28,21 @@ class Tld
     }
 
     /**
-     * Set tld
+     * Set tld.
      *
      * @param string $tld
+     *
      * @return Tld
      */
     public function setTld($tld)
     {
         $this->tld = $tld;
-    
+
         return $this;
     }
 
     /**
-     * Get tld
+     * Get tld.
      *
      * @return string
      */

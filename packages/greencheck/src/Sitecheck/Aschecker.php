@@ -2,11 +2,8 @@
 
 namespace TGWF\Greencheck\Sitecheck;
 
-use TGWF\Greencheck\SitecheckResult;
-use TGWF\Greencheck\Entity;
-
 /**
- * Sitecheck class
+ * Sitecheck class.
  *
  * The sitecheck handles all actions with regard to the Green Web Foundation greencheck.
  *
@@ -27,39 +24,39 @@ class Aschecker
     protected $cache = null;
 
     /**
-     * Construct the sitecheck
-     *
+     * Construct the sitecheck.
      */
     public function __construct($cache)
     {
         // Setup the cache
         $this->cache = $cache;
     }
-    
+
     private function parseAsOutput($asoutput)
     {
         $data = explode('|', str_replace('"', '', $asoutput['txt']));
-        $as   = explode(' ', trim($data[0])); // It's possible to have multiple as numbers in the return, store them in an array
+        $as = explode(' ', trim($data[0])); // It's possible to have multiple as numbers in the return, store them in an array
 
-        $result['raw']     = $asoutput;
-        $result['as']      = $as;
+        $result['raw'] = $asoutput;
+        $result['as'] = $as;
         $result['iprange'] = trim($data[1]);
         $result['country'] = trim($data[2]);
-        $result['rir']     = trim($data[3]);
-        $result['date']    = trim($data[4]);
+        $result['rir'] = trim($data[3]);
+        $result['date'] = trim($data[4]);
+
         return $result;
     }
 
     private function getAsFromOutput($output, $ip, $type)
     {
-        $result = array();
+        $result = [];
         if (count($output) > 0) {
             foreach ($output as $asoutput) {
                 $data = $this->parseAsOutput($asoutput);
-                if ($type == 'ipv4') {
-                    $data['ip']   = $ip;
+                if ('ipv4' == $type) {
+                    $data['ip'] = $ip;
                 } else {
-                    $data['ip']   = false;
+                    $data['ip'] = false;
                     $data['ipv6'] = $ip;
                 }
                 foreach ($data['as'] as $as) {
@@ -75,7 +72,7 @@ class Aschecker
                 }
             }
             $results = count($result);
-            if ($results == 1) {
+            if (1 == $results) {
                 return $result[$as];
             }
             if ($results > 1) {
@@ -84,6 +81,7 @@ class Aschecker
                     $iprange = $range[1];
                     $ipranges[$iprange] = $as;
                 }
+
                 return max($ipranges);
             }
         } else {
@@ -94,37 +92,42 @@ class Aschecker
     }
 
     /**
-     * Do a dig as lookup for the given ip
+     * Do a dig as lookup for the given ip.
      *
-     * @param  string $ip
+     * @param string $ip
+     *
      * @return array
      */
     public function getAsForIpv4($ip)
     {
         if ($result = $this->getCache('aslookups')->fetch(sha1('as'.$ip))) {
             $result['cached'] = true;
+
             return $result;
         }
         $asresult = @dns_get_record($this->ipv4ToReverseDnsAdressNotation($ip).'.origin.asn.cymru.com', DNS_TXT);
-        
+
         $result = $this->getAsFromOutput($asresult, $ip, 'ipv4');
         if (count($asresult) > 0) {
             $result['cached'] = false;
         }
         $this->cache->setItem('aslookups', 'as'.$ip, $result);
+
         return $result;
     }
-    
+
     /**
-    * Do a dig as lookup for the given ip
-    *
-    * @param  string $ip
-    * @return array
-    */
+     * Do a dig as lookup for the given ip.
+     *
+     * @param string $ip
+     *
+     * @return array
+     */
     public function getAsForIpv6($ip)
     {
         if ($result = $this->getCache('aslookups')->fetch(sha1('as'.$ip))) {
             $result['cached'] = true;
+
             return $result;
         }
         $asresult = @dns_get_record($this->ipv6ToReverseDnsAdressNotation($ip).'.origin6.asn.cymru.com', DNS_TXT);
@@ -134,12 +137,14 @@ class Aschecker
             $result['cached'] = false;
         }
         $this->cache->setItem('aslookups', 'as'.$ip, $result);
+
         return $result;
     }
 
     private function ipv4ToReverseDnsAdressNotation($ip)
     {
         $ip_arr = explode('.', $ip);
+
         return $ip_arr[3].'.'.$ip_arr[2].'.'.$ip_arr[1].'.'.$ip_arr[0];
     }
 
@@ -153,6 +158,7 @@ class Aschecker
         }
         $arr = str_split(strrev($string));
         $ipv6 = implode('.', $arr);
+
         return $ipv6;
     }
 

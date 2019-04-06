@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * TGWF\Grencheck\Entity\Certificate
+ * TGWF\Grencheck\Entity\Certificate.
  *
  * @Gedmo\Loggable
  * @ORM\Table(name="hostingprovider_certificates")
@@ -15,14 +15,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class HostingproviderCertificate
 {
-    const ENERGYSOURCE_SOLAR   = 'solar';
-    const ENERGYSOURCE_WIND    = 'wind';
-    const ENERGYSOURCE_WATER   = 'water';
+    const ENERGYSOURCE_SOLAR = 'solar';
+    const ENERGYSOURCE_WIND = 'wind';
+    const ENERGYSOURCE_WATER = 'water';
     const ENERGYSOURCE_BIOMASS = 'biomass';
-    const ENERGYSOURCE_MIXED   = 'mixed';
+    const ENERGYSOURCE_MIXED = 'mixed';
 
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -31,7 +31,7 @@ class HostingproviderCertificate
     protected $id;
 
     /**
-     * @var string $url
+     * @var string
      *
      * @Gedmo\Versioned
      * @Assert\Url()
@@ -40,7 +40,7 @@ class HostingproviderCertificate
     protected $url;
 
     /**
-     * @var date $valid_from
+     * @var date
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="valid_from", type="date")
@@ -48,7 +48,7 @@ class HostingproviderCertificate
     protected $valid_from;
 
     /**
-     * @var date $valid_to
+     * @var date
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="valid_to", type="date")
@@ -56,14 +56,14 @@ class HostingproviderCertificate
     protected $valid_to;
 
     /**
-     * @var string $mainenergytype
+     * @var string
      * @Gedmo\Versioned
      * @ORM\Column(name="mainenergytype", type="string", length=255)
      */
     protected $mainenergytype;
 
     /**
-     * @var string $energyprovider
+     * @var string
      * @Gedmo\Versioned
      * @ORM\Column(name="energyprovider", type="string", length=255)
      */
@@ -77,9 +77,9 @@ class HostingproviderCertificate
     protected $hostingprovider;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -87,19 +87,21 @@ class HostingproviderCertificate
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
+     *
      * @return Certificate
      */
     public function setUrl($url)
     {
         $this->url = $url;
+
         return $this;
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
@@ -109,19 +111,21 @@ class HostingproviderCertificate
     }
 
     /**
-     * Set valid_from
+     * Set valid_from.
      *
      * @param datetime $validFrom
+     *
      * @return Certificate
      */
     public function setValidFrom($validFrom)
     {
         $this->valid_from = $validFrom;
+
         return $this;
     }
 
     /**
-     * Get valid_from
+     * Get valid_from.
      *
      * @return datetime
      */
@@ -131,19 +135,21 @@ class HostingproviderCertificate
     }
 
     /**
-     * Set valid_to
+     * Set valid_to.
      *
      * @param datetime $validTo
+     *
      * @return Certificate
      */
     public function setValidTo($validTo)
     {
         $this->valid_to = $validTo;
+
         return $this;
     }
 
     /**
-     * Get valid_to
+     * Get valid_to.
      *
      * @return datetime
      */
@@ -153,22 +159,24 @@ class HostingproviderCertificate
     }
 
     /**
-     * Set mainenergytype
+     * Set mainenergytype.
      *
      * @param string $mainenergytype
+     *
      * @return Certificate
      */
     public function setMainenergytype($mainenergytype)
     {
-        if (!in_array($mainenergytype, array(self::ENERGYSOURCE_BIOMASS,self::ENERGYSOURCE_MIXED,self::ENERGYSOURCE_SOLAR,  self::ENERGYSOURCE_WATER,self::ENERGYSOURCE_WIND))) {
-            throw new \InvalidArgumentException("Invalid energy source");
+        if (!in_array($mainenergytype, [self::ENERGYSOURCE_BIOMASS, self::ENERGYSOURCE_MIXED, self::ENERGYSOURCE_SOLAR,  self::ENERGYSOURCE_WATER, self::ENERGYSOURCE_WIND])) {
+            throw new \InvalidArgumentException('Invalid energy source');
         }
         $this->mainenergytype = $mainenergytype;
+
         return $this;
     }
 
     /**
-     * Get mainenergytype
+     * Get mainenergytype.
      *
      * @return string
      */
@@ -178,19 +186,21 @@ class HostingproviderCertificate
     }
 
     /**
-     * Set energyprovider
+     * Set energyprovider.
      *
      * @param string $energyprovider
+     *
      * @return Certificate
      */
     public function setEnergyprovider($energyprovider)
     {
         $this->energyprovider = $energyprovider;
+
         return $this;
     }
 
     /**
-     * Get energyprovider
+     * Get energyprovider.
      *
      * @return string
      */
@@ -200,19 +210,21 @@ class HostingproviderCertificate
     }
 
     /**
-     * Set hostingprovider
+     * Set hostingprovider.
      *
      * @param TGWF\Greencheck\Entity\Hostingprovider $hostingprovider
+     *
      * @return Certificate
      */
     public function setHostingprovider($hostingprovider = null)
     {
         $this->hostingprovider = $hostingprovider;
+
         return $this;
     }
 
     /**
-     * Get hostingprovider
+     * Get hostingprovider.
      *
      * @return TGWF\Greencheck\Entity\Hostingprovider
      */

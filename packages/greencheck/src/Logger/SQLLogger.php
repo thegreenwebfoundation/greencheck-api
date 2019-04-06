@@ -5,19 +5,18 @@ namespace TGWF\Greencheck\Logger;
 use Doctrine\DBAL\Logging\SQLLogger as SQLLoggerInterface;
 
 /**
- * A SQL logger that logs queries to be countable
- *
+ * A SQL logger that logs queries to be countable.
  */
 class SQLLogger implements SQLLoggerInterface
 {
-    protected $queries = array();
+    protected $queries = [];
 
     /**
      * {@inheritdoc}
      */
     public function startQuery($sql, array $params = null, array $types = null)
     {
-        $this->queries[] = array($sql, $params, $types);
+        $this->queries[] = [$sql, $params, $types];
         /*echo $sql . PHP_EOL;
 
         if ($params) {
@@ -42,12 +41,12 @@ class SQLLogger implements SQLLoggerInterface
     }
 
     /**
-     * Clear the queries array to start over
+     * Clear the queries array to start over.
      *
      * @return [type] [description]
      */
     public function clearQueries()
     {
-        $this->queries = array();
+        $this->queries = [];
     }
 }

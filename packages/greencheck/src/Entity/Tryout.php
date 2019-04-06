@@ -3,19 +3,17 @@
 namespace TGWF\Greencheck\Entity;
 
 /**
- * TGWF\AdminBundle\Entity\Tryout
- *
+ * TGWF\AdminBundle\Entity\Tryout.
  */
 class Tryout
 {
     /**
-     * @var string $url
-     *
+     * @var string
      */
     private $url;
 
     /**
-     * Set tld
+     * Set tld.
      *
      * @param string $tld
      */
@@ -25,7 +23,7 @@ class Tryout
     }
 
     /**
-     * Get tld
+     * Get tld.
      *
      * @return string
      */
@@ -33,7 +31,7 @@ class Tryout
     {
         return $this->url;
     }
-    
+
     public function __toString()
     {
         return $this->url;

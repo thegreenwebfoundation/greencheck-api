@@ -2,55 +2,53 @@
 
 namespace TGWF\Greencheck\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * TGWF\Greencheck\Entity\Datacenter
+ * TGWF\Greencheck\Entity\Datacenter.
  */
 class Datacenter
 {
     /**
-     * @var integer $id
+     * @var int
      */
     private $id;
 
     /**
-     * @var string $naam
+     * @var string
      */
     private $naam;
 
     /**
-     * @var string $website
+     * @var string
      */
     private $website;
 
     /**
-     * @var string $model
+     * @var string
      */
     private $model;
 
     /**
-     * @var string $countrydomain
+     * @var string
      */
     private $countrydomain;
 
     /**
-     * @var boolean $showonwebsite
+     * @var bool
      */
     private $showonwebsite;
 
     /**
-     * @var float $pue
+     * @var float
      */
     private $pue;
 
     /**
-     * @var boolean $mja3
+     * @var bool
      */
     private $mja3;
 
     /**
-     * @var boolean $greengrid
+     * @var bool
      */
     private $greengrid;
 
@@ -65,18 +63,18 @@ class Datacenter
     private $certificates;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->hostingproviders = new \Doctrine\Common\Collections\ArrayCollection();
         $this->certificates = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -84,20 +82,21 @@ class Datacenter
     }
 
     /**
-     * Set naam
+     * Set naam.
      *
      * @param string $naam
+     *
      * @return Datacenter
      */
     public function setNaam($naam)
     {
         $this->naam = $naam;
-    
+
         return $this;
     }
 
     /**
-     * Get naam
+     * Get naam.
      *
      * @return string
      */
@@ -107,20 +106,21 @@ class Datacenter
     }
 
     /**
-     * Set website
+     * Set website.
      *
      * @param string $website
+     *
      * @return Datacenter
      */
     public function setWebsite($website)
     {
         $this->website = $website;
-    
+
         return $this;
     }
 
     /**
-     * Get website
+     * Get website.
      *
      * @return string
      */
@@ -130,20 +130,21 @@ class Datacenter
     }
 
     /**
-     * Set model
+     * Set model.
      *
      * @param string $model
+     *
      * @return Datacenter
      */
     public function setModel($model)
     {
         $this->model = $model;
-    
+
         return $this;
     }
 
     /**
-     * Get model
+     * Get model.
      *
      * @return string
      */
@@ -153,20 +154,21 @@ class Datacenter
     }
 
     /**
-     * Set countrydomain
+     * Set countrydomain.
      *
      * @param string $countrydomain
+     *
      * @return Datacenter
      */
     public function setCountrydomain($countrydomain)
     {
         $this->countrydomain = $countrydomain;
-    
+
         return $this;
     }
 
     /**
-     * Get countrydomain
+     * Get countrydomain.
      *
      * @return string
      */
@@ -176,22 +178,23 @@ class Datacenter
     }
 
     /**
-     * Set showonwebsite
+     * Set showonwebsite.
      *
-     * @param boolean $showonwebsite
+     * @param bool $showonwebsite
+     *
      * @return Datacenter
      */
     public function setShowonwebsite($showonwebsite)
     {
         $this->showonwebsite = $showonwebsite;
-    
+
         return $this;
     }
 
     /**
-     * Get showonwebsite
+     * Get showonwebsite.
      *
-     * @return boolean
+     * @return bool
      */
     public function getShowonwebsite()
     {
@@ -199,20 +202,21 @@ class Datacenter
     }
 
     /**
-     * Set pue
+     * Set pue.
      *
      * @param float $pue
+     *
      * @return Datacenter
      */
     public function setPue($pue)
     {
         $this->pue = $pue;
-    
+
         return $this;
     }
 
     /**
-     * Get pue
+     * Get pue.
      *
      * @return float
      */
@@ -222,22 +226,23 @@ class Datacenter
     }
 
     /**
-     * Set mja3
+     * Set mja3.
      *
-     * @param boolean $mja3
+     * @param bool $mja3
+     *
      * @return Datacenter
      */
     public function setMja3($mja3)
     {
         $this->mja3 = $mja3;
-    
+
         return $this;
     }
 
     /**
-     * Get mja3
+     * Get mja3.
      *
-     * @return boolean
+     * @return bool
      */
     public function getMja3()
     {
@@ -245,22 +250,23 @@ class Datacenter
     }
 
     /**
-     * Set greengrid
+     * Set greengrid.
      *
-     * @param boolean $greengrid
+     * @param bool $greengrid
+     *
      * @return Datacenter
      */
     public function setGreengrid($greengrid)
     {
         $this->greengrid = $greengrid;
-    
+
         return $this;
     }
 
     /**
-     * Get greengrid
+     * Get greengrid.
      *
-     * @return boolean
+     * @return bool
      */
     public function getGreengrid()
     {
@@ -268,20 +274,21 @@ class Datacenter
     }
 
     /**
-     * Add hostingproviders
+     * Add hostingproviders.
      *
      * @param TGWF\Greencheck\Entity\DatacenterHostingprovider $hostingproviders
+     *
      * @return Datacenter
      */
     public function addHostingprovider(\TGWF\Greencheck\Entity\DatacenterHostingprovider $hostingproviders)
     {
         $this->hostingproviders[] = $hostingproviders;
-    
+
         return $this;
     }
 
     /**
-     * Remove hostingproviders
+     * Remove hostingproviders.
      *
      * @param TGWF\Greencheck\Entity\DatacenterHostingprovider $hostingproviders
      */
@@ -291,7 +298,7 @@ class Datacenter
     }
 
     /**
-     * Get hostingproviders
+     * Get hostingproviders.
      *
      * @return Doctrine\Common\Collections\Collection
      */
@@ -301,20 +308,21 @@ class Datacenter
     }
 
     /**
-     * Add certificates
+     * Add certificates.
      *
      * @param TGWF\Greencheck\Entity\DatacenterCertificate $certificates
+     *
      * @return Datacenter
      */
     public function addCertificate(\TGWF\Greencheck\Entity\DatacenterCertificate $certificates)
     {
         $this->certificates[] = $certificates;
-    
+
         return $this;
     }
 
     /**
-     * Remove certificates
+     * Remove certificates.
      *
      * @param TGWF\Greencheck\Entity\DatacenterCertificate $certificates
      */
@@ -324,7 +332,7 @@ class Datacenter
     }
 
     /**
-     * Get certificates
+     * Get certificates.
      *
      * @return Doctrine\Common\Collections\Collection
      */

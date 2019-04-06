@@ -7,7 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * TGWF\Greencheck\Entity\Hostingproviders
+ * TGWF\Greencheck\Entity\Hostingproviders.
  *
  * @Gedmo\Loggable
  * @ORM\Table(name="hostingproviders")
@@ -19,7 +19,7 @@ class Hostingprovider implements \ArrayAccess
     const MODEL_GREENENERGY = 'groeneenergie';
 
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -28,7 +28,7 @@ class Hostingprovider implements \ArrayAccess
     protected $id;
 
     /**
-     * @var string $naam
+     * @var string
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="naam", type="string", length=255, nullable=false)
@@ -36,7 +36,7 @@ class Hostingprovider implements \ArrayAccess
     protected $naam;
 
     /**
-     * @var string $website
+     * @var string
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="website", type="string", length=255, nullable=false)
@@ -44,7 +44,7 @@ class Hostingprovider implements \ArrayAccess
     protected $website;
 
     /**
-     * @var string $model
+     * @var string
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="model", type="string", nullable=false)
@@ -52,7 +52,7 @@ class Hostingprovider implements \ArrayAccess
     protected $model;
 
     /**
-     * @var string $countrydomain
+     * @var string
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="countrydomain", type="string", nullable=false)
@@ -60,7 +60,7 @@ class Hostingprovider implements \ArrayAccess
     protected $countrydomain;
 
     /**
-     * @var string $customer
+     * @var string
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="customer", type="boolean", nullable=false)
@@ -68,7 +68,7 @@ class Hostingprovider implements \ArrayAccess
     protected $customer = false;
 
     /**
-     * @var string $icon
+     * @var string
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="icon", type="string", length=50, nullable=false)
@@ -76,7 +76,7 @@ class Hostingprovider implements \ArrayAccess
     protected $icon = '';
 
     /**
-     * @var string $iconurl
+     * @var string
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="iconurl", type="string", length=255, nullable=false)
@@ -84,7 +84,7 @@ class Hostingprovider implements \ArrayAccess
     protected $iconurl = '';
 
     /**
-     * @var boolean $showonwebsite
+     * @var bool
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="showonwebsite", type="boolean", nullable=false)
@@ -112,12 +112,12 @@ class Hostingprovider implements \ArrayAccess
     protected $greencheckrecords;
 
     /**
-     * \\ORM\OneToMany(targetEntity="DatacenterHostingprovider",mappedBy="hostingprovider")
+     * \\ORM\OneToMany(targetEntity="DatacenterHostingprovider",mappedBy="hostingprovider").
      **/
     protected $datacenters;
 
     /**
-     * @var boolean $partner
+     * @var bool
      *
      * @ORM\Column(name="partner", type="string")
      */
@@ -131,9 +131,9 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -141,7 +141,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Set naam
+     * Set naam.
      *
      * @param string $naam
      */
@@ -151,7 +151,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get naam
+     * Get naam.
      *
      * @return string
      */
@@ -161,7 +161,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Set website
+     * Set website.
      *
      * @param string $website
      */
@@ -171,7 +171,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get website
+     * Get website.
      *
      * @return string
      */
@@ -181,20 +181,20 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Set model
+     * Set model.
      *
      * @param string $model
      */
     public function setModel($model)
     {
-        if (!in_array($model, array(self::MODEL_COMPENSATION, self::MODEL_GREENENERGY))) {
-            throw new \InvalidArgumentException("Invalid model");
+        if (!in_array($model, [self::MODEL_COMPENSATION, self::MODEL_GREENENERGY])) {
+            throw new \InvalidArgumentException('Invalid model');
         }
         $this->model = $model;
     }
 
     /**
-     * Get model
+     * Get model.
      *
      * @return string
      */
@@ -204,9 +204,9 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Set showonwebsite
+     * Set showonwebsite.
      *
-     * @param boolean $showonwebsite
+     * @param bool $showonwebsite
      */
     public function setShowonwebsite($showonwebsite)
     {
@@ -214,9 +214,9 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get showonwebsite
+     * Get showonwebsite.
      *
-     * @return boolean
+     * @return bool
      */
     public function getShowonwebsite()
     {
@@ -224,7 +224,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Add asnumbers
+     * Add asnumbers.
      *
      * @param TGWF\AdminBundle\Entity\GreencheckAs $asnumbers
      */
@@ -234,7 +234,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get asnumbers
+     * Get asnumbers.
      *
      * @return Doctrine\Common\Collections\Collection
      */
@@ -244,7 +244,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Add iprecords
+     * Add iprecords.
      *
      * @param TGWF\AdminBundle\Entity\GreencheckIp $iprecords
      */
@@ -254,17 +254,18 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get iprecords
+     * Get iprecords.
      *
      * @return Doctrine\Common\Collections\Collection
      */
     public function getIprecords()
     {
-        $data = array();
+        $data = [];
         foreach ($this->iprecords as $ip) {
             $data[ip2long($ip->getIpStart())] = $ip;
         }
         ksort($data);
+
         return $data;
     }
 
@@ -274,7 +275,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Set countrydomain
+     * Set countrydomain.
      *
      * @param string $countrydomain
      */
@@ -284,7 +285,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get countrydomain
+     * Get countrydomain.
      *
      * @return string
      */
@@ -294,7 +295,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Add greencheckrecords
+     * Add greencheckrecords.
      *
      * @param TGWF\AdminBundle\Entity\Greencheck $greencheckrecords
      */
@@ -304,7 +305,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get greencheckrecords
+     * Get greencheckrecords.
      *
      * @return Doctrine\Common\Collections\Collection
      */
@@ -314,7 +315,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get asnumbersapprove
+     * Get asnumbersapprove.
      *
      * @return Doctrine\Common\Collections\Collection
      */
@@ -324,7 +325,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get iprecordsapprove
+     * Get iprecordsapprove.
      *
      * @return Doctrine\Common\Collections\Collection
      */
@@ -334,7 +335,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Add datacenter
+     * Add datacenter.
      *
      * @param TGWF\AdminBundle\Entity\Datacenter $datacenter
      */
@@ -344,7 +345,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get datacenters
+     * Get datacenters.
      *
      * @return Doctrine\Common\Collections\Collection
      */
@@ -354,7 +355,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Add datacenters
+     * Add datacenters.
      *
      * @param TGWF\AdminBundle\Entity\DatacenterHostingprovider $datacenters
      */
@@ -364,9 +365,9 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Set customer
+     * Set customer.
      *
-     * @param boolean $customer
+     * @param bool $customer
      */
     public function setCustomer($customer)
     {
@@ -374,9 +375,9 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get customer
+     * Get customer.
      *
-     * @return boolean
+     * @return bool
      */
     public function getCustomer()
     {
@@ -384,7 +385,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Set icon
+     * Set icon.
      *
      * @param string $icon
      */
@@ -394,7 +395,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get icon
+     * Get icon.
      *
      * @return string
      */
@@ -404,7 +405,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Set iconurl
+     * Set iconurl.
      *
      * @param string $iconurl
      */
@@ -414,7 +415,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Get iconurl
+     * Get iconurl.
      *
      * @return string
      */
@@ -424,19 +425,21 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Add certificates
+     * Add certificates.
      *
      * @param TGWF\AdminBundle\Entity\Certificate $certificates
+     *
      * @return Hostingprovider
      */
     public function addCertificate(HostingproviderCertificate $certificates)
     {
         $this->certificates[] = $certificates;
+
         return $this;
     }
 
     /**
-     * Get certificates
+     * Get certificates.
      *
      * @return Doctrine\Common\Collections\Collection
      */
@@ -446,7 +449,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Remove certificates
+     * Remove certificates.
      *
      * @param TGWF\AdminBundle\Entity\Certificate $certificates
      */
@@ -456,19 +459,21 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Add asnumbers
+     * Add asnumbers.
      *
      * @param TGWF\AdminBundle\Entity\GreencheckAs $asnumbers
+     *
      * @return Hostingprovider
      */
     public function addAsnumber(GreencheckAs $asnumbers)
     {
         $this->asnumbers[] = $asnumbers;
+
         return $this;
     }
 
     /**
-     * Remove asnumbers
+     * Remove asnumbers.
      *
      * @param TGWF\AdminBundle\Entity\GreencheckAs $asnumbers
      */
@@ -478,19 +483,21 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Add iprecords
+     * Add iprecords.
      *
      * @param TGWF\AdminBundle\Entity\GreencheckIp $iprecords
+     *
      * @return Hostingprovider
      */
     public function addIprecord(GreencheckIp $iprecords)
     {
         $this->iprecords[] = $iprecords;
+
         return $this;
     }
 
     /**
-     * Remove iprecords
+     * Remove iprecords.
      *
      * @param GreencheckIp $iprecords
      */
@@ -500,19 +507,21 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Add greencheckrecords
+     * Add greencheckrecords.
      *
      * @param Greencheck $greencheckrecords
+     *
      * @return Hostingprovider
      */
     public function addGreencheckrecord(Greencheck $greencheckrecords)
     {
         $this->greencheckrecords[] = $greencheckrecords;
+
         return $this;
     }
 
     /**
-     * Remove greencheckrecords
+     * Remove greencheckrecords.
      *
      * @param Greencheck $greencheckrecords
      */
@@ -522,7 +531,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * Remove datacenters
+     * Remove datacenters.
      *
      * @param DatacenterHostingprovider $datacenters
      */
@@ -549,12 +558,13 @@ class Hostingprovider implements \ArrayAccess
     {
         // In this example we say that exists means it is not null
         $value = $this->{"get$offset"}();
-        return $value !== null;
+
+        return null !== $value;
     }
 
     public function offsetSet($offset, $value)
     {
-        throw new BadMethodCallException("Array access of class " . get_class($this) . " is read-only!");
+        throw new BadMethodCallException('Array access of class '.get_class($this).' is read-only!');
     }
 
     public function offsetGet($offset)
@@ -564,12 +574,11 @@ class Hostingprovider implements \ArrayAccess
 
     public function offsetUnset($offset)
     {
-        throw new BadMethodCallException("Array access of class " . get_class($this) . " is read-only!");
+        throw new BadMethodCallException('Array access of class '.get_class($this).' is read-only!');
     }
 
-
     /**
-     * @return boolean
+     * @return bool
      */
     public function getPartner()
     {
@@ -577,7 +586,7 @@ class Hostingprovider implements \ArrayAccess
     }
 
     /**
-     * @param boolean $partner
+     * @param bool $partner
      */
     public function setPartner($partner)
     {

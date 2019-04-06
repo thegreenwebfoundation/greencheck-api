@@ -50,7 +50,7 @@ class GreencheckLogProcessor implements Processor, TopicSubscriberInterface
 
     public function process(Message $message, Context $context)
     {
-        $this->logger->debug("GreencheckLogProcessor called");
+        $this->logger->debug('GreencheckLogProcessor called');
         $greencheckLogger = $this->initializeLogger();
 
         $request = unserialize($message->getBody());

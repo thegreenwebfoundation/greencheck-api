@@ -5,7 +5,7 @@ namespace TGWF\Greencheck\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TGWF\GreencheckAdminBundle\Entity\Greencheck
+ * TGWF\GreencheckAdminBundle\Entity\Greencheck.
  *
  * @ORM\Table(name="greencheck_by",indexes={
  *  @ORM\Index(name="datum", columns={"datum"}),
@@ -15,11 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-
 class GreencheckBy
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -28,28 +27,28 @@ class GreencheckBy
     private $id;
 
     /**
-     * @var datetime $datum
+     * @var datetime
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
     private $datum;
 
     /**
-     * @var integer $checkedBy
+     * @var int
      *
      * @ORM\Column(name="checked_by", type="string",length=40, nullable=false)
      */
     private $checkedBy;
 
     /**
-     * @var string $checkedThrough
+     * @var string
      *
      * @ORM\Column(name="checked_through", type="string", nullable=false)
      */
     private $checkedThrough;
 
     /**
-     * @var string $checkedBrowser
+     * @var string
      *
      * @ORM\Column(name="checked_browser", type="string", length=255, nullable=false)
      */
@@ -63,9 +62,9 @@ class GreencheckBy
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -73,7 +72,7 @@ class GreencheckBy
     }
 
     /**
-     * Set datum
+     * Set datum.
      *
      * @param datetime $datum
      */
@@ -83,7 +82,7 @@ class GreencheckBy
     }
 
     /**
-     * Get datum
+     * Get datum.
      *
      * @return datetime
      */
@@ -93,9 +92,9 @@ class GreencheckBy
     }
 
     /**
-     * Set checkedBy
+     * Set checkedBy.
      *
-     * @param integer $checkedBy
+     * @param int $checkedBy
      */
     public function setCheckedBy($checkedBy)
     {
@@ -103,9 +102,9 @@ class GreencheckBy
     }
 
     /**
-     * Get checkedBy
+     * Get checkedBy.
      *
-     * @return integer
+     * @return int
      */
     public function getCheckedBy()
     {
@@ -113,7 +112,7 @@ class GreencheckBy
     }
 
     /**
-     * Set checkedThrough
+     * Set checkedThrough.
      *
      * @param string $checkedThrough
      */
@@ -123,7 +122,7 @@ class GreencheckBy
     }
 
     /**
-     * Get checkedThrough
+     * Get checkedThrough.
      *
      * @return string
      */
@@ -133,7 +132,7 @@ class GreencheckBy
     }
 
     /**
-     * Set checkedBrowser
+     * Set checkedBrowser.
      *
      * @param string $checkedBrowser
      */
@@ -143,7 +142,7 @@ class GreencheckBy
     }
 
     /**
-     * Get checkedBrowser
+     * Get checkedBrowser.
      *
      * @return string
      */

@@ -5,8 +5,7 @@ namespace App\Greencheck;
 use TGWF\Greencheck\SitecheckResult;
 
 /**
- * Class LatestResult
- * @package App\Greencheck
+ * Class LatestResult.
  */
 class LatestResult
 {

@@ -10,7 +10,7 @@ use Predis\Client;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * Clear the cache from the admin part
+ * Clear the cache from the admin part.
  */
 class GreencheckClearCacheListenerCommand extends Command
 {

@@ -5,7 +5,7 @@ namespace TGWF\Greencheck\Sitecheck;
 use TGWF\Greencheck\Cache\DisabledCache;
 
 /**
- * Sitecheck class
+ * Sitecheck class.
  *
  * The sitecheck handles all actions with regard to the Green Web Foundation greencheck.
  *
@@ -20,7 +20,6 @@ use TGWF\Greencheck\Cache\DisabledCache;
  */
 class Cache
 {
-
     /**
      * @var array
      */
@@ -32,22 +31,22 @@ class Cache
     protected $_config = null;
 
     /**
-     * Cache is enabled by default
+     * Cache is enabled by default.
      *
-     * @var boolean
+     * @var bool
      */
     protected $_disable = false;
 
     /**
-     * Construct the sitecheck
+     * Construct the sitecheck.
      *
-     * @param array $config     [description]
+     * @param array $config [description]
      */
     public function __construct($config)
     {
-        $this->_config     = $config;
- 
-        if ($config['greencheck']['cache'] == false) {
+        $this->_config = $config;
+
+        if (false == $config['greencheck']['cache']) {
             $this->disableCache();
         }
 
@@ -58,11 +57,12 @@ class Cache
     public function getTTL($key = 'default')
     {
         $config = $this->_config;
-        if ($key != 'default' && isset($config['greencheck'][$key])) {
+        if ('default' != $key && isset($config['greencheck'][$key])) {
             $lifetime = $config['greencheck'][$key]['cachetime'];
         } else {
             $lifetime = $config['greencheck']['cachetime'];
         }
+
         return $lifetime;
     }
 
@@ -73,10 +73,10 @@ class Cache
         }
 
         $config = $this->_config;
-        if ($key != 'default' && isset($config['greencheck'][$key])) {
-            $caching  = $config['greencheck'][$key]['cache'];
+        if ('default' != $key && isset($config['greencheck'][$key])) {
+            $caching = $config['greencheck'][$key]['cache'];
         } else {
-            $caching  = $config['greencheck']['cache'];
+            $caching = $config['greencheck']['cache'];
         }
 
         return $caching;
@@ -86,7 +86,7 @@ class Cache
     {
         $config = $this->_config;
         if (isset($config['greencheck']['cachetype'])) {
-            $cachetype  = $config['greencheck']['cachetype'];
+            $cachetype = $config['greencheck']['cachetype'];
         } else {
             $cachetype = 'apc';
         }
@@ -96,13 +96,13 @@ class Cache
 
     public function getCacheDriver($cachetype)
     {
-        if ($cachetype == 'memcache') {
+        if ('memcache' == $cachetype) {
             $memcache = new \Memcache();
             $memcache->connect('127.0.0.1', 11211);
 
             $cache = new \Doctrine\Common\Cache\MemcacheCache();
             $cache->setMemcache($memcache);
-        } elseif ($cachetype == 'redis') {
+        } elseif ('redis' == $cachetype) {
             $redis = new \Redis();
             $redis->connect('127.0.0.1', 6379);
 
@@ -113,20 +113,23 @@ class Cache
         }
 
         $cache->setNamespace('tgwf_greencheck');
+
         return $cache;
     }
 
     /**
-     * Setup the cache functions
+     * Setup the cache functions.
      */
     private function setupCache($key = 'default')
     {
-        if ($this->isDisabled() || $this->getCacheEnabled($key) == false) {
+        if ($this->isDisabled() || false == $this->getCacheEnabled($key)) {
             $cache = new DisabledCache();
+
             return $cache;
         }
 
         $cache = $this->getCacheDriver($this->getCacheType());
+
         return $cache;
     }
 

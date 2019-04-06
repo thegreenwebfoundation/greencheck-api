@@ -8,7 +8,7 @@ use TGWF\Greencheck\Validator\Constraints as TGWFAssert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * TGWF\Greencheck\Entity\GreencheckIp
+ * TGWF\Greencheck\Entity\GreencheckIp.
  *
  * @Gedmo\Loggable
  * @TGWFAssert\IpRange
@@ -18,7 +18,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class GreencheckIp
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -27,7 +27,7 @@ class GreencheckIp
     private $id;
 
     /**
-     * @var integer $ipStartLong
+     * @var int
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="ip_start", type="decimal", precision=39, nullable=false)
@@ -35,14 +35,14 @@ class GreencheckIp
     protected $ipStartLong;
 
     /**
-     * @var string $ipStart
+     * @var string
      *
      * @Assert\Ip(version="all_public")
      */
     protected $ipStart;
 
     /**
-     * @var integer $ipStartLong
+     * @var int
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="ip_eind", type="decimal", precision=39, nullable=false)
@@ -50,20 +50,19 @@ class GreencheckIp
     protected $ipEindLong;
 
     /**
-    * @var string $ipEind
-    *
-    * @Assert\Ip(version="all_public")
-    */
+     * @var string
+     *
+     * @Assert\Ip(version="all_public")
+     */
     protected $ipEind;
 
     /**
-     * @var integer $active
+     * @var int
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active;
-
 
     /**
      * @Gedmo\Versioned
@@ -73,9 +72,9 @@ class GreencheckIp
     protected $hostingprovider;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -83,7 +82,7 @@ class GreencheckIp
     }
 
     /**
-     * Set ipStart
+     * Set ipStart.
      *
      * @param string $ipStart
      */
@@ -91,11 +90,12 @@ class GreencheckIp
     {
         $this->ipStart = $ipStart;
         $this->ipStartLong = $this->inet_ptod($ipStart);
+
         return $this;
     }
 
     /**
-     * Get ipStart
+     * Get ipStart.
      *
      * @return string
      */
@@ -104,11 +104,12 @@ class GreencheckIp
         if (is_null($this->ipStart)) {
             $this->ipStart = $this->inet_dtop($this->ipStartLong);
         }
+
         return $this->ipStart;
     }
 
     /**
-     * Set ipEind
+     * Set ipEind.
      *
      * @param string $ipEind
      */
@@ -116,11 +117,12 @@ class GreencheckIp
     {
         $this->ipEind = $ipEind;
         $this->ipEindLong = $this->inet_ptod($ipEind);
+
         return $this;
     }
 
     /**
-     * Get ipEind
+     * Get ipEind.
      *
      * @return string
      */
@@ -129,25 +131,28 @@ class GreencheckIp
         if (is_null($this->ipEind)) {
             $this->ipEind = $this->inet_dtop($this->ipEindLong);
         }
+
         return $this->ipEind;
     }
 
     /**
-    * Set ipStartLong
-    *
-    * @param integer $ipStartLong
-    * @return GreencheckIp
-    */
+     * Set ipStartLong.
+     *
+     * @param int $ipStartLong
+     *
+     * @return GreencheckIp
+     */
     public function setIpStartLong($ipStartLong)
     {
         $this->ipStartLong = $ipStartLong;
+
         return $this;
     }
 
     /**
-     * Get ipStartLong
+     * Get ipStartLong.
      *
-     * @return integer
+     * @return int
      */
     public function getIpStartLong()
     {
@@ -155,21 +160,23 @@ class GreencheckIp
     }
 
     /**
-     * Set ipEindLong
+     * Set ipEindLong.
      *
-     * @param integer $ipEindLong
+     * @param int $ipEindLong
+     *
      * @return GreencheckIp
      */
     public function setIpEindLong($ipEindLong)
     {
         $this->ipEindLong = $ipEindLong;
+
         return $this;
     }
 
     /**
-     * Get ipEindLong
+     * Get ipEindLong.
      *
-     * @return integer
+     * @return int
      */
     public function getIpEindLong()
     {
@@ -177,9 +184,9 @@ class GreencheckIp
     }
 
     /**
-     * Set active
+     * Set active.
      *
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {
@@ -187,9 +194,9 @@ class GreencheckIp
     }
 
     /**
-     * Get active
+     * Get active.
      *
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -197,9 +204,9 @@ class GreencheckIp
     }
 
     /**
-     * Is active
+     * Is active.
      *
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {
@@ -207,7 +214,7 @@ class GreencheckIp
     }
 
     /**
-     * Set hostingprovider
+     * Set hostingprovider.
      *
      * @param TGWF\Greencheck\Entity\Hostingprovider $hostingprovider
      */
@@ -217,7 +224,7 @@ class GreencheckIp
     }
 
     /**
-     * Get hostingprovider
+     * Get hostingprovider.
      *
      * @return TGWF\Greencheck\Entity\Hostingprovider
      */
@@ -227,32 +234,35 @@ class GreencheckIp
     }
 
     /**
-     * Check that the end ip is greater than or equals the start ip
-     * @return boolean
+     * Check that the end ip is greater than or equals the start ip.
+     *
+     * @return bool
      */
     public function isValidIpRange()
     {
         if ($this->ipStartLong > $this->ipEindLong) {
             return false;
         }
+
         return true;
     }
 
     /**
-    * Convert an IP address from presentation to decimal(39,0) format suitable for storage in MySQL
-    *
-    * @param string $ip_address An IP address in IPv4, IPv6 or decimal notation
-    * @return string The IP address in decimal notation
-    */
+     * Convert an IP address from presentation to decimal(39,0) format suitable for storage in MySQL.
+     *
+     * @param string $ip_address An IP address in IPv4, IPv6 or decimal notation
+     *
+     * @return string The IP address in decimal notation
+     */
     public function inet_ptod($ip_address)
     {
         // IPv4 address
-        if (strpos($ip_address, ':') === false && strpos($ip_address, '.') !== false) {
-            $ip_address = '::' . $ip_address;
+        if (false === strpos($ip_address, ':') && false !== strpos($ip_address, '.')) {
+            $ip_address = '::'.$ip_address;
         }
 
         // IPv6 address
-        if (strpos($ip_address, ':') !== false) {
+        if (false !== strpos($ip_address, ':')) {
             $network = inet_pton($ip_address);
             $parts = unpack('N*', $network);
 
@@ -279,20 +289,21 @@ class GreencheckIp
     }
 
     /**
-     * Convert an IP address from decimal format to presentation format
+     * Convert an IP address from decimal format to presentation format.
      *
      * @param string $decimal An IP address in IPv4, IPv6 or decimal notation
+     *
      * @return string The IP address in presentation format
      */
     public function inet_dtop($decimal)
     {
         // IPv4 or IPv6 format
-        if (strpos($decimal, ':') !== false || strpos($decimal, '.') !== false) {
+        if (false !== strpos($decimal, ':') || false !== strpos($decimal, '.')) {
             return $decimal;
         }
 
         // Decimal format
-        $parts = array();
+        $parts = [];
         $parts[1] = bcdiv($decimal, '79228162514264337593543950336', 0);
         $decimal = bcsub($decimal, bcmul($parts[1], '79228162514264337593543950336'));
         $parts[2] = bcdiv($decimal, '18446744073709551616', 0);
@@ -302,7 +313,7 @@ class GreencheckIp
         $parts[4] = $decimal;
 
         foreach ($parts as &$part) {
-            if (bccomp($part, '2147483647') == 1) {
+            if (1 == bccomp($part, '2147483647')) {
                 $part = bcsub($part, '4294967296');
             }
 

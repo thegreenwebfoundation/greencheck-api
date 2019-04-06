@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * TGWF\GreencheckAdminBundle\Entity\GreencheckAs
+ * TGWF\GreencheckAdminBundle\Entity\GreencheckAs.
  *
  * @Gedmo\Loggable
  * @ORM\Table(name="greencheck_as",indexes={@ORM\Index(name="asn", columns={"asn"})})
@@ -16,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class GreencheckAs
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -25,7 +25,7 @@ class GreencheckAs
     private $id;
 
     /**
-     * @var integer $asn
+     * @var int
      *
      * @ORM\Column(name="asn", type="integer", nullable=false)
      * @Assert\Range(
@@ -39,7 +39,7 @@ class GreencheckAs
     private $asn;
 
     /**
-     * @var integer $active
+     * @var int
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      * @Gedmo\Versioned
@@ -54,9 +54,9 @@ class GreencheckAs
     protected $hostingprovider;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -64,9 +64,9 @@ class GreencheckAs
     }
 
     /**
-     * Set asn
+     * Set asn.
      *
-     * @param integer $asn
+     * @param int $asn
      */
     public function setAsn($asn)
     {
@@ -74,9 +74,9 @@ class GreencheckAs
     }
 
     /**
-     * Get asn
+     * Get asn.
      *
-     * @return integer
+     * @return int
      */
     public function getAsn()
     {
@@ -84,9 +84,9 @@ class GreencheckAs
     }
 
     /**
-     * Set active
+     * Set active.
      *
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {
@@ -94,9 +94,9 @@ class GreencheckAs
     }
 
     /**
-     * Get active
+     * Get active.
      *
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -104,7 +104,7 @@ class GreencheckAs
     }
 
     /**
-     * Set hostingprovider
+     * Set hostingprovider.
      *
      * @param Hostingprovider $hostingprovider
      */
@@ -114,7 +114,7 @@ class GreencheckAs
     }
 
     /**
-     * Get hostingprovider
+     * Get hostingprovider.
      *
      * @return Hostingprovider
      */

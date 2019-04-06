@@ -17,7 +17,9 @@
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
-        "doctrine/data-fixtures": "dev-master"
+        "doctrine/data-fixtures": "dev-master",
+        "friendsofphp/php-cs-fixer": "^2.14",
+        "symfony/console": "^4.2"
     },
     "minimum-stability" : "stable",
     "autoload": {

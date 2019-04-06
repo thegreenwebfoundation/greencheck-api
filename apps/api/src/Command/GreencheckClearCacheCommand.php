@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use TGWF\Greencheck\Sitecheck;
 
 /**
- * Clear the greencheck cache
+ * Clear the greencheck cache.
  */
 class GreencheckClearCacheCommand extends Command
 {

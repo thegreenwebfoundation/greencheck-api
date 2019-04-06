@@ -2,15 +2,12 @@
 
 namespace TGWF\Greencheck;
 
-use TGWF\Greencheck\SitecheckResult;
-use TGWF\Greencheck\Entity;
 use TGWF\Greencheck\Sitecheck\Validator;
-
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints\Ip;
 
 /**
- * Sitecheck class
+ * Sitecheck class.
  *
  * The sitecheck handles all actions with regard to the Green Web Foundation greencheck.
  *
@@ -26,19 +23,20 @@ use Symfony\Component\Validator\Constraints\Ip;
 class Sitecheck
 {
     /**
-     * Error messages from validation
+     * Error messages from validation.
+     *
      * @var array
      */
     protected $_errorMessages = null;
 
     /**
-     * Should the checks be logged
+     * Should the checks be logged.
+     *
      * @var boolean, defaults to true
      */
     protected $_log = true;
 
     /**
-     *
      * @var Validator
      */
     protected $validator = null;
@@ -49,92 +47,97 @@ class Sitecheck
     protected $cache = null;
 
     /**
-     * Doctrine entity manager
+     * Doctrine entity manager.
+     *
      * @var [type]
      */
     protected $em = null;
 
     /**
-     * Needed for log purposes (website|admin|test|bot)
+     * Needed for log purposes (website|admin|test|bot).
+     *
      * @var string
      */
     protected $_calledfrom = 'website';
 
     /**
-     * Ip's for checked url's to skip hostname checks on each call
+     * Ip's for checked url's to skip hostname checks on each call.
+     *
      * @var array
      */
-    protected $_ipforurl = array();
+    protected $_ipforurl = [];
 
     /**
-     * Ip's for checked url's to skip hostname checks on each call
+     * Ip's for checked url's to skip hostname checks on each call.
+     *
      * @var array
      */
-    protected $cleanurl = array();
+    protected $cleanurl = [];
 
     /**
-     * The domains we have knowledge on
+     * The domains we have knowledge on.
+     *
      * @var <type>
      */
     protected $_countrytlds = null;
 
     /**
-     *
      * @var Table\GreencheckUrl
      */
     protected $greencheckUrl = null;
 
     /**
-     *
      * @var Table\GreencheckIp
      */
     protected $greencheckIp = null;
 
     /**
-     *
      * @var Table\GreencheckAs
      */
     protected $greencheckAs = null;
 
     protected $aschecker = null;
-    
+
     /**
-     * Construct the sitecheck
+     * Construct the sitecheck.
      *
-     * @param EntityManager $em         Doctrine Entity Manager
-     * @param Sitecheck/Cache $cache    Cache object
-     * @param string $calledfrom [description]
+     * @param EntityManager   $em         Doctrine Entity Manager
+     * @param Sitecheck/Cache $cache      Cache object
+     * @param string          $calledfrom [description]
      */
     public function __construct($em, $cache, $calledfrom = 'website')
     {
         $this->_calledfrom = $calledfrom;
-        $this->em          = $em;
-        
+        $this->em = $em;
+
         $this->validator = new Validator();
 
-        $this->greencheckUrl    = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
-        $this->greencheckIp     = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
-        $this->greencheckAs     = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
-        $this->greencheckTld    = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
+        $this->greencheckUrl = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
+        $this->greencheckIp = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
+        $this->greencheckAs = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
+        $this->greencheckTld = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
 
         $this->cache = $cache;
     }
 
     /**
-     * Check if the given url is a valid Hostname, and if so, check that it returns a valid ip adress
+     * Check if the given url is a valid Hostname, and if so, check that it returns a valid ip adress.
      *
-     * @param  string  $url
-     * @return boolean
+     * @param string $url
+     *
+     * @return bool
      */
     public function validate($url)
     {
         $url = $this->validator->getHostname($url);
         $ips = $this->getIpForUrl($url);
+
         return $this->validator->validate($url, $ips);
     }
 
     /**
-     * Return eventual validation errors
+     * Return eventual validation errors.
+     *
      * @return array
      */
     public function getValidateErrors()
@@ -148,33 +151,34 @@ class Sitecheck
     }
 
     /**
-     * Check the url in the greencheck, flow see above
+     * Check the url in the greencheck, flow see above.
      *
-     * @param  string                $url The url to check
+     * @param string $url The url to check
+     *
      * @return SitecheckResult|false
      */
     public function check($url, $checked_by = '0', $checked_browser = '', $checked_through = '')
     {
         $url = $this->validator->getHostname($url);
-        
+
         $validurl = $this->validate($url);
         // Incorrect url, then return
-        if ($validurl == false) {
+        if (false == $validurl) {
             return $validurl;
         }
 
-        if ($checked_through == '') {
+        if ('' == $checked_through) {
             $checked_through = $this->_calledfrom;
         }
 
         // Result is cached, then return result
         if ($result = $this->getCache('result')->fetch(sha1($url))) {
             $result->setCalledFrom(
-                array(
+                [
                     'checked_by' => $checked_by,
                     'checked_browser' => $checked_browser,
-                    'checked_through' => $checked_through
-                    )
+                    'checked_through' => $checked_through,
+                    ]
             );
             $result->setCheckedAt(new \DateTime('now'));
             $this->logResult($result);
@@ -186,18 +190,18 @@ class Sitecheck
         $result = new SitecheckResult($url, $this->getIpForUrl($url));
 
         $result->setCalledFrom(
-            array(
+            [
                 'checked_by' => $checked_by,
                 'checked_browser' => $checked_browser,
-                'checked_through' => $checked_through
-            )
+                'checked_through' => $checked_through,
+            ]
         );
 
         // Check both www.domain.tld and domain.tld
-        if (substr($url, 0, 4) == 'www.') {
+        if ('www.' == substr($url, 0, 4)) {
             $strippedurl = substr($url, 4);
         } else {
-            $strippedurl = 'www.' . $url;
+            $strippedurl = 'www.'.$url;
         }
 
         // Compensated/Greened by Cleanbits?
@@ -215,7 +219,7 @@ class Sitecheck
         // Not compensated, check in IP database
         $ipResult = $this->checkIp($url);
         if (!is_null($ipResult)) {
-            $matchtext = $ipResult->getIpStart() . ' - '. $ipResult->getIpEind();
+            $matchtext = $ipResult->getIpStart().' - '.$ipResult->getIpEind();
 
             return $this->updateResult($result, $matchtext, 'ip', $ipResult);
         }
@@ -240,10 +244,11 @@ class Sitecheck
     }
 
     /**
-     * Check if we have data for the tld of this url
+     * Check if we have data for the tld of this url.
      *
-     * @param  string                     $url
-     * @param  Greencheck_SitecheckResult $result
+     * @param string                     $url
+     * @param Greencheck_SitecheckResult $result
+     *
      * @return Greencheck_SitecheckResult
      */
     public function checkTld($url, $result)
@@ -259,21 +264,23 @@ class Sitecheck
     }
 
     /**
-     * Get the tld for the given url
+     * Get the tld for the given url.
      *
-     * @param  string $url
+     * @param string $url
+     *
      * @return string
      */
     public function getTldFromUrl($url)
     {
-        $splittedurl = explode(".", $url);
+        $splittedurl = explode('.', $url);
         $tld = array_pop($splittedurl);
 
         return $tld;
     }
 
     /**
-     * Get all tld's for which we have data
+     * Get all tld's for which we have data.
+     *
      * @return <type>
      */
     public function getCountryTlds()
@@ -286,7 +293,8 @@ class Sitecheck
     }
 
     /**
-     * Log the request to the logtable, for clientlist and statistics
+     * Log the request to the logtable, for clientlist and statistics.
+     *
      * @param Greencheck_SitecheckResult $result
      */
     public function logResult($result)
@@ -337,9 +345,10 @@ class Sitecheck
     }
 
     /**
-     * Get the ip belonging to the given url
+     * Get the ip belonging to the given url.
      *
-     * @param  string       $url
+     * @param string $url
+     *
      * @return string|false
      */
     public function getIpForUrl($url)
@@ -356,6 +365,7 @@ class Sitecheck
                 $this->_ipforurl[$url]['ipv6'] = $ip;
                 $this->_ipforurl[$url]['ipv4'] = false;
             }
+
             return $this->_ipforurl[$url];
         }
 
@@ -363,6 +373,7 @@ class Sitecheck
             // Valid non public ip adress, return false
             $this->_ipforurl[$url]['ipv4'] = false;
             $this->_ipforurl[$url]['ipv6'] = false;
+
             return $this->_ipforurl[$url];
         }
 
@@ -370,8 +381,8 @@ class Sitecheck
         $url = $this->validator->getHostname($url);
         if (!isset($this->_ipforurl[$url])) {
             $hostname = $this->getHostByName($url);
-            $ip       = $hostname['ip'];
-            if ($ip != false && $this->validator->isValidIpAddressForType($ip, '4')) {
+            $ip = $hostname['ip'];
+            if (false != $ip && $this->validator->isValidIpAddressForType($ip, '4')) {
                 $this->_ipforurl[$url]['ipv4'] = $ip;
             } else {
                 $this->_ipforurl[$url]['ipv4'] = false;
@@ -380,13 +391,15 @@ class Sitecheck
             $ipv6 = $hostname['ipv6'];
             $this->_ipforurl[$url]['ipv6'] = $ipv6;
         }
+
         return $this->_ipforurl[$url];
     }
 
     /**
-     * Get the ipadress for a given url by the gethostbyname function, return cached if available
+     * Get the ipadress for a given url by the gethostbyname function, return cached if available.
      *
-     * @param  string $url
+     * @param string $url
+     *
      * @return string
      */
     public function getHostByName($url)
@@ -399,14 +412,14 @@ class Sitecheck
 
         // Ignore dns warnings
         $dns4 = @dns_get_record($url, DNS_A);
-        if (count($dns4) > 0 && $dns4 !== false) {
+        if (count($dns4) > 0 && false !== $dns4) {
             $result['ip'] = $dns4[0]['ip'];
             $result['ipv6'] = false;
         } else {
             $result['ip'] = false;
             // Ignore dns warnings
             $dns6 = @dns_get_record($url, DNS_AAAA);
-            if (count($dns6) > 0 && $dns6 !== false) {
+            if (count($dns6) > 0 && false !== $dns6) {
                 $result['ipv6'] = $dns6[0]['ipv6'];
             } else {
                 $result['ipv6'] = false;
@@ -415,27 +428,29 @@ class Sitecheck
 
         $result['cached'] = false;
         $this->cache->setItem('hostbynamelookups', 'hostbyname'.$url, $result);
+
         return $result;
     }
 
     /**
-     * Check if ip of given url is in the $searchdata set
+     * Check if ip of given url is in the $searchdata set.
      *
-     * @param  string     $url
-     * @return null|array
+     * @param string $url
+     *
+     * @return array|null
      */
     public function checkIp($url)
     {
         $ip = $this->getIpForUrl($url);
-        if ($ip['ipv4'] !== false) {
-            $result =  $this->greencheckIp->checkIp($ip['ipv4']);
+        if (false !== $ip['ipv4']) {
+            $result = $this->greencheckIp->checkIp($ip['ipv4']);
             if (!is_null($result)) {
                 return $result;
             }
         }
 
-        if ($ip['ipv6'] !== false) {
-            $result =  $this->greencheckIp->checkIp($ip['ipv6']);
+        if (false !== $ip['ipv6']) {
+            $result = $this->greencheckIp->checkIp($ip['ipv6']);
         }
 
         if (!isset($result)) {
@@ -446,20 +461,21 @@ class Sitecheck
     }
 
     /**
-     * Check if as of given url is in the $searchdata set
+     * Check if as of given url is in the $searchdata set.
      *
-     * @param  string     $url
-     * @return null|array
+     * @param string $url
+     *
+     * @return array|null
      */
     public function checkAs($url)
     {
         $as = $this->getAsForUrl($url);
-        
+
         if (is_null($as)) {
             return null;
         }
         foreach ($as['as'] as $asnumber) {
-            $result =  $this->greencheckAs->checkAs($asnumber);
+            $result = $this->greencheckAs->checkAs($asnumber);
             if (!is_null($result)) {
                 return $result;
             }
@@ -469,9 +485,10 @@ class Sitecheck
     }
 
     /**
-     * Get the AS information for the given url
+     * Get the AS information for the given url.
      *
-     * @param  string $url
+     * @param string $url
+     *
      * @return array
      */
     public function getAsForUrl($url)
@@ -480,14 +497,14 @@ class Sitecheck
 
         // Get the ip adress for this url
         $ip = $this->getIpForUrl($url);
-        if ($ip['ipv4'] !== false) {
+        if (false !== $ip['ipv4']) {
             return $aschecker->getAsForIpv4($ip['ipv4']);
         }
 
-        if ($ip['ipv6'] !== false) {
+        if (false !== $ip['ipv6']) {
             return $aschecker->getAsForIpv6($ip['ipv6']);
         }
-        
+
         return false; // This should not happen
     }
 
@@ -496,11 +513,12 @@ class Sitecheck
         if (is_null($this->aschecker)) {
             $this->aschecker = new Sitecheck\Aschecker($this->cache);
         }
+
         return $this->aschecker;
     }
 
     /**
-     * Disable the logging of checks
+     * Disable the logging of checks.
      */
     public function disableLog()
     {
@@ -533,12 +551,13 @@ class Sitecheck
     }
 
     /**
-     * Update the sitecheckresult with a hostingprovider enttiy, log the result and cache the result
+     * Update the sitecheckresult with a hostingprovider enttiy, log the result and cache the result.
      *
-     * @param  [type] $result      [description]
-     * @param  [type] $matchtext   [description]
-     * @param  [type] $matchtype   [description]
-     * @param  [type] $matchobject [description]
+     * @param [type] $result      [description]
+     * @param [type] $matchtext   [description]
+     * @param [type] $matchtype   [description]
+     * @param [type] $matchobject [description]
+     *
      * @return [type] [description]
      */
     private function updateResult($result, $matchtext, $matchtype, $matchobject)

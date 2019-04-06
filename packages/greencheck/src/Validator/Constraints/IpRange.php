@@ -1,4 +1,5 @@
 <?php
+
 namespace TGWF\Greencheck\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;

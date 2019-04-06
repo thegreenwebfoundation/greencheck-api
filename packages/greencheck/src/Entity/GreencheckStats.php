@@ -2,38 +2,35 @@
 
 namespace TGWF\Greencheck\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * TGWF\Greencheck\Entity\GreencheckStats
+ * TGWF\Greencheck\Entity\GreencheckStats.
  */
 class GreencheckStats
 {
     /**
-     * @var integer $id
+     * @var int
      */
     private $id;
 
     /**
-     * @var string $checkedThrough
+     * @var string
      */
     private $checkedThrough;
 
     /**
-     * @var integer $count
+     * @var int
      */
     private $count;
 
     /**
-     * @var integer $ips
+     * @var int
      */
     private $ips;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -41,20 +38,21 @@ class GreencheckStats
     }
 
     /**
-     * Set checkedThrough
+     * Set checkedThrough.
      *
      * @param string $checkedThrough
+     *
      * @return GreencheckStats
      */
     public function setCheckedThrough($checkedThrough)
     {
         $this->checkedThrough = $checkedThrough;
-    
+
         return $this;
     }
 
     /**
-     * Get checkedThrough
+     * Get checkedThrough.
      *
      * @return string
      */
@@ -64,22 +62,23 @@ class GreencheckStats
     }
 
     /**
-     * Set count
+     * Set count.
      *
-     * @param integer $count
+     * @param int $count
+     *
      * @return GreencheckStats
      */
     public function setCount($count)
     {
         $this->count = $count;
-    
+
         return $this;
     }
 
     /**
-     * Get count
+     * Get count.
      *
-     * @return integer
+     * @return int
      */
     public function getCount()
     {
@@ -87,22 +86,23 @@ class GreencheckStats
     }
 
     /**
-     * Set ips
+     * Set ips.
      *
-     * @param integer $ips
+     * @param int $ips
+     *
      * @return GreencheckStats
      */
     public function setIps($ips)
     {
         $this->ips = $ips;
-    
+
         return $this;
     }
 
     /**
-     * Get ips
+     * Get ips.
      *
-     * @return integer
+     * @return int
      */
     public function getIps()
     {

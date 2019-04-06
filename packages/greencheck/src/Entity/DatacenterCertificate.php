@@ -2,40 +2,38 @@
 
 namespace TGWF\Greencheck\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * TGWF\Greencheck\Entity\DatacenterCertificate
+ * TGWF\Greencheck\Entity\DatacenterCertificate.
  */
 class DatacenterCertificate
 {
     /**
-     * @var integer $id
+     * @var int
      */
     private $id;
 
     /**
-     * @var string $url
+     * @var string
      */
     private $url;
 
     /**
-     * @var \DateTime $valid_from
+     * @var \DateTime
      */
     private $valid_from;
 
     /**
-     * @var \DateTime $valid_to
+     * @var \DateTime
      */
     private $valid_to;
 
     /**
-     * @var string $mainenergytype
+     * @var string
      */
     private $mainenergytype;
 
     /**
-     * @var string $energyprovider
+     * @var string
      */
     private $energyprovider;
 
@@ -44,11 +42,10 @@ class DatacenterCertificate
      */
     private $datacenter;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -56,20 +53,21 @@ class DatacenterCertificate
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
+     *
      * @return DatacenterCertificate
      */
     public function setUrl($url)
     {
         $this->url = $url;
-    
+
         return $this;
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
@@ -79,20 +77,21 @@ class DatacenterCertificate
     }
 
     /**
-     * Set valid_from
+     * Set valid_from.
      *
      * @param \DateTime $validFrom
+     *
      * @return DatacenterCertificate
      */
     public function setValidFrom($validFrom)
     {
         $this->valid_from = $validFrom;
-    
+
         return $this;
     }
 
     /**
-     * Get valid_from
+     * Get valid_from.
      *
      * @return \DateTime
      */
@@ -102,20 +101,21 @@ class DatacenterCertificate
     }
 
     /**
-     * Set valid_to
+     * Set valid_to.
      *
      * @param \DateTime $validTo
+     *
      * @return DatacenterCertificate
      */
     public function setValidTo($validTo)
     {
         $this->valid_to = $validTo;
-    
+
         return $this;
     }
 
     /**
-     * Get valid_to
+     * Get valid_to.
      *
      * @return \DateTime
      */
@@ -125,20 +125,21 @@ class DatacenterCertificate
     }
 
     /**
-     * Set mainenergytype
+     * Set mainenergytype.
      *
      * @param string $mainenergytype
+     *
      * @return DatacenterCertificate
      */
     public function setMainenergytype($mainenergytype)
     {
         $this->mainenergytype = $mainenergytype;
-    
+
         return $this;
     }
 
     /**
-     * Get mainenergytype
+     * Get mainenergytype.
      *
      * @return string
      */
@@ -148,20 +149,21 @@ class DatacenterCertificate
     }
 
     /**
-     * Set energyprovider
+     * Set energyprovider.
      *
      * @param string $energyprovider
+     *
      * @return DatacenterCertificate
      */
     public function setEnergyprovider($energyprovider)
     {
         $this->energyprovider = $energyprovider;
-    
+
         return $this;
     }
 
     /**
-     * Get energyprovider
+     * Get energyprovider.
      *
      * @return string
      */
@@ -171,20 +173,21 @@ class DatacenterCertificate
     }
 
     /**
-     * Set datacenter
+     * Set datacenter.
      *
      * @param TGWF\Greencheck\Entity\Datacenter $datacenter
+     *
      * @return DatacenterCertificate
      */
     public function setDatacenter(\TGWF\Greencheck\Entity\Datacenter $datacenter = null)
     {
         $this->datacenter = $datacenter;
-    
+
         return $this;
     }
 
     /**
-     * Get datacenter
+     * Get datacenter.
      *
      * @return TGWF\Greencheck\Entity\Datacenter
      */

@@ -5,7 +5,7 @@ namespace TGWF\Greencheck\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TGWF\Greencheck\Entity\GreencheckTld
+ * TGWF\Greencheck\Entity\GreencheckTld.
  *
  * @ORM\Table(name="greencheck_tld")
  * @ORM\Entity(repositoryClass="TGWF\Greencheck\Repository\GreencheckTldRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class GreencheckTld
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -22,46 +22,44 @@ class GreencheckTld
     private $id;
 
     /**
-     * @var string $tld
+     * @var string
      *
      * @ORM\Column(name="tld", type="string", length=5, nullable=false)
      */
     private $tld;
 
     /**
-     * @var string $tld
+     * @var string
      *
      * @ORM\Column(name="toplevel", type="string", length=64, nullable=false)
      */
     private $toplevel;
 
     /**
-     * @var integer $checkedDomains
+     * @var int
      *
      * @ORM\Column(name="checked_domains", type="integer", nullable=false)
      */
     private $checkedDomains;
 
     /**
-     * @var integer $greenDomains
+     * @var int
      *
      * @ORM\Column(name="green_domains", type="integer", nullable=false)
      */
     private $greenDomains;
 
     /**
-     * @var integer $hps
+     * @var int
      *
      * @ORM\Column(name="hps", type="integer", nullable=false)
      */
     private $hps;
 
-
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -69,7 +67,7 @@ class GreencheckTld
     }
 
     /**
-     * Set tld
+     * Set tld.
      *
      * @param string $tld
      */
@@ -79,7 +77,7 @@ class GreencheckTld
     }
 
     /**
-     * Get tld
+     * Get tld.
      *
      * @return string
      */
@@ -89,7 +87,7 @@ class GreencheckTld
     }
 
     /**
-     * Set toplevel
+     * Set toplevel.
      *
      * @param string $toplevel
      */
@@ -99,7 +97,7 @@ class GreencheckTld
     }
 
     /**
-     * Get tld
+     * Get tld.
      *
      * @return string
      */
@@ -109,9 +107,9 @@ class GreencheckTld
     }
 
     /**
-     * Set checkedDomains
+     * Set checkedDomains.
      *
-     * @param integer $checkedDomains
+     * @param int $checkedDomains
      */
     public function setCheckedDomains($checkedDomains)
     {
@@ -119,9 +117,9 @@ class GreencheckTld
     }
 
     /**
-     * Get checkedDomains
+     * Get checkedDomains.
      *
-     * @return integer
+     * @return int
      */
     public function getCheckedDomains()
     {
@@ -129,9 +127,9 @@ class GreencheckTld
     }
 
     /**
-     * Set greenDomains
+     * Set greenDomains.
      *
-     * @param integer $greenDomains
+     * @param int $greenDomains
      */
     public function setGreenDomains($greenDomains)
     {
@@ -139,9 +137,9 @@ class GreencheckTld
     }
 
     /**
-     * Get greenDomains
+     * Get greenDomains.
      *
-     * @return integer
+     * @return int
      */
     public function getGreenDomains()
     {
@@ -149,9 +147,9 @@ class GreencheckTld
     }
 
     /**
-     * Set hps
+     * Set hps.
      *
-     * @param integer $hps
+     * @param int $hps
      */
     public function setHps($hps)
     {
@@ -159,9 +157,9 @@ class GreencheckTld
     }
 
     /**
-     * Get hps
+     * Get hps.
      *
-     * @return integer
+     * @return int
      */
     public function getHps()
     {

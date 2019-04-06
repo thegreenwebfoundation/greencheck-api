@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use TGWF\Greencheck\Sitecheck;
 
 /**
- * Clear the as lookups cache
+ * Clear the as lookups cache.
  */
 class GreencheckClearAsLookupsCacheCommand extends Command
 {

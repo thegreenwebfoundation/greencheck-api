@@ -67,7 +67,7 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
 
     public function process(Message $message, Context $context)
     {
-        $this->logger->debug("GreencheckProcessor called");
+        $this->logger->debug('GreencheckProcessor called');
         $checker = $this->initializeChecker();
 
         $this->logger->debug($message->getBody());

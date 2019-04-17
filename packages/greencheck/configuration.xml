@@ -10,7 +10,7 @@ and open the template in the editor.
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         stopOnFailure="true">
+         stopOnFailure="false">
     <testsuites>
         <testsuite name="Greencheck">
             <directory>tests</directory>

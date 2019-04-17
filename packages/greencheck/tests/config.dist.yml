@@ -1,0 +1,19 @@
+greencheck:
+  db:
+    driver: pdo_mysql
+    host: localhost
+    user: tgwf
+    password: tgwf
+    dbname: greencheck_test
+  cachetime: 7200 # Standard cachetime is 2 hours
+  cache: true
+  cachetype: redis
+  result:
+    cachetime: 3600 # Result cached for one hour
+    cache: true
+  hostbynamelookups:
+    cachetime: 86400 # Hostname lookups cached for 1 day
+    cache: true
+  aslookups:
+    cachetime: 86400 # As lookups cached for one day
+    cache: true

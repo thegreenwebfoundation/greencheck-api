@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 
 use TGWF\Greencheck\Entity\Greencheck;
+use TGWF\Greencheck\Entity\GreencheckIp;
 use TGWF\Greencheck\Entity\GreencheckBy;
 
 class LoadGreencheckData implements FixtureInterface
@@ -29,7 +30,8 @@ class LoadGreencheckData implements FixtureInterface
         $gc->setGreen(true);
         $gc->setUrl('www.xs4all.nl');
         $gc->setDatum(new \DateTime('now'));
-        $gc->setIp(ip2long('194.109.21.4'));
+
+        $gc->setIp(GreencheckIp::convertIpPresentationToDecimal('194.109.21.4'));
 
         $gcby = new GreencheckBy();
         $gcby->setCheckedBy(ip2long('127.0.0.1'));
@@ -46,7 +48,7 @@ class LoadGreencheckData implements FixtureInterface
         $gc->setGreen(true);
         $gc->setUrl('www.xs4all.nl');
         $gc->setDatum(new \DateTime('now'));
-        $gc->setIp(ip2long('194.109.21.4'));
+        $gc->setIp(GreencheckIp::convertIpPresentationToDecimal('194.109.21.4'));
 
         $gcby = new GreencheckBy();
         $gcby->setCheckedBy(ip2long('127.0.0.1'));
@@ -63,7 +65,7 @@ class LoadGreencheckData implements FixtureInterface
         $gc->setGreen(true);
         $gc->setUrl('www.xs4all.nl');
         $gc->setDatum(new \DateTime('now'));
-        $gc->setIp(ip2long('194.109.21.4'));
+        $gc->setIp(GreencheckIp::convertIpPresentationToDecimal('194.109.21.4'));
 
         $gcby = new GreencheckBy();
         $gcby->setCheckedBy(ip2long('127.0.0.1'));
@@ -81,7 +83,7 @@ class LoadGreencheckData implements FixtureInterface
         $gc->setGreen(true);
         $gc->setUrl('www.xs4all.nl');
         $gc->setDatum(new \DateTime('now'));
-        $gc->setIp(ip2long('194.109.21.4'));
+        $gc->setIp(GreencheckIp::convertIpPresentationToDecimal('194.109.21.4'));
 
         $gcby = new GreencheckBy();
         $gcby->setCheckedBy(ip2long('127.0.0.1'));

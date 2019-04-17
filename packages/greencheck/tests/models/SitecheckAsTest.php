@@ -41,13 +41,14 @@ class Models_SitecheckAsTest extends TestCase
     {
         $result = $this->sitecheck->getAsForUrl('www.netexpo.nl');
         //"49750 | 194.242.18.0/23 | NL | ripencc | 2009-09-03"
-        
+
         $this->assertEquals(array('49750'), $result['as']);
-        $this->assertEquals('194.242.18.0/23', $result['iprange']);
+
+        $this->assertEquals('88.151.32.0/22', $result['iprange']);
         $this->assertEquals('NL', $result['country']);
         $this->assertEquals('ripencc', $result['rir']);
-        $this->assertEquals('2009-09-03', $result['date']);
-        $this->assertEquals('194.242.18.58', $result['ip']);
+        $this->assertEquals('2006-02-08', $result['date']);
+        $this->assertEquals('88.151.33.85', $result['ip']);
     }
 
     /**

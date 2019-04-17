@@ -57,7 +57,7 @@ class Greencheck
     /**
      * @var int
      *
-     * @ORM\Column(name="ip", type="integer", nullable=false)
+     * @ORM\Column(name="ip", type="decimal", precision=39, nullable=false)
      */
     private $ip;
 

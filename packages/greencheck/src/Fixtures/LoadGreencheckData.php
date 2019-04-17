@@ -24,7 +24,7 @@ class LoadGreencheckData implements FixtureInterface
 
         $gc = new Greencheck();
         $gc->setIdGreencheck(2);
-        $gc->setHostingProvider($hostingprovider);
+        $gc->setIdHp($hostingprovider);
         $gc->setType('ip');
         $gc->setGreen(true);
         $gc->setUrl('www.xs4all.nl');
@@ -41,7 +41,7 @@ class LoadGreencheckData implements FixtureInterface
 
         $gc = new Greencheck();
         $gc->setIdGreencheck(2);
-        $gc->setHostingProvider($hostingprovider);
+        $gc->setIdHp($hostingprovider);
         $gc->setType('ip');
         $gc->setGreen(true);
         $gc->setUrl('www.xs4all.nl');
@@ -58,7 +58,7 @@ class LoadGreencheckData implements FixtureInterface
 
         $gc = new Greencheck();
         $gc->setIdGreencheck(2);
-        $gc->setHostingProvider($hostingprovider);
+        $gc->setIdHp($hostingprovider);
         $gc->setType('ip');
         $gc->setGreen(true);
         $gc->setUrl('www.xs4all.nl');
@@ -76,7 +76,7 @@ class LoadGreencheckData implements FixtureInterface
 
         $gc = new Greencheck();
         $gc->setIdGreencheck(2);
-        $gc->setHostingProvider($hostingprovider);
+        $gc->setIdHp($hostingprovider);
         $gc->setType('ip');
         $gc->setGreen(true);
         $gc->setUrl('www.xs4all.nl');

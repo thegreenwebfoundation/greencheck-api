@@ -82,6 +82,10 @@ class Models_SitecheckAsTest extends TestCase
     {
         $result = $this->sitecheck->check('www.jelleluteijn.nl');
 
+        $this->markTestIncomplete(
+            'This website has moved hosts, so we need a different fixture'
+        );
+
         $this->assertEquals(true, $result->isGreen());
         $this->assertEquals('AS Hoster', $result->getHostingProvider()->getNaam());
     }
@@ -109,7 +113,10 @@ class Models_SitecheckAsTest extends TestCase
         $result = $this->sitecheck->getAsForUrl('www.ipv6.xs4all.nl');
         //"3265 | 2001:888::/30 | NL | ripencc | 2009-09-03"
         //"3265 | 2001:888::/32 | NL | ripencc | 2009-09-03"
-        
+        $this->markTestIncomplete(
+            'This website has moved hosts, so we need a different fixture'
+        );
+
         $this->assertEquals(array('3265'), $result['as']);
         $this->assertEquals('2001:888::/32', $result['iprange']);
         $this->assertEquals('NL', $result['country']);
@@ -127,7 +134,9 @@ class Models_SitecheckAsTest extends TestCase
         $result = $this->sitecheck->getAsForUrl('159.253.0.50');
         // "61387 | 159.253.0.0/24 | NL | ripencc | 2011-09-20" <- This one is smallest, should be returned
         // "50673 | 159.253.0.0/21 | NL | ripencc | 2011-09-20"
-        
+        $this->markTestIncomplete(
+            'This URL ias associated with a different AS now, so we need a different fixture'
+        );
         $this->assertEquals(array('61387'), $result['as']);
         $this->assertEquals('159.253.0.0/24', $result['iprange']);
         $this->assertEquals('NL', $result['country']);

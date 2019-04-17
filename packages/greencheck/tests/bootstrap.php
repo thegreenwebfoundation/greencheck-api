@@ -55,10 +55,10 @@ $yamlconfig = $yaml->parse(file_get_contents($rootDir .'/tests/config.yml'));
 $config = new Configuration();
 $cache = new Cache();
 $config->setQueryCacheImpl($cache);
-$config->setProxyDir($rootDir .'/src/TGWF/Greencheck/EntityProxy');
+$config->setProxyDir($rootDir .'/src/EntityProxy');
 $config->setProxyNamespace('EntityProxy');
 $config->setAutoGenerateProxyClasses(true);
- 
+
 // DEBUG
 //$config->setSQLLogger(new \Doctrine\DBAL\Logging\EchoSQLLogger());
 
@@ -67,7 +67,7 @@ AnnotationRegistry::registerFile($rootDir .'/vendor/doctrine/orm/lib/Doctrine/OR
 AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
 $driver = new Doctrine\ORM\Mapping\Driver\AnnotationDriver(
     new Doctrine\Common\Annotations\AnnotationReader(),
-    array($rootDir .'/src/TGWF/Greencheck/Entity')
+    array($rootDir .'/src/Entity')
 );
 $config->setMetadataDriverImpl($driver);
 $config->setMetadataCacheImpl($cache);

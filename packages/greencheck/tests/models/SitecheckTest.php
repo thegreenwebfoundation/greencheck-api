@@ -254,8 +254,13 @@ class Models_SitecheckTest extends TestCase
      */
     public function testWebsiteHostedByGreenHostingProviderShouldReturnIdOfHostingProvider()
     {
-        $result    = $this->sitecheck->check('www.iping.nl');
-        $this->assertEquals('Xs4all', $result->getHostingProvider()->getNaam());
+        $result    = $this->sitecheck->check('www.greenweb.nl');
+        $this->assertNotNull($result);
+        $this->assertNotNull($result->getHostingProvider());
+        $this->markTestIncomplete(
+            'We do not have a site with a green provider in the fixtures to check against. Do we need to fake a dns resolution to a GreenIP for a hoster here?'
+        );
+        $this->assertEquals('Greencheck dummy provider', $result->getHostingProvider()->getNaam());
     }
 
     /**

@@ -40,37 +40,23 @@ class SitecheckTest extends TestCase
         $greencheckAsRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
         $greencheckTldRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
 
-        /* mock out the `getIpAddressesForUrl`function on  TGWF\Greencheck\Sitecheck\DnsFetcher now, before we call `__construct` on `Sitecheck`
+        // A map with values to map and as last value the return value.
+        $map = [
+            ['a.b.c',  ['ip' => false, 'ipv6' => false]],
+            ['www.iping.nl', ['ip' => '94.75.237.71','ipv6' => false]],
+            ['www.free.fr', ['ip' => '94.75.237.69','ipv6' => false]], // outside a fixture range
 
-        */
+        ];
+
         $dns = $this->createMock(Sitecheck\DnsFetcher::class);
-        $dns->method('getIpAddressesForUrl')->willReturn(
-            // make the return value match the signature in DNSFetcher
-            [
-                'ip' => '94.75.237.71',
-                'ipv6' => false
-            ]);
-        /* */
+        $dns->method('getIpAddressesForUrl')->will(
+            $this->returnValueMap($map));
 
         $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, new Sitecheck\Logger($entityManager), 'test', $dns);
 
         //Cleanup all cache entries to correctly test
         $cache = $this->sitecheck->getCache();
         $cache->deleteAll();
-
-        /*
-        $dns = $this->getFunctionMock('TGWF\Greencheck\Sitecheck', "dns_get_record");
-        $dns->expects($this->once())->with(['www.greenweb.nl', DNS_A])->willReturn([
-            [
-                'host' => 'www.greenweb.nl',
-                'class' => 'IN',
-                'ttl' => 617,
-                'type' => 'A',
-                'mocked' => true,
-                'ip' => '94.75.237.71', // Groene hosting fixture
-            ]
-        ]);
-        */
     }
 
     /**
@@ -103,26 +89,9 @@ class SitecheckTest extends TestCase
     */
     public function testCheckingAValidFullUrlShouldReturnTrue()
     {
-        /*
-        trying to define a mock here doesn't affect the return value either, so presumably
-        it's not a case of the object already been instantiated before we can mock
-        the function
-
-        $dns = $this->getFunctionMock('TGWF\Greencheck\Sitecheck\DnsFetcher', "getIpAddressesForUrl");
-        $dns->expects($this->once())->with('http://www.iping.nl/en/test')->willReturn(
-            // make the return value match the signature in DNSFetcher, and match a green url
-            [
-                'ip' => '94.75.237.71',
-                'ipv6' => false
-            ]);
-        */
-
-        // we get `188.93.150.80` as our value still
-
+        // iping is mocked to return an ip out of the ip fixtures
         $result = $this->sitecheck->check('http://www.iping.nl/en/test');
-
-        $this->assertnull($result);
-        // $this->assertTrue($result->isGreen());
+        $this->assertTrue($result->isGreen());
     }
 
     /**
@@ -134,7 +103,7 @@ class SitecheckTest extends TestCase
         $result = $this->sitecheck->check('www.iping.nl');
 
         $this->assertEquals('www.iping.nl', $result->getCheckedUrl());
-        $this->assertEquals('188.93.150.80', $result->getIpAddress('ipv4'));
+        $this->assertEquals('94.75.237.71', $result->getIpAddress('ipv4'));
     }
 
     /**
@@ -145,7 +114,7 @@ class SitecheckTest extends TestCase
     {
         $result = $this->sitecheck->check('www.iping.nl');
         
-        $this->assertEquals('188.93.150.80', $result->getIpAddress('ipv4'));
+        $this->assertEquals('94.75.237.71', $result->getIpAddress('ipv4'));
     }
 
     /**
@@ -155,7 +124,7 @@ class SitecheckTest extends TestCase
     public function testValidUrlShouldReturnValidIpAdress()
     {
         $ip = $this->sitecheck->getIpForUrl('www.iping.nl');
-        $this->assertEquals('188.93.150.80', $ip['ipv4']);
+        $this->assertEquals('94.75.237.71', $ip['ipv4']);
     }
 
     /**

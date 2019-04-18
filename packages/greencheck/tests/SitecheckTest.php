@@ -1,13 +1,18 @@
 <?php
-require_once __DIR__ . '/../TestConfiguration.php';
+require_once __DIR__ . '/TestConfiguration.php';
 
+use phpmock\phpunit\PHPMock;
+use Symfony\Bridge\PhpUnit\DnsMock;
 use TGWF\Greencheck\Sitecheck;
 
 use Symfony\Component\Validator\ValidatorBuilder;
 use PHPUnit\Framework\TestCase;
+use TGWF\Greencheck\Sitecheck\Aschecker;
 
-class Models_SitecheckTest extends TestCase
+class SitecheckTest extends TestCase
 {
+    use PHPMock;
+
     /**
      *
      * @var Greencheck_Sitecheck
@@ -40,6 +45,20 @@ class Models_SitecheckTest extends TestCase
         //Cleanup all cache entries to correctly test
         $cache = $this->sitecheck->getCache();
         $cache->deleteAll();
+
+        /*
+        $dns = $this->getFunctionMock('TGWF\Greencheck\Sitecheck', "dns_get_record");
+        $dns->expects($this->once())->with(['www.greenweb.nl', DNS_A])->willReturn([
+            [
+                'host' => 'www.greenweb.nl',
+                'class' => 'IN',
+                'ttl' => 617,
+                'type' => 'A',
+                'mocked' => true,
+                'ip' => '94.75.237.71', // Groene hosting fixture
+            ]
+        ]);
+        */
     }
 
     /**
@@ -261,13 +280,33 @@ class Models_SitecheckTest extends TestCase
      */
     public function testWebsiteHostedByGreenHostingProviderShouldReturnIdOfHostingProvider()
     {
+        /*
+        DnsMock::register(TGWF\Greencheck\Sitecheck\DnsFetcher::class);
+        DnsMock::register(Aschecker::class);
+        DnsMock::withMockedHosts([
+            'www.greenweb.nl' => ,
+            Aschecker::ipv4ToReverseDnsAdressNotation('94.75.237.71'). '.origin.asn.cymru.com' => [
+                [
+                    'host' => "94.75.237.71.origin.asn.cymru.com",
+                    'class' => "IN",
+                    'ttl' => 7111,
+                    'type' => "TXT",
+                    'txt' => "49750 | 141.138.168.0/21 | NL | ripencc | 2011-07-01",
+                    'entries' => [
+                        0 => "49750 | 141.138.168.0/21 | NL | ripencc | 2011-07-01"
+                    ]
+                ]
+            ]
+        ]);
+        */
+
         $result    = $this->sitecheck->check('www.greenweb.nl');
         $this->assertNotNull($result);
         $this->assertNotNull($result->getHostingProvider());
         $this->markTestIncomplete(
             'We do not have a site with a green provider in the fixtures to check against. Do we need to fake a dns resolution to a GreenIP for a hoster here?'
         );
-        $this->assertEquals('Greencheck dummy provider', $result->getHostingProvider()->getNaam());
+        $this->assertEquals('Groene Hosting', $result->getHostingProvider()->getNaam());
     }
 
     /**

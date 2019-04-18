@@ -24,13 +24,20 @@ class Models_SitecheckLoggingTest extends TestCase
         TestConfiguration::setupDatabase();
 
         $config     = TestConfiguration::$config;
-        $this->em   = TestConfiguration::$em;
+        $entityManager   = TestConfiguration::$em;
+        $this->em = $entityManager;
 
         // Setup the cache
-        $this->cache = new Sitecheck\Cache($config);
-        $this->cache->setCache('default');
+        $cache = new Sitecheck\Cache($config);
+        $cache->setCache('default');
 
-        $this->sitecheck = new Sitecheck($this->em, $this->cache, 'test');
+        // @todo mock these where needed
+        $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
+        $greencheckIpRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
+        $greencheckAsRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
+        $greencheckTldRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
+
+        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, new Sitecheck\Logger($entityManager), 'test');
 
         //Cleanup all cache entries to correctly test
         $cache = $this->sitecheck->getCache();
@@ -61,37 +68,6 @@ class Models_SitecheckLoggingTest extends TestCase
         $result = $greencheck->findBy(array());
         $result = end($result);
         $this->assertGreaterThan('2009-01-01', $result->getDatum());
-    }
-   
-    public function testLoggingSourceCanBeOverWrittenInCheck()
-    {
-        $result    = $this->sitecheck->check('www.bliin.com', '127.0.0.1', 'testbrowser', 'bots');
-
-        $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckBy");
-        $result = $greencheck->findBy(array());
-        $result = end($result);
-        $this->assertEquals('bots', $result->getCheckedThrough());
-    }
-
-    public function testLoggingShouldContainBrowser()
-    {
-        $result    = $this->sitecheck->check('www.bliin.com', '127.0.0.1', 'testbrowser');
-
-        $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckBy");
-        $result = $greencheck->findBy(array());
-        $result = end($result);
-        $this->assertEquals('test', $result->getCheckedThrough());
-        $this->assertEquals('testbrowser', $result->getCheckedBrowser());
-    }
-
-    public function testLoggingShouldContainCheckedByAsHash()
-    {
-        $result    = $this->sitecheck->check('www.bliin.com', '127.0.0.1');
-
-        $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckBy");
-        $result = $greencheck->findBy(array());
-        $result = end($result);
-        $this->assertEquals('2095c30cebbeb00c42538bc7fc0c1db203dec8db', $result->getCheckedBy());
     }
 
     public function testLoggingCheckShouldContainCorrectResults()

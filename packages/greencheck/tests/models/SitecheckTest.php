@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../TestConfiguration.php';
+require_once __DIR__ . '/../TestConfiguration.php';
 
 use TGWF\Greencheck\Sitecheck;
 
@@ -22,13 +22,20 @@ class Models_SitecheckTest extends TestCase
         TestConfiguration::setupDatabase();
 
         $config     = TestConfiguration::$config;
-        $this->em   = TestConfiguration::$em;
+        $entityManager   = TestConfiguration::$em;
+        $this->em = $entityManager;
 
         // Setup the cache
-        $this->cache = new Sitecheck\Cache($config);
-        $this->cache->setCache('default');
+        $cache = new Sitecheck\Cache($config);
+        $cache->setCache('default');
 
-        $this->sitecheck = new Sitecheck($this->em, $this->cache, 'test');
+        // @todo mock these where needed
+        $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
+        $greencheckIpRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
+        $greencheckAsRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
+        $greencheckTldRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
+
+        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, new Sitecheck\Logger($entityManager), 'test');
 
         //Cleanup all cache entries to correctly test
         $cache = $this->sitecheck->getCache();

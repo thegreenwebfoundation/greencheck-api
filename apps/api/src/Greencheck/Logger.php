@@ -50,7 +50,7 @@ class Logger
     /**
      * Log the request to the logtable, for clientlist and statistics.
      *
-     * @param Greencheck_SitecheckResult $result
+     * @param SitecheckResult $result
      */
     public function logResult(SitecheckResult $result)
     {

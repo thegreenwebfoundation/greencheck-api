@@ -15,6 +15,11 @@ use Liuggio\StatsdClient\Factory\StatsdDataFactory;
 use Liuggio\StatsdClient\StatsdClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use TGWF\Greencheck\Entity\GreencheckAs;
+use TGWF\Greencheck\Repository\GreencheckAsRepository;
+use TGWF\Greencheck\Repository\GreencheckIpRepository;
+use TGWF\Greencheck\Repository\GreencheckTldRepository;
+use TGWF\Greencheck\Repository\GreencheckUrlRepository;
 use TGWF\Greencheck\Sitecheck;
 use TGWF\Greencheck\Sitecheck\Cache;
 
@@ -48,6 +53,26 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
      * @var ProducerInterface
      */
     private $producer;
+
+    /**
+     * @var GreencheckUrlRepository
+     */
+    private $greencheckUrlRepository;
+
+    /**
+     * @var GreencheckIpRepository
+     */
+    private $greencheckIpRepository;
+
+    /**
+     * @var GreencheckAsRepository
+     */
+    private $greencheckAsRepository;
+
+    /**
+     * @var GreencheckTldRepository
+     */
+    private $greencheckTldRepository;
 
     public function __construct(
         ParameterBagInterface $params,
@@ -105,7 +130,13 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
         $cache = new Cache($config);
         $cache->setCache('default');
 
-        $siteCheck = new Sitecheck($this->entityManager, $cache, 'api');
+        // @todo inject these in constructor
+        $this->greencheckUrlRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
+        $this->greencheckIpRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
+        $this->greencheckAsRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
+        $this->greencheckTldRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
+
+        $siteCheck = new Sitecheck($this->greencheckUrlRepository, $this->greencheckIpRepository, $this->greencheckAsRepository, $this->greencheckTldRepository, $cache, new Sitecheck\Logger($this->entityManager), 'api');
         $siteCheck->disableLog();
 
         // @todo make this a proper service and inject it

@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__) . '/../TestConfiguration.php';
+require_once __DIR__ . '/TestConfiguration.php';
 
 use TGWF\Greencheck\Sitecheck;
 use TGWF\Greencheck\Table;
@@ -7,7 +7,7 @@ use TGWF\Greencheck\Logger\SQLLogger;
 
 use Symfony\Component\Validator\ValidatorBuilder;
 use PHPUnit\Framework\TestCase;
-class Models_SitecheckCachingTest extends TestCase
+class SitecheckCachingTest extends TestCase
 {
     /**
      *

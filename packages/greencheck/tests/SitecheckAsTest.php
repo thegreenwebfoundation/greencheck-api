@@ -1,10 +1,10 @@
 <?php
-require_once dirname(__FILE__) . '/../TestConfiguration.php';
+require_once __DIR__ . '/TestConfiguration.php';
 
 use TGWF\Greencheck\Sitecheck;
 use PHPUnit\Framework\TestCase;
 
-class Models_SitecheckAsTest extends TestCase
+class SitecheckAsTest extends TestCase
 {
     /**
      *

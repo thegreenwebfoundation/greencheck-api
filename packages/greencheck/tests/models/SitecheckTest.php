@@ -231,7 +231,7 @@ class Models_SitecheckTest extends TestCase
      */
     public function testWebsiteHostedByGreenHostingProviderShouldReturnWebsiteIsGreen()
     {
-        $result    = $this->sitecheck->check('www.iping.nl');
+        $result    = $this->sitecheck->check('www.xs4all.nl');
         $this->assertTrue($result->isGreen());
     }
 
@@ -243,7 +243,7 @@ class Models_SitecheckTest extends TestCase
      */
     public function testWebsiteHostedByHostingProviderShouldReturnTrueForIsHostingProvider()
     {
-        $result    = $this->sitecheck->check('www.iping.nl');
+        $result    = $this->sitecheck->check('www.xs4all.nl');
         $this->assertTrue($result->isHostingProvider());
     }
 

@@ -92,9 +92,6 @@ class SitecheckTest extends TestCase
     public function testCheckingAValidFullUrlShouldReturnTrue()
     {
         $result = $this->sitecheck->check('http://www.iping.nl/en/test');
-        $this->markTestIncomplete(
-            'This test needs Redis added back in the stack before can check caching behaviour'
-        );
         $this->assertTrue($result->isGreen());
     }
 

@@ -52,8 +52,7 @@ class SitecheckCachingTest extends TestCase
 
         $result = $this->sitecheck->check('www.nu.nl');
         $this->assertFalse($result->isCached());
-
-        $this->assertEquals(9, count($logger->getQueries()));
+        $this->assertEquals(8, count($logger->getQueries()));
 
         sleep(1);
 
@@ -62,9 +61,7 @@ class SitecheckCachingTest extends TestCase
         
         $newdate = new \DateTime('now');
         $result = $this->sitecheck->check('www.nu.nl');
-        $this->markTestIncomplete(
-            'This test needs Redis added back in the stack'
-        );
+
         $this->assertTrue($result->isCached());
         $this->assertTrue($result->getCheckedAt() > $date);
         $this->assertTrue($result->getCheckedAt() >= $newdate);
@@ -72,9 +69,10 @@ class SitecheckCachingTest extends TestCase
         /*
          * Only do queries to store the result
          *
-         * Start transaction, greencheck table, greencheck_by table, commit
+         * Start transaction, greencheck table, commit
+         * TODO: this no longer writes to greencheck_by table - this the intended behaviour?
          */
-        $this->assertEquals(4, count($logger->getQueries()));
+        $this->assertEquals(3, count($logger->getQueries()));
     }
 
     /**
@@ -95,9 +93,6 @@ class SitecheckCachingTest extends TestCase
         $this->assertEquals('www.nu.nl', $result[4]->getUrl());
 
         $result = $this->sitecheck->check('www.nu.nl');
-        $this->markTestIncomplete(
-            'This test needs Redis added back in the stack before can check caching behaviour'
-        );
         $this->assertTrue($result->isCached());
 
         $result = $greencheck->findBy(array());
@@ -131,9 +126,6 @@ class SitecheckCachingTest extends TestCase
         $this->assertFalse($result->isCached());
 
         $result = $this->sitecheck->check('www.nu.nl');
-        $this->markTestIncomplete(
-            'This test needs Redis added back in the stack before can check caching behaviour'
-        );
         $this->assertTrue($result->isCached());
 
         $this->sitecheck->resetCache('result');
@@ -155,9 +147,6 @@ class SitecheckCachingTest extends TestCase
         $this->assertFalse($result['cached']);
 
         $result = $this->sitecheck->getHostByName('www.nu.nl');
-        $this->markTestIncomplete(
-            'This test needs Redis added back in the stack before can check caching behaviour'
-        );
         $this->assertTrue($result['cached']);
     }
 
@@ -167,9 +156,6 @@ class SitecheckCachingTest extends TestCase
         $this->assertFalse($result['cached']);
 
         $result = $this->sitecheck->getAsForUrl('www.nu.nl');
-        $this->markTestIncomplete(
-            'This test needs Redis added back in the stack before can check caching behaviour'
-        );
         $this->assertTrue($result['cached']);
     }
 
@@ -181,7 +167,7 @@ class SitecheckCachingTest extends TestCase
         $result = $this->sitecheck->checkAs('www.netexpo.nl');
         $this->assertEquals('AS Hoster', $result->getHostingProvider()->getNaam());
         $this->assertEquals('49750', $result->getAsn());
-
+        // select from greencheck, select from hosting providers
         $this->assertEquals(2, count($logger->getQueries()));
 
         $logger = new SQLLogger();
@@ -200,10 +186,7 @@ class SitecheckCachingTest extends TestCase
         $this->em->getConnection()->getConfiguration()->setSQLLogger($logger);
 
         $result = $this->sitecheck->checkip('www.netexpo.nl');
-        $this->markTestIncomplete(
-            'This test needs Redis added back in the stack before can check caching behaviour'
-        );
-        $this->assertEquals(2, count($logger->getQueries()));
+        $this->assertEquals(1, count($logger->getQueries()));
 
         $logger = new SQLLogger();
         $this->em->getConnection()->getConfiguration()->setSQLLogger($logger);
@@ -232,10 +215,6 @@ class SitecheckCachingTest extends TestCase
         $cache = new \Doctrine\Common\Cache\FilesystemCache('/tmp');
         
         $this->sitecheck->setCache('test', $cache);
-        $this->markTestIncomplete(
-            'This test needs Redis added back in the stack before can check caching behaviour'
-        );
-
         $this->assertEquals($cache, $this->sitecheck->getCache('test'));
     }
 

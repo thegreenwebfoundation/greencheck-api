@@ -2,7 +2,14 @@
 
 namespace TGWF\Greencheck;
 
+use Doctrine\ORM\EntityManager;
 use TGWF\Greencheck\Entity\GreencheckIp;
+use TGWF\Greencheck\Repository\GreencheckAsRepository;
+use TGWF\Greencheck\Repository\GreencheckIpRepository;
+use TGWF\Greencheck\Repository\GreencheckTldRepository;
+use TGWF\Greencheck\Repository\GreencheckUrlRepository;
+use TGWF\Greencheck\Sitecheck\Cache;
+use TGWF\Greencheck\Sitecheck\Logger;
 use TGWF\Greencheck\Sitecheck\Validator;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints\Ip;
@@ -48,13 +55,6 @@ class Sitecheck
     protected $cache = null;
 
     /**
-     * Doctrine entity manager.
-     *
-     * @var [type]
-     */
-    protected $em = null;
-
-    /**
      * Needed for log purposes (website|admin|test|bot).
      *
      * @var string
@@ -83,42 +83,61 @@ class Sitecheck
     protected $_countrytlds = null;
 
     /**
-     * @var Table\GreencheckUrl
+     * @var GreencheckUrlRepository
      */
     protected $greencheckUrl = null;
 
     /**
-     * @var Table\GreencheckIp
+     * @var GreencheckIpRepository
      */
     protected $greencheckIp = null;
 
     /**
-     * @var Table\GreencheckAs
+     * @var GreencheckAsRepository
      */
     protected $greencheckAs = null;
 
     protected $aschecker = null;
 
     /**
+     * @var GreencheckTldRepository
+     */
+    private $greencheckTld;
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * Construct the sitecheck.
      *
-     * @param EntityManager   $em         Doctrine Entity Manager
-     * @param Sitecheck/Cache $cache      Cache object
-     * @param string          $calledfrom [description]
+     * @param GreencheckUrlRepository $greencheckUrlRepository
+     * @param GreencheckIpRepository  $greencheckIpRepository
+     * @param GreencheckAsRepository  $greencheckAsRepository
+     * @param GreencheckTldRepository $greencheckTldRepository
+     * @param Cache $cache
+     * @param string $calledfrom [description]
      */
-    public function __construct($em, $cache, $calledfrom = 'website')
-    {
+    public function __construct(
+        GreencheckUrlRepository $greencheckUrlRepository,
+        GreencheckIpRepository $greencheckIpRepository,
+        GreencheckAsRepository $greencheckAsRepository,
+        GreencheckTldRepository $greencheckTldRepository,
+        Cache $cache,
+        Logger $logger,
+        $calledfrom = 'website'
+    ) {
         $this->_calledfrom = $calledfrom;
-        $this->em = $em;
 
         $this->validator = new Validator();
 
-        $this->greencheckUrl = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
-        $this->greencheckIp = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
-        $this->greencheckAs = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
-        $this->greencheckTld = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
+        $this->greencheckUrl = $greencheckUrlRepository;
+        $this->greencheckIp = $greencheckIpRepository;
+        $this->greencheckAs = $greencheckAsRepository;
+        $this->greencheckTld = $greencheckTldRepository;
 
         $this->cache = $cache;
+        $this->logger = $logger;
     }
 
     /**
@@ -304,44 +323,7 @@ class Sitecheck
             return;
         }
 
-        $match = $result->getMatch();
-
-        // No matches, then assign none for logging
-        if (!isset($match['id'])) {
-            $match['id'] = 0;
-            $match['type'] = 'none';
-        }
-
-        if ($result->getIpAddress()) {
-            $ip = $result->getIpAddress();
-        } elseif ($result->getIpAddress('ipv6')) {
-            $ip = $result->getIpAddress('ipv6');
-        } else {
-            $ip = 0;
-        }
-        $ip = GreencheckIp::convertIpPresentationToDecimal($ip);
-
-        $gc = new Entity\Greencheck();
-        $gc->setIdGreencheck($match['id']);
-        if ($result->isHostingProvider()) {
-            $gc->setIdHp($result->getHostingProviderId());
-        } else {
-            $gc->setIdHp(null);
-        }
-        $gc->setType($match['type']);
-        $gc->setGreen($result->isGreen());
-        $gc->setUrl($result->getCheckedUrl());
-        $gc->setDatum(new \DateTime('now'));
-        $gc->setIp($ip);
-
-        $gcby = new Entity\GreencheckBy();
-        $gcby->setCheckedBy(GreencheckIp::convertIpPresentationToDecimal($result->getCalledFrom('checked_by')));
-        $gcby->setCheckedThrough($result->getCalledFrom('checked_through'));
-        $gcby->setCheckedBrowser($result->getCalledFrom('checked_browser'));
-
-        $this->em->persist($gc);
-        $this->em->persist($gcby);
-        $this->em->flush();
+        $this->logger->logResult($result);
     }
 
     /**
@@ -412,14 +394,14 @@ class Sitecheck
 
         // Ignore dns warnings
         $dns4 = @dns_get_record($url, DNS_A);
-        if (count($dns4) > 0 && false !== $dns4) {
+        if (is_countable($dns4) && count($dns4) > 0 && false !== $dns4) {
             $result['ip'] = $dns4[0]['ip'];
             $result['ipv6'] = false;
         } else {
             $result['ip'] = false;
             // Ignore dns warnings
             $dns6 = @dns_get_record($url, DNS_AAAA);
-            if (count($dns6) > 0 && false !== $dns6) {
+            if (is_countable($dns6) && count($dns6) > 0 && false !== $dns6) {
                 $result['ipv6'] = $dns6[0]['ipv6'];
             } else {
                 $result['ipv6'] = false;

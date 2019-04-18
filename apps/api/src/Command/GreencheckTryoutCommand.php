@@ -71,7 +71,13 @@ class GreencheckTryoutCommand extends Command
         $this->cache->setCache('default');
         $this->cache->disableCache();
 
-        $this->checker = new Sitecheck($em, $this->cache, 'api');
+        // @todo inject these in constructor
+        $this->greencheckUrlRepository = $em->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
+        $this->greencheckIpRepository = $em->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
+        $this->greencheckAsRepository = $em->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
+        $this->greencheckTldRepository = $em->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
+
+        $this->checker = new Sitecheck($this->greencheckUrlRepository, $this->greencheckIpRepository, $this->greencheckAsRepository, $this->greencheckTldRepository, $this->cache, new Sitecheck\Logger($this->entityManager), 'api');
         $this->checker->disableLog();
 
         $this->output = $output;

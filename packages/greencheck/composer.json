@@ -18,7 +18,8 @@
     "symfony/validator": "~2.3|3.*|4.*",
     "symfony/yaml": "~2.3|3.*|4.*",
     "gedmo/doctrine-extensions": "~2.3",
-    "predis/predis": "*"
+    "predis/predis": "*",
+    "symfony/polyfill-php73": "^1.11"
   },
   "require-dev": {
     "phpunit/phpunit": "^8.0",

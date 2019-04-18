@@ -57,7 +57,13 @@ class GreencheckClearAsLookupsCacheCommand extends Command
         $sitecheckCache = new Sitecheck\Cache($config);
         $sitecheckCache->setCache('default');
 
-        $siteCheck = new Sitecheck($this->entityManager, $sitecheckCache, 'api');
+        // @todo inject these in constructor
+        $this->greencheckUrlRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
+        $this->greencheckIpRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
+        $this->greencheckAsRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
+        $this->greencheckTldRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
+
+        $siteCheck = new Sitecheck($this->greencheckUrlRepository, $this->greencheckIpRepository, $this->greencheckAsRepository, $this->greencheckTldRepository, $this->cache, new Sitecheck\Logger($this->entityManager), 'api');
         $siteCheck->disableLog();
 
         $output->writeln('Clearing greencheck aslookups cache');

@@ -265,6 +265,9 @@ class Models_SitecheckTest extends TestCase
     public function testWebsiteHostedByAnotherGreenHostingProviderShouldReturnIdOfHostingProvider()
     {
         $result    = $this->sitecheck->check('www.stuurterug.nl');
+        $this->markTestIncomplete(
+            'result returns as null here too. ping can not find it either now. dead domain?'
+        );
         $this->assertEquals('Xs4all', $result->getHostingProvider()->getNaam());
     }
 

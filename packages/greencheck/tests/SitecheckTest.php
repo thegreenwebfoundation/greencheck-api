@@ -43,16 +43,16 @@ class SitecheckTest extends TestCase
         /* mock out the `getIpAddressesForUrl`function on  TGWF\Greencheck\Sitecheck\DnsFetcher now, before we call `__construct` on `Sitecheck`
 
         */
-        $dns = $this->getFunctionMock('TGWF\Greencheck\Sitecheck\DnsFetcher', "getIpAddressesForUrl");
-        $dns->expects($this->once())->with('http://www.iping.nl/en/test')->willReturn(
+        $dns = $this->createMock(Sitecheck\DnsFetcher::class);
+        $dns->method('getIpAddressesForUrl')->willReturn(
             // make the return value match the signature in DNSFetcher
             [
-                'ipv4' => '94.75.237.71',
+                'ip' => '94.75.237.71',
                 'ipv6' => false
             ]);
         /* */
 
-        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, new Sitecheck\Logger($entityManager), 'test');
+        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, new Sitecheck\Logger($entityManager), 'test', $dns);
 
         //Cleanup all cache entries to correctly test
         $cache = $this->sitecheck->getCache();

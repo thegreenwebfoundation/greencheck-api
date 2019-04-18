@@ -126,12 +126,16 @@ class Sitecheck
         GreencheckTldRepository $greencheckTldRepository,
         Cache $cache,
         Logger $logger,
-        $calledfrom = 'website'
+        $calledfrom = 'website',
+        DnsFetcher $dnsFetcher = null
     ) {
         $this->_calledfrom = $calledfrom;
 
         $this->validator = new Validator();
-        $this->dnsFetcher = new DnsFetcher();
+        if (null == $dnsFetcher) {
+            $dnsFetcher = new DnsFetcher();
+        }
+        $this->dnsFetcher = $dnsFetcher;
 
         $this->greencheckUrl = $greencheckUrlRepository;
         $this->greencheckIp = $greencheckIpRepository;

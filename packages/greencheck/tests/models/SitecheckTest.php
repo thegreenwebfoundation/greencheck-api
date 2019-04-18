@@ -298,10 +298,10 @@ class Models_SitecheckTest extends TestCase
     {
         $gc = $this->em->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
         $result = $gc->checkUrl('www.geluidsnet.nl');
-        
+
         $this->assertEquals('www.geluidsnet.nl', $result->getUrl());
         $this->assertEquals(new \DateTime('2009-01-01'), $result->getDatumBegin());
-        $this->assertEquals(new \DateTime('2016-01-01'), $result->getDatumEind());
+        $this->assertEquals(new \DateTime('2050-01-01'), $result->getDatumEind());
     }
 
     /**

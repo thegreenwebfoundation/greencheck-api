@@ -49,6 +49,14 @@ class LoadIpData implements FixtureInterface
         $manager->persist($ip);
 
         $ip = new GreencheckIp();
+        $ip->setIpStart('194.109.21.4');
+        $ip->setIpEind('194.109.21.4');
+        $ip->setActive(true);
+        $ip->setHostingprovider($hostingprovider);
+
+        $manager->persist($ip);
+
+        $ip = new GreencheckIp();
         $ip->setIpStart('94.75.237.89');
         $ip->setIpEind('94.75.237.89');
         $ip->setActive(true);

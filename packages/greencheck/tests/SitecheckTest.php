@@ -45,12 +45,12 @@ class SitecheckTest extends TestCase
             ['a.b.c',  ['ip' => false, 'ipv6' => false]],
             ['www.iping.nl', ['ip' => '94.75.237.71','ipv6' => false]],
             ['www.free.fr', ['ip' => '94.75.237.69','ipv6' => false]], // outside a fixture range
-
+            ['www.xs4all.nl', ['ip' => '194.109.21.4','ipv6' => false]], // xs4all ip range
+            ['www.nu.nl', ['ip' => '94.75.237.69','ipv6' => false]], // outside ip range for checkIp function
         ];
 
         $dns = $this->createMock(Sitecheck\DnsFetcher::class);
-        $dns->method('getIpAddressesForUrl')->will(
-            $this->returnValueMap($map));
+        $dns->method('getIpAddressesForUrl')->will($this->returnValueMap($map));
 
         $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, new Sitecheck\Logger($entityManager), 'test', $dns);
 
@@ -162,14 +162,10 @@ class SitecheckTest extends TestCase
     public function testUrlInIpSearchShouldReturnSearchResult()
     {
         $result = $this->sitecheck->checkIp('www.xs4all.nl');
-        $this->markTestIncomplete(
-            'We do not seem to have a checkIp function on the greencheckIP class, which is what the the sitecheck calls in $this->sitecheck->checkIp'
-        );
-        //
-            // greencheck anymore
+
         $this->assertEquals('194.109.21.4', $result->getIpStart());
         $this->assertEquals('194.109.21.4', $result->getIpEind());
-        $this->assertEquals('Greencheck dummy provider', $result->getHostingprovider()->getNaam());
+        $this->assertEquals('Xs4all', $result->getHostingprovider()->getNaam());
         $this->assertEquals(true, $result->isActive());
     }
 

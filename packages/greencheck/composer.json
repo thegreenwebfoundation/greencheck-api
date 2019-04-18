@@ -18,8 +18,9 @@
         "predis/predis": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
-        "doctrine/data-fixtures": "dev-master"
+        "phpunit/phpunit": "^8.0",
+        "doctrine/data-fixtures": "dev-master",
+        "friendsofphp/php-cs-fixer": "^2.14",
     },
     "minimum-stability" : "stable",
     "autoload": {

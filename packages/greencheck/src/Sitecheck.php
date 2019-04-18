@@ -9,6 +9,7 @@ use TGWF\Greencheck\Repository\GreencheckIpRepository;
 use TGWF\Greencheck\Repository\GreencheckTldRepository;
 use TGWF\Greencheck\Repository\GreencheckUrlRepository;
 use TGWF\Greencheck\Sitecheck\Cache;
+use TGWF\Greencheck\Sitecheck\DnsFetcher;
 use TGWF\Greencheck\Sitecheck\Logger;
 use TGWF\Greencheck\Sitecheck\Validator;
 use Symfony\Component\Validator\Validation;
@@ -130,6 +131,7 @@ class Sitecheck
         $this->_calledfrom = $calledfrom;
 
         $this->validator = new Validator();
+        $this->dnsFetcher = new DnsFetcher();
 
         $this->greencheckUrl = $greencheckUrlRepository;
         $this->greencheckIp = $greencheckIpRepository;
@@ -393,20 +395,7 @@ class Sitecheck
         }
 
         // Ignore dns warnings
-        $dns4 = @dns_get_record($url, DNS_A);
-        if (is_countable($dns4) && count($dns4) > 0 && false !== $dns4) {
-            $result['ip'] = $dns4[0]['ip'];
-            $result['ipv6'] = false;
-        } else {
-            $result['ip'] = false;
-            // Ignore dns warnings
-            $dns6 = @dns_get_record($url, DNS_AAAA);
-            if (is_countable($dns6) && count($dns6) > 0 && false !== $dns6) {
-                $result['ipv6'] = $dns6[0]['ipv6'];
-            } else {
-                $result['ipv6'] = false;
-            }
-        }
+        $result = $this->dnsFetcher->getIpAddressesForUrl($url);
 
         $result['cached'] = false;
         $this->cache->setItem('hostbynamelookups', 'hostbyname'.$url, $result);

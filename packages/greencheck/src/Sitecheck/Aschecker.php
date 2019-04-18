@@ -60,7 +60,7 @@ class Aschecker
     private function getAsFromOutput($output, $ip, $type)
     {
         $result = [];
-        if (count($output) > 0) {
+        if (is_countable($output) && count($output) > 0) {
             foreach ($output as $asoutput) {
                 $data = $this->parseAsOutput($asoutput);
                 if ('ipv4' == $type) {
@@ -115,10 +115,14 @@ class Aschecker
 
             return $result;
         }
-        $asresult = @dns_get_record($this->ipv4ToReverseDnsAdressNotation($ip).'.origin.asn.cymru.com', DNS_TXT);
+        $asresult = @dns_get_record(self::ipv4ToReverseDnsAdressNotation($ip).'.origin.asn.cymru.com', DNS_TXT);
+
+        if($ip == '94.75.237.71') {
+            var_dump($asresult);
+        }
 
         $result = $this->getAsFromOutput($asresult, $ip, 'ipv4');
-        if (count($asresult) > 0) {
+        if (is_countable($asresult) && count($asresult) > 0) {
             $result['cached'] = false;
         }
         $this->cache->setItem('aslookups', 'as'.$ip, $result);
@@ -140,10 +144,10 @@ class Aschecker
 
             return $result;
         }
-        $asresult = @dns_get_record($this->ipv6ToReverseDnsAdressNotation($ip).'.origin6.asn.cymru.com', DNS_TXT);
+        $asresult = @dns_get_record(self::ipv6ToReverseDnsAdressNotation($ip).'.origin6.asn.cymru.com', DNS_TXT);
 
         $result = $this->getAsFromOutput($asresult, $ip, 'ipv6');
-        if (count($asresult) > 0) {
+        if (is_countable($asresult) && count($asresult) > 0) {
             $result['cached'] = false;
         }
         $this->cache->setItem('aslookups', 'as'.$ip, $result);
@@ -155,7 +159,7 @@ class Aschecker
      * @param $ip
      * @return string
      */
-    private function ipv4ToReverseDnsAdressNotation($ip)
+    public static function ipv4ToReverseDnsAdressNotation($ip)
     {
         $ip_arr = explode('.', $ip);
 
@@ -166,7 +170,7 @@ class Aschecker
      * @param $ipaddr
      * @return string
      */
-    private function ipv6ToReverseDnsAdressNotation($ipaddr)
+    public static function ipv6ToReverseDnsAdressNotation($ipaddr)
     {
         $addr = inet_pton($ipaddr);
 

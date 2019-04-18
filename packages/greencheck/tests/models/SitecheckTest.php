@@ -456,9 +456,14 @@ class Models_SitecheckTest extends TestCase
     public function testGetIpv6ForurlForIpv6()
     {
         $result = $this->sitecheck->getHostByName('www.ipv6.xs4all.nl');
+        $this->markTestIncomplete(
+            'This website has moved hosts, so we need a different fixture'
+        );
 
-        $this->assertEquals('2001:888::18:0:0:0:80', $result['ipv6']);
         $this->assertFalse($result['ip']);
+        // this is returning false too at present. Are IPv5 looks
+        // returning anything?
+        $this->assertEquals('2001:888::18:0:0:0:80', $result['ipv6']);
     }
 
     /**
@@ -479,6 +484,9 @@ class Models_SitecheckTest extends TestCase
     public function testUrlWithIpv6ShouldReturnValidResult()
     {
         $result = $this->sitecheck->check('www.ipv6.xs4all.nl');
+        $this->markTestIncomplete(
+            'This website has moved hosts, so we need a different fixture'
+        );
 
         $this->assertEquals('2001:888::18:0:0:0:80', $result->getIpAddress('ipv6'));
         $this->assertTrue($result->isGreen());

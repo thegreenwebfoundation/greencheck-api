@@ -365,10 +365,21 @@ class Sitecheck
             return $this->_ipforurl[$url];
         }
 
+        // if we get a null value passed into the sitecheck, it
+        // gets coerced to "". We change it here so the return values
+        // for $url are in one place
+        if ("" == $url) {
+            $this->_ipforurl[$url]['ipv4'] = false;
+            $this->_ipforurl[$url]['ipv6'] = false;
+
+            return $this->_ipforurl[$url];
+        }
+
         // Real url given, clean it up and get ipadress
         $url = $this->validator->getHostname($url);
         if (!isset($this->_ipforurl[$url])) {
             $hostname = $this->getHostByName($url);
+
             $ip = $hostname['ip'];
             if (false != $ip && $this->validator->isValidIpAddressForType($ip, '4')) {
                 $this->_ipforurl[$url]['ipv4'] = $ip;

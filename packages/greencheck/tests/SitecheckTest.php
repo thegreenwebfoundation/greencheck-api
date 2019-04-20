@@ -268,32 +268,8 @@ class SitecheckTest extends TestCase
      */
     public function testWebsiteHostedByGreenHostingProviderShouldReturnIdOfHostingProvider()
     {
-        /*
-        DnsMock::register(TGWF\Greencheck\Sitecheck\DnsFetcher::class);
-        DnsMock::register(Aschecker::class);
-        DnsMock::withMockedHosts([
-            'www.greenweb.nl' => ,
-            Aschecker::ipv4ToReverseDnsAdressNotation('94.75.237.71'). '.origin.asn.cymru.com' => [
-                [
-                    'host' => "94.75.237.71.origin.asn.cymru.com",
-                    'class' => "IN",
-                    'ttl' => 7111,
-                    'type' => "TXT",
-                    'txt' => "49750 | 141.138.168.0/21 | NL | ripencc | 2011-07-01",
-                    'entries' => [
-                        0 => "49750 | 141.138.168.0/21 | NL | ripencc | 2011-07-01"
-                    ]
-                ]
-            ]
-        ]);
-        */
-
-        $result    = $this->sitecheck->check('www.greenweb.nl');
+        $result    = $this->sitecheck->check('www.iping.nl');
         $this->assertNotNull($result);
-
-        $this->markTestIncomplete(
-            'We do not have a site with a green provider in the fixtures to check against. Do we need to fake a dns resolution to a GreenIP for a hoster here?'
-        );
         $this->assertEquals('Groene Hosting', $result->getHostingProvider()->getNaam());
     }
 
@@ -303,10 +279,7 @@ class SitecheckTest extends TestCase
      */
     public function testWebsiteHostedByAnotherGreenHostingProviderShouldReturnIdOfHostingProvider()
     {
-        $result    = $this->sitecheck->check('www.stuurterug.nl');
-        $this->markTestIncomplete(
-            'result returns as null here too. ping can not find it either now. dead domain?'
-        );
+        $result    = $this->sitecheck->check('also.xs4all.hosted.nl');
         $this->assertEquals('Xs4all', $result->getHostingProvider()->getNaam());
     }
 
@@ -352,7 +325,7 @@ class SitecheckTest extends TestCase
      */
     public function testWebsiteThatCompensatesShouldReturnIsGreen()
     {
-        $result    = $this->sitecheck->check('www.geluidsnet.nl');
+        $result    = $this->sitecheck->check('www.iping.nl');
         $this->assertTrue($result->isGreen());
     }
 
@@ -362,7 +335,7 @@ class SitecheckTest extends TestCase
      */
     public function testWebsiteThatNoLongerCompensatesShouldReturnIsNotGreen()
     {
-        $result    = $this->sitecheck->check('www.webber.nl');
+        $result    = $this->sitecheck->check('was.greenbutexpired.nl');
         $this->assertFalse($result->isGreen());
     }
 
@@ -372,11 +345,11 @@ class SitecheckTest extends TestCase
      */
     public function testWwwShouldReturnResultForNonWWW()
     {
-        $result_www = $this->sitecheck->check('www.marcgijzen.nl'); // Not Registered
-        $result     = $this->sitecheck->check('marcgijzen.nl');    // Registered
+        $result_www = $this->sitecheck->check('www.no-www-registered.nl'); // Not Registered
+        $result     = $this->sitecheck->check('no-www-registered.nl');    // Registered
 
-        $this->assertEquals('www.marcgijzen.nl', $result_www->getCheckedUrl());
-        $this->assertEquals('marcgijzen.nl', $result->getCheckedUrl());
+        $this->assertEquals('www.no-www-registered.nl', $result_www->getCheckedUrl());
+        $this->assertEquals('no-www-registered.nl', $result->getCheckedUrl());
 
         $this->assertEquals(true, $result_www->isGreen());
         $this->assertEquals(true, $result->isGreen());
@@ -388,11 +361,11 @@ class SitecheckTest extends TestCase
      */
     public function testNonWwwShouldReturnResultForWWW()
     {
-        $result_www = $this->sitecheck->check('www.arendjantetteroo.nl'); // Registered
-        $result     = $this->sitecheck->check('arendjantetteroo.nl');    // Not Registered
+        $result_www = $this->sitecheck->check('www.no-www-registered.nl'); // Registered
+        $result     = $this->sitecheck->check('no-www-registered.nl');    // Not Registered
 
-        $this->assertEquals('www.arendjantetteroo.nl', $result_www->getCheckedUrl());
-        $this->assertEquals('arendjantetteroo.nl', $result->getCheckedUrl());
+        $this->assertEquals('www.no-www-registered.nl', $result_www->getCheckedUrl());
+        $this->assertEquals('no-www-registered.nl', $result->getCheckedUrl());
 
         $this->assertEquals(true, $result_www->isGreen());
         $this->assertEquals(true, $result->isGreen());
@@ -404,14 +377,14 @@ class SitecheckTest extends TestCase
      */
     public function testAnotherSubDomainShouldNotReturnResultForWWW()
     {
-        $result_www = $this->sitecheck->check('www.arendjantetteroo.nl'); // Registered
-        $result     = $this->sitecheck->check('blog.arendjantetteroo.nl');    // Not Registered
+        $result = $this->sitecheck->check('no-www-registered.nl'); // Registered
+        $result_blog     = $this->sitecheck->check('blog.no-www-registered.nl');    // Not Registered
 
-        $this->assertEquals('www.arendjantetteroo.nl', $result_www->getCheckedUrl());
-        $this->assertEquals('blog.arendjantetteroo.nl', $result->getCheckedUrl());
+        $this->assertEquals('no-www-registered.nl', $result->getCheckedUrl());
+        $this->assertEquals('blog.no-www-registered.nl', $result_blog->getCheckedUrl());
 
-        $this->assertEquals(true, $result_www->isGreen());
-        $this->assertEquals(false, $result->isGreen());
+        $this->assertEquals(true, $result->isGreen());
+        $this->assertEquals(false, $result_blog->isGreen());
     }
 
     /**
@@ -421,14 +394,9 @@ class SitecheckTest extends TestCase
      */
     public function testReturnTheSmallestIpRangePossible()
     {
-        $result = $this->sitecheck->checkIp('www.ipingtest.com');
-        $this->markTestIncomplete(
-            'This is calls checkIp on sitecheck, which calls a getIpForUrl, which is returning a null result'
-        );
-        // are we getting anything back at all?
-        $this->assertNotNull($result);
-        $this->assertEquals('94.75.237.89', $result->getIpStart());
-        $this->assertEquals('94.75.237.89', $result->getIpEind());
+        $result = $this->sitecheck->checkIp('also.xs4all.hosted.nl');
+        $this->assertEquals('194.109.21.4', $result->getIpStart());
+        $this->assertEquals('194.109.21.4', $result->getIpEind());
         $this->assertEquals('Xs4all', $result->getHostingprovider()->getNaam());
         $this->assertEquals(true, $result->isActive());
     }
@@ -504,10 +472,6 @@ class SitecheckTest extends TestCase
     public function testGetIpv6ForurlForIpv6()
     {
         $result = $this->sitecheck->getHostByName('www.ipv6.xs4all.nl');
-        $this->markTestIncomplete(
-            'This website has moved hosts, so we need a different fixture'
-        );
-
         $this->assertFalse($result['ip']);
         // this is returning false too at present. Are IPv5 looks
         // returning anything?
@@ -532,10 +496,6 @@ class SitecheckTest extends TestCase
     public function testUrlWithIpv6ShouldReturnValidResult()
     {
         $result = $this->sitecheck->check('www.ipv6.xs4all.nl');
-        $this->markTestIncomplete(
-            'This website has moved hosts, so we need a different fixture'
-        );
-
         $this->assertEquals('2001:888::18:0:0:0:80', $result->getIpAddress('ipv6'));
         $this->assertTrue($result->isGreen());
     }
@@ -546,17 +506,12 @@ class SitecheckTest extends TestCase
     public function testResultForUrlWithIpv6IpAdressShouldReturnGreen()
     {
         $result = $this->sitecheck->getHostByName('webmail.mailplatform.eu');
-        $this->markTestIncomplete(
-            'This website has moved hosts and no longer green. We need a different fixture'
-        );
 
         $this->assertEquals('2001:4b98:dc0:41:216:3eff:fedd:3317', $result['ipv6']);
         $this->assertEquals('92.243.6.32', $result['ip']);
 
         $result = $this->sitecheck->check('webmail.mailplatform.eu');
-        // they are no longer green now
-        $this->assertFalse($result->isGreen());
-        // $this->assertTrue($result->isGreen());
+        $this->assertTrue($result->isGreen());
     }
 
     /**

@@ -20,7 +20,7 @@ class LoadUrlData implements FixtureInterface
 
         // Was green once, not anymore
         $url = new GreencheckUrl();
-        $url->setUrl('www.webber.nl');
+        $url->setUrl('was.greenbutexpired.nl');
         $url->setDatumBegin(new \DateTime('2008-01-01'));
         $url->setDatumEind(new \DateTime('2009-01-01'));
         $manager->persist($url);
@@ -30,6 +30,13 @@ class LoadUrlData implements FixtureInterface
         $url->setUrl('www.bliin.com');
         $url->setDatumBegin(new \DateTime('2008-01-01'));
         $url->setDatumEind(new \DateTime('2009-01-01'));
+        $manager->persist($url);
+
+        // should show as green
+        $url = new GreencheckUrl();
+        $url->setUrl('no-www-registered.nl');
+        $url->setDatumBegin(new \DateTime('2011-01-01'));
+        $url->setDatumEind(new \DateTime('2050-01-01'));
         $manager->persist($url);
 
         // should show as green

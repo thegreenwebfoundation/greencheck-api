@@ -221,9 +221,6 @@ class SitecheckValidationTest extends TestCase
      */
     public function testValidatingAValidIpv6AdressShouldReturnTrue()
     {
-        $this->markTestIncomplete(
-            'This website has moved hosts, so we need a different fixture'
-        );
         $this->assertTrue($this->sitecheck->validate('http://www.ipv6.xs4all.nl'));
         $this->assertTrue($this->sitecheck->validate('http://[2001:888::18:0:0:0:80]'));
         $this->assertTrue($this->sitecheck->validate('2001:888::18:0:0:0:80'));

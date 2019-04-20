@@ -40,14 +40,10 @@ class SitecheckTest extends TestCase
         $greencheckAsRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
         $greencheckTldRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
 
-        // A map with values to map and as last value the return value.
-        $map = [
-            ['a.b.c',  ['ip' => false, 'ipv6' => false]],
-            ['www.iping.nl', ['ip' => '94.75.237.71','ipv6' => false]],
-            ['www.free.fr', ['ip' => '94.75.237.69','ipv6' => false]], // outside a fixture range
-            ['www.xs4all.nl', ['ip' => '194.109.21.4','ipv6' => false]], // xs4all ip range
-            ['www.nu.nl', ['ip' => '94.75.237.69','ipv6' => false]], // outside ip range for checkIp function
-        ];
+        // include the map as an external file ,
+        // we use it in multiple files
+        global $map;
+        require_once __DIR__ . '/urlMap.php';
 
         $dns = $this->createMock(Sitecheck\DnsFetcher::class);
         $dns->method('getIpAddressesForUrl')->will($this->returnValueMap($map));

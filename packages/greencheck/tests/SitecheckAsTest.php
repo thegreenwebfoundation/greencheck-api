@@ -1,14 +1,17 @@
 <?php
 require_once __DIR__ . '/TestConfiguration.php';
 
+use phpmock\phpunit\PHPMock;
+use Symfony\Bridge\PhpUnit\DnsMock;
 use TGWF\Greencheck\Sitecheck;
+
 use PHPUnit\Framework\TestCase;
 
 class SitecheckAsTest extends TestCase
 {
     /**
      *
-     * @var Greencheck_Sitecheck
+     * @var Sitecheck
      */
     protected $sitecheck = null;
 
@@ -30,7 +33,16 @@ class SitecheckAsTest extends TestCase
         $greencheckAsRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
         $greencheckTldRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
 
-        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, new Sitecheck\Logger($entityManager), 'test');
+        // @todo this feels *really* messy. See if this makes sense to move
+        // to TestConfiguration.php
+        global $map;
+        require_once __DIR__ . '/urlMap.php';
+
+
+        $dns = $this->createMock(Sitecheck\DnsFetcher::class);
+        $dns->method('getIpAddressesForUrl')->will($this->returnValueMap($map));
+
+        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, new Sitecheck\Logger($entityManager), 'test', $dns);
 
         //Cleanup all cache entries to correctly test
         $cache = $this->sitecheck->getCache();

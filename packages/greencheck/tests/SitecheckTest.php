@@ -1,18 +1,13 @@
 <?php
 require_once __DIR__ . '/TestConfiguration.php';
 
-use phpmock\phpunit\PHPMock;
-use Symfony\Bridge\PhpUnit\DnsMock;
 use TGWF\Greencheck\Sitecheck;
 
 use Symfony\Component\Validator\ValidatorBuilder;
 use PHPUnit\Framework\TestCase;
-use TGWF\Greencheck\Sitecheck\Aschecker;
 
 class SitecheckTest extends TestCase
 {
-    use PHPMock;
-
     /**
      *
      * @var Sitecheck

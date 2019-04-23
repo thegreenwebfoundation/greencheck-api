@@ -83,8 +83,6 @@ class LoadIpData implements FixtureInterface
 
         $manager->persist($as);
 
-        $manager->persist($ip);
-
         /**
          * Store ipv6 data
          * @var [type]

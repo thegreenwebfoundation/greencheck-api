@@ -15,7 +15,6 @@ use Liuggio\StatsdClient\Factory\StatsdDataFactory;
 use Liuggio\StatsdClient\StatsdClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use TGWF\Greencheck\Entity\GreencheckAs;
 use TGWF\Greencheck\Repository\GreencheckAsRepository;
 use TGWF\Greencheck\Repository\GreencheckIpRepository;
 use TGWF\Greencheck\Repository\GreencheckTldRepository;

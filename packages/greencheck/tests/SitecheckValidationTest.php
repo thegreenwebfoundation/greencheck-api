@@ -34,13 +34,8 @@ class SitecheckValidationTest extends TestCase
         $greencheckAsRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
         $greencheckTldRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
 
-        // include the map as an external file ,
-        // we use it in multiple files
-        global $map;
-        require_once __DIR__ . '/urlMap.php';
-
         $dns = $this->createMock(Sitecheck\DnsFetcher::class);
-        $dns->method('getIpAddressesForUrl')->will($this->returnValueMap($map));
+        $dns->method('getIpAddressesForUrl')->will($this->returnValueMap(TestConfiguration::getIpUrlMapping()));
 
         $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, new Sitecheck\Logger($entityManager), 'test', $dns);
 

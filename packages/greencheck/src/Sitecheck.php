@@ -2,8 +2,6 @@
 
 namespace TGWF\Greencheck;
 
-use Doctrine\ORM\EntityManager;
-use TGWF\Greencheck\Entity\GreencheckIp;
 use TGWF\Greencheck\Repository\GreencheckAsRepository;
 use TGWF\Greencheck\Repository\GreencheckIpRepository;
 use TGWF\Greencheck\Repository\GreencheckTldRepository;
@@ -12,8 +10,6 @@ use TGWF\Greencheck\Sitecheck\Cache;
 use TGWF\Greencheck\Sitecheck\DnsFetcher;
 use TGWF\Greencheck\Sitecheck\Logger;
 use TGWF\Greencheck\Sitecheck\Validator;
-use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Constraints\Ip;
 
 /**
  * Sitecheck class.
@@ -36,38 +32,38 @@ class Sitecheck
      *
      * @var array
      */
-    protected $_errorMessages = null;
+    protected $errorMessages;
 
     /**
      * Should the checks be logged.
      *
      * @var boolean, defaults to true
      */
-    protected $_log = true;
+    protected $logChecks = true;
 
     /**
      * @var Validator
      */
-    protected $validator = null;
+    protected $validator;
 
     /**
      * @var Sitecheck\Cache
      */
-    protected $cache = null;
+    protected $cache;
 
     /**
      * Needed for log purposes (website|admin|test|bot).
      *
      * @var string
      */
-    protected $_calledfrom = 'website';
+    protected $calledFrom = 'website';
 
     /**
      * Ip's for checked url's to skip hostname checks on each call.
      *
      * @var array
      */
-    protected $_ipforurl = [];
+    protected $ipForUrl = [];
 
     /**
      * Ip's for checked url's to skip hostname checks on each call.
@@ -79,35 +75,43 @@ class Sitecheck
     /**
      * The domains we have knowledge on.
      *
-     * @var <type>
+     * @var array
      */
-    protected $_countrytlds = null;
+    protected $countryTlds;
 
     /**
      * @var GreencheckUrlRepository
      */
-    protected $greencheckUrl = null;
+    protected $greencheckUrlRepository;
 
     /**
      * @var GreencheckIpRepository
      */
-    protected $greencheckIp = null;
+    protected $greencheckIpRepository;
 
     /**
      * @var GreencheckAsRepository
      */
-    protected $greencheckAs = null;
+    protected $greencheckAsRepository;
 
-    protected $aschecker = null;
+    /**
+     * @var
+     */
+    protected $aschecker;
 
     /**
      * @var GreencheckTldRepository
      */
-    private $greencheckTld;
+    private $greencheckTldRepository;
     /**
      * @var Logger
      */
     private $logger;
+
+    /**
+     * @var DnsFetcher
+     */
+    private $dnsFetcher;
 
     /**
      * Construct the sitecheck.
@@ -129,7 +133,7 @@ class Sitecheck
         $calledfrom = 'website',
         DnsFetcher $dnsFetcher = null
     ) {
-        $this->_calledfrom = $calledfrom;
+        $this->calledFrom = $calledfrom;
 
         $this->validator = new Validator();
         if (null == $dnsFetcher) {
@@ -137,10 +141,10 @@ class Sitecheck
         }
         $this->dnsFetcher = $dnsFetcher;
 
-        $this->greencheckUrl = $greencheckUrlRepository;
-        $this->greencheckIp = $greencheckIpRepository;
-        $this->greencheckAs = $greencheckAsRepository;
-        $this->greencheckTld = $greencheckTldRepository;
+        $this->greencheckUrlRepository = $greencheckUrlRepository;
+        $this->greencheckIpRepository = $greencheckIpRepository;
+        $this->greencheckAsRepository = $greencheckAsRepository;
+        $this->greencheckTldRepository = $greencheckTldRepository;
 
         $this->cache = $cache;
         $this->logger = $logger;
@@ -190,11 +194,11 @@ class Sitecheck
         $validurl = $this->validate($url);
         // Incorrect url, then return
         if (false == $validurl) {
-            return $validurl;
+            return false;
         }
 
         if ('' == $checked_through) {
-            $checked_through = $this->_calledfrom;
+            $checked_through = $this->calledFrom;
         }
 
         // Result is cached, then return result
@@ -224,27 +228,27 @@ class Sitecheck
         );
 
         // Check both www.domain.tld and domain.tld
-        if ('www.' == substr($url, 0, 4)) {
+        if (strpos($url, 'www.') === 0) {
             $strippedurl = substr($url, 4);
         } else {
             $strippedurl = 'www.'.$url;
         }
 
         // Compensated/Greened by Cleanbits?
-        $customerResult = $this->greencheckUrl->checkUrl($url);
-        if (!is_null($customerResult)) {
+        $customerResult = $this->greencheckUrlRepository->checkUrl($url);
+        if ($customerResult !== null) {
             return $this->updateCustomerResult($result, $customerResult);
         }
 
         // Recheck
-        $customerResult = $this->greencheckUrl->checkUrl($strippedurl);
-        if (!is_null($customerResult)) {
+        $customerResult = $this->greencheckUrlRepository->checkUrl($strippedurl);
+        if ($customerResult !== null) {
             return $this->updateCustomerResult($result, $customerResult);
         }
 
         // Not compensated, check in IP database
         $ipResult = $this->checkIp($url);
-        if (!is_null($ipResult)) {
+        if ($ipResult !== null) {
             $matchtext = $ipResult->getIpStart().' - '.$ipResult->getIpEind();
 
             return $this->updateResult($result, $matchtext, 'ip', $ipResult);
@@ -252,7 +256,7 @@ class Sitecheck
 
         // Not compensated, check in AS database
         $asResult = $this->checkAs($url);
-        if (!is_null($asResult)) {
+        if ($asResult !== null) {
             $matchtext = $asResult->getAsn();
 
             return $this->updateResult($result, $matchtext, 'as', $asResult);
@@ -311,11 +315,11 @@ class Sitecheck
      */
     public function getCountryTlds()
     {
-        if (!isset($this->_countrytlds)) {
-            $this->_countrytlds = $this->greencheckTld->getTLDsWithData();
+        if (!isset($this->countryTlds)) {
+            $this->countryTlds = $this->greencheckTldRepository->getTLDsWithData();
         }
 
-        return $this->_countrytlds;
+        return $this->countryTlds;
     }
 
     /**
@@ -325,7 +329,7 @@ class Sitecheck
      */
     public function logResult($result)
     {
-        if (!$this->_log) {
+        if (!$this->logChecks) {
             return;
         }
 
@@ -345,53 +349,53 @@ class Sitecheck
             $ip = $url;
             if ($this->validator->isValidIpAddressForType($ip, '4')) {
                 // Valid ipv4 adress, assign
-                $this->_ipforurl[$url]['ipv4'] = $ip;
-                $this->_ipforurl[$url]['ipv6'] = false;
+                $this->ipForUrl[$url]['ipv4'] = $ip;
+                $this->ipForUrl[$url]['ipv6'] = false;
             }
             if ($this->validator->isValidIpAddressForType($ip, '6')) {
                 // Valid ipv6 adress, assign
-                $this->_ipforurl[$url]['ipv6'] = $ip;
-                $this->_ipforurl[$url]['ipv4'] = false;
+                $this->ipForUrl[$url]['ipv6'] = $ip;
+                $this->ipForUrl[$url]['ipv4'] = false;
             }
 
-            return $this->_ipforurl[$url];
+            return $this->ipForUrl[$url];
         }
 
         if ($this->validator->isUrlAValidIpAddress($url)) {
             // Valid non public ip adress, return false
-            $this->_ipforurl[$url]['ipv4'] = false;
-            $this->_ipforurl[$url]['ipv6'] = false;
+            $this->ipForUrl[$url]['ipv4'] = false;
+            $this->ipForUrl[$url]['ipv6'] = false;
 
-            return $this->_ipforurl[$url];
+            return $this->ipForUrl[$url];
         }
 
         // if we get a null value passed into the sitecheck, it
         // gets coerced to "". We change it here so the return values
         // for $url are in one place
         if ("" == $url) {
-            $this->_ipforurl[$url]['ipv4'] = false;
-            $this->_ipforurl[$url]['ipv6'] = false;
+            $this->ipForUrl[$url]['ipv4'] = false;
+            $this->ipForUrl[$url]['ipv6'] = false;
 
-            return $this->_ipforurl[$url];
+            return $this->ipForUrl[$url];
         }
 
         // Real url given, clean it up and get ipadress
         $url = $this->validator->getHostname($url);
-        if (!isset($this->_ipforurl[$url])) {
+        if (!isset($this->ipForUrl[$url])) {
             $hostname = $this->getHostByName($url);
 
             $ip = $hostname['ip'];
             if (false != $ip && $this->validator->isValidIpAddressForType($ip, '4')) {
-                $this->_ipforurl[$url]['ipv4'] = $ip;
+                $this->ipForUrl[$url]['ipv4'] = $ip;
             } else {
-                $this->_ipforurl[$url]['ipv4'] = false;
+                $this->ipForUrl[$url]['ipv4'] = false;
             }
 
             $ipv6 = $hostname['ipv6'];
-            $this->_ipforurl[$url]['ipv6'] = $ipv6;
+            $this->ipForUrl[$url]['ipv6'] = $ipv6;
         }
 
-        return $this->_ipforurl[$url];
+        return $this->ipForUrl[$url];
     }
 
     /**
@@ -399,7 +403,7 @@ class Sitecheck
      *
      * @param string $url
      *
-     * @return string
+     * @return array
      */
     public function getHostByName($url)
     {
@@ -432,14 +436,14 @@ class Sitecheck
             // we don't seem to have a checkIp function on the
             // GreencheckIp class anymore anymore. It is on
             // the repository class
-            $result = $this->greencheckIp->checkIp($ip['ipv4']);
-            if (!is_null($result)) {
+            $result = $this->greencheckIpRepository->checkIp($ip['ipv4']);
+            if ($result !== null) {
                 return $result;
             }
         }
 
         if (false !== $ip['ipv6']) {
-            $result = $this->greencheckIp->checkIp($ip['ipv6']);
+            $result = $this->greencheckIpRepository->checkIp($ip['ipv6']);
         }
 
         if (!isset($result)) {
@@ -460,12 +464,12 @@ class Sitecheck
     {
         $as = $this->getAsForUrl($url);
 
-        if (is_null($as)) {
+        if ($as === null) {
             return null;
         }
         foreach ($as['as'] as $asnumber) {
-            $result = $this->greencheckAs->checkAs($asnumber);
-            if (!is_null($result)) {
+            $result = $this->greencheckAsRepository->checkAs($asnumber);
+            if ($result !== null) {
                 return $result;
             }
         }
@@ -499,7 +503,7 @@ class Sitecheck
 
     public function getAsChecker()
     {
-        if (is_null($this->aschecker)) {
+        if ($this->aschecker === null) {
             $this->aschecker = new Sitecheck\Aschecker($this->cache);
         }
 
@@ -511,7 +515,7 @@ class Sitecheck
      */
     public function disableLog()
     {
-        $this->_log = false;
+        $this->logChecks = false;
     }
 
     public function disableCache()
@@ -547,7 +551,7 @@ class Sitecheck
      * @param [type] $matchtype   [description]
      * @param [type] $matchobject [description]
      *
-     * @return [type] [description]
+     * @return SitecheckResult
      */
     private function updateResult($result, $matchtext, $matchtype, $matchobject)
     {

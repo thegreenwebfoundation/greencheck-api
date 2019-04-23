@@ -45,7 +45,6 @@ class SitecheckAsTest extends TestCase
 
     /**
      * Check that we can get the as information for an url
-     * https://bitbucket.org/cleanbits/greencheck/issue/1/ip-to-asn-mapping-support
      */
     public function testGetAsForurl()
     {
@@ -63,7 +62,6 @@ class SitecheckAsTest extends TestCase
 
     /**
      * Check that we get a green result for a green as
-     * https://bitbucket.org/cleanbits/greencheck/issue/1/ip-to-asn-mapping-support
      */
     public function testRunAsCheckForValidAndGreenUrlShouldReturnAs()
     {
@@ -74,7 +72,6 @@ class SitecheckAsTest extends TestCase
 
     /**
      * Check that we get a green result for a green as
-     * https://bitbucket.org/cleanbits/greencheck/issue/1/ip-to-asn-mapping-support
      */
     public function testAsCheckForValidAndGreenUrlShouldReturnGreen()
     {
@@ -86,7 +83,6 @@ class SitecheckAsTest extends TestCase
     
     /**
      * Check that we get a green result for a green as with double as numbers
-     * https://bitbucket.org/cleanbits/greencheck/issue/13/dubbele-as-nummers-in-as-output-niet-groen
      */
     public function testDoubleAsNumbersInAsOutputShouldReturnGreen()
     {

@@ -12,9 +12,9 @@ class SitecheckTest extends TestCase
      *
      * @var Sitecheck
      */
-    protected $sitecheck = null;
+    protected $sitecheck;
 
-    protected $em = null;
+    protected $em;
 
     public function setUp(): void
     {
@@ -47,7 +47,6 @@ class SitecheckTest extends TestCase
 
     /**
      * When checking a valid url, a sitecheck result object should be returned
-     * @return unknown_type
      */
     public function testCheckValidUrlShouldReturnSitecheckResultObject()
     {
@@ -57,7 +56,6 @@ class SitecheckTest extends TestCase
 
     /**
      * When checking a valid url, a sitecheck result object should be returned
-     * @return unknown_type
      */
     public function testCheckValidUrlShouldReturnResultObjectWithCheckedDate()
     {
@@ -82,7 +80,6 @@ class SitecheckTest extends TestCase
 
     /**
      * The returned sitecheck result object should contain the checked url
-     * @return unknown_type
      */
     public function testSitecheckResultObjectShouldContainCheckedUrl()
     {
@@ -94,7 +91,6 @@ class SitecheckTest extends TestCase
 
     /**
      * The returned sitecheck result object should contain the checked ip from the url
-     * @return unknown_type
      */
     public function testSitecheckResultObjectShouldContainCheckedIp()
     {
@@ -105,7 +101,6 @@ class SitecheckTest extends TestCase
 
     /**
      * A valid url should return a valid ip adress
-     * @return unknown_type
      */
     public function testValidUrlShouldReturnValidIpAdress()
     {
@@ -115,7 +110,6 @@ class SitecheckTest extends TestCase
 
     /**
      * An invalid url should return false when getting the ipadress for it
-     * @return unknown_type
      */
     public function testInvalidUrlShouldReturnFalseForIP()
     {
@@ -125,7 +119,6 @@ class SitecheckTest extends TestCase
 
     /**
      * If the url is not green, false should be returned
-     * @return unknown_type
      */
     public function testCheckNotGreenUrlShouldReturnFalse()
     {
@@ -143,7 +136,6 @@ class SitecheckTest extends TestCase
 
     /**
      * If the url is found in the ip search, then the search result should be returned
-     * @return unknown_type
      */
     public function testUrlInIpSearchShouldReturnSearchResult()
     {
@@ -157,7 +149,6 @@ class SitecheckTest extends TestCase
 
     /**
      * If the url is found in the ip search, then the search result should be returned
-     * @return unknown_type
      */
     public function testValidIPRangeShouldReturnTrue()
     {
@@ -189,7 +180,6 @@ class SitecheckTest extends TestCase
 
     /**
      * If the url is found in the ip search, then the search result should be returned
-     * @return unknown_type
      */
     public function testGreencheckIPShouldOnlyAllowPublicIpRanges()
     {
@@ -221,7 +211,6 @@ class SitecheckTest extends TestCase
 
     /**
      * No ip search result, then return null
-     * @return unknown_type
      */
     public function testUrlNotInIpSearchShouldReturnNull()
     {
@@ -231,7 +220,6 @@ class SitecheckTest extends TestCase
 
     /**
      * A website that is hosted by a green hosting provider should be qualified as a green website
-     * @return unknown_type
      */
     public function testWebsiteHostedByGreenHostingProviderShouldReturnWebsiteIsGreen()
     {
@@ -254,7 +242,6 @@ class SitecheckTest extends TestCase
     /**
      * The result for a check for a website hosted by a green hosting provider should store the
      * id of this hosting provider for later retrieval
-     * @return unknown_type
      */
     public function testWebsiteHostedByGreenHostingProviderShouldReturnIdOfHostingProvider()
     {
@@ -265,7 +252,6 @@ class SitecheckTest extends TestCase
 
     /**
      * Same test as above, another url with another hosting provider
-     * @return unknown_type
      */
     public function testWebsiteHostedByAnotherGreenHostingProviderShouldReturnIdOfHostingProvider()
     {
@@ -287,7 +273,6 @@ class SitecheckTest extends TestCase
 
     /**
      * A website hosted with a grey hosting provider should return the result that the website is not green
-     * @return unknown_type
      */
     public function testWebsiteHostedByGreyHostingProviderShouldReturnWebsiteIsNotGreen()
     {
@@ -297,7 +282,6 @@ class SitecheckTest extends TestCase
 
     /**
      * If the url is found in the customer search, then the search result should be returned
-     * @return unknown_type
      */
     public function testUrlInCustomerSearchShouldReturnSearchResult()
     {
@@ -311,7 +295,6 @@ class SitecheckTest extends TestCase
 
     /**
      * A website that is a customer should return green, unless the date has passed.
-     * @return unknown_type
      */
     public function testWebsiteThatCompensatesShouldReturnIsGreen()
     {
@@ -321,7 +304,6 @@ class SitecheckTest extends TestCase
 
     /**
      * A website that is a customer should return green, unless the date has passed.
-     * @return unknown_type
      */
     public function testWebsiteThatNoLongerCompensatesShouldReturnIsNotGreen()
     {
@@ -331,7 +313,6 @@ class SitecheckTest extends TestCase
 
     /**
      * Make sure a registered url without www. is also found
-     * https://bitbucket.org/cleanbits/greencheck/issue/8/support-checking-wwwdomaintld-and
      */
     public function testWwwShouldReturnResultForNonWWW()
     {
@@ -347,7 +328,6 @@ class SitecheckTest extends TestCase
 
     /**
      * Make sure a registered url without www. is also found
-     * https://bitbucket.org/cleanbits/greencheck/issue/8/support-checking-wwwdomaintld-and
      */
     public function testNonWwwShouldReturnResultForWWW()
     {
@@ -363,7 +343,6 @@ class SitecheckTest extends TestCase
 
     /**
      * Make sure a registered url without www. is also found
-     * https://bitbucket.org/cleanbits/greencheck/issue/8/support-checking-wwwdomaintld-and
      */
     public function testAnotherSubDomainShouldNotReturnResultForWWW()
     {
@@ -380,7 +359,6 @@ class SitecheckTest extends TestCase
     /**
      * Make sure the smallest ip range is returned when matched on ip
      * In order to have small hosting resellers get back instead of the big ones
-     * https://bitbucket.org/cleanbits/greencheck/issue/4/return-smallest-ip-range-while-checking
      */
     public function testReturnTheSmallestIpRangePossible()
     {
@@ -393,7 +371,6 @@ class SitecheckTest extends TestCase
 
     /**
      * Make sure adding ip ranges work correctly with signed/unsigned ints
-     * https://bitbucket.org/cleanbits/greencheck/issue/7/fix-ip2long-on-32bit-64-returns-signed-int
      */
     public function testAddIpRangeToDatabase()
     {
@@ -436,8 +413,6 @@ class SitecheckTest extends TestCase
 
     /**
      * Checking an ip on a green server should return green
-     * https://bitbucket.org/cleanbits/greencheck/issue/15/support-lookup-of-ip-adresses
-     * @return unknown_type
      */
     public function testIpAsUrlShouldReturnResult()
     {
@@ -447,8 +422,6 @@ class SitecheckTest extends TestCase
     
     /**
      * Checking an ip on a green server should return green
-     * https://bitbucket.org/cleanbits/greencheck/issue/15/support-lookup-of-ip-adresses
-     * @return unknown_type
      */
     public function testInvalidIpAsUrlShouldReturnNoResult()
     {
@@ -470,8 +443,6 @@ class SitecheckTest extends TestCase
 
     /**
      * Checking an ipv6 on a green server should return green
-     * https://bitbucket.org/cleanbits/greencheck/issue/15/support-lookup-of-ip-adresses
-     * @return unknown_type
      */
     public function testIpv6AsUrlShouldReturnResult()
     {

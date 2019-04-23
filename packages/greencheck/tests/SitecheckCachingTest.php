@@ -77,7 +77,6 @@ class SitecheckCachingTest extends TestCase
 
     /**
      * Test for #11 : Log every request even if cached
-     * https://bitbucket.org/cleanbits/greencheck/issue/11/log-every-request-even-if-cached
      */
     public function testSecondCheckWhenCachedShouldBeLogged()
     {

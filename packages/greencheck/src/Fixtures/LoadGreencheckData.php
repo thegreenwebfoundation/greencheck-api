@@ -33,13 +33,7 @@ class LoadGreencheckData implements FixtureInterface
 
         $gc->setIp(GreencheckIp::convertIpPresentationToDecimal('194.109.21.4'));
 
-        $gcby = new GreencheckBy();
-        $gcby->setCheckedBy(ip2long('127.0.0.1'));
-        $gcby->setCheckedThrough('Tester');
-        $gcby->setCheckedBrowser('Chrometester');
-
         $manager->persist($gc);
-        $manager->persist($gcby);
 
         $gc = new Greencheck();
         $gc->setIdGreencheck(2);
@@ -50,13 +44,7 @@ class LoadGreencheckData implements FixtureInterface
         $gc->setDatum(new \DateTime('now'));
         $gc->setIp(GreencheckIp::convertIpPresentationToDecimal('194.109.21.4'));
 
-        $gcby = new GreencheckBy();
-        $gcby->setCheckedBy(ip2long('127.0.0.1'));
-        $gcby->setCheckedThrough('Tester');
-        $gcby->setCheckedBrowser('Chrometester');
-
         $manager->persist($gc);
-        $manager->persist($gcby);
 
         $gc = new Greencheck();
         $gc->setIdGreencheck(2);
@@ -67,14 +55,7 @@ class LoadGreencheckData implements FixtureInterface
         $gc->setDatum(new \DateTime('now'));
         $gc->setIp(GreencheckIp::convertIpPresentationToDecimal('194.109.21.4'));
 
-        $gcby = new GreencheckBy();
-        $gcby->setCheckedBy(ip2long('127.0.0.1'));
-        $gcby->setCheckedThrough('Tester');
-        $gcby->setCheckedBrowser('Chrometester');
-
         $manager->persist($gc);
-        $manager->persist($gcby);
-
 
         $gc = new Greencheck();
         $gc->setIdGreencheck(2);
@@ -85,13 +66,7 @@ class LoadGreencheckData implements FixtureInterface
         $gc->setDatum(new \DateTime('now'));
         $gc->setIp(GreencheckIp::convertIpPresentationToDecimal('194.109.21.4'));
 
-        $gcby = new GreencheckBy();
-        $gcby->setCheckedBy(ip2long('127.0.0.1'));
-        $gcby->setCheckedThrough('Tester');
-        $gcby->setCheckedBrowser('Chrometester');
-
         $manager->persist($gc);
-        $manager->persist($gcby);
 
         $manager->flush();
     }

@@ -433,9 +433,6 @@ class Sitecheck
     {
         $ip = $this->getIpForUrl($url);
         if (false !== $ip['ipv4']) {
-            // we don't seem to have a checkIp function on the
-            // GreencheckIp class anymore anymore. It is on
-            // the repository class
             $result = $this->greencheckIpRepository->checkIp($ip['ipv4']);
             if ($result !== null) {
                 return $result;

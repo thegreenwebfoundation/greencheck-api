@@ -117,10 +117,6 @@ class Aschecker
         }
         $asresult = @dns_get_record(self::ipv4ToReverseDnsAdressNotation($ip).'.origin.asn.cymru.com', DNS_TXT);
 
-        if($ip == '94.75.237.71') {
-            var_dump($asresult);
-        }
-
         $result = $this->getAsFromOutput($asresult, $ip, 'ipv4');
         if (is_countable($asresult) && count($asresult) > 0) {
             $result['cached'] = false;

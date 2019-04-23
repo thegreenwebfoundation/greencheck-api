@@ -70,7 +70,6 @@ class SitecheckCachingTest extends TestCase
          * Only do queries to store the result
          *
          * Start transaction, greencheck table, commit
-         * TODO: this no longer writes to greencheck_by table - this the intended behaviour?
          */
         $this->assertEquals(3, count($logger->getQueries()));
     }

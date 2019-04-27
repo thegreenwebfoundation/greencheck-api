@@ -1,0 +1,12 @@
+web:
+  image: greencheck
+
+  links:
+    - redis
+    - db
+
+redis:
+  image: redis:alpine
+
+db:
+  image: circleci/mysql:5.6

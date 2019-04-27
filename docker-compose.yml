@@ -1,6 +1,6 @@
 web:
   image: greencheck
-
+  command: ["bash", "/app/runtests.sh"]
   links:
     - redis
     - db

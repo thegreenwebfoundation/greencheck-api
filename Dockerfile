@@ -20,11 +20,12 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 # # set up the src
 RUN mkdir -p /app
 
-# # move
+#
+COPY runtests.sh /app/runtests.sh
+
+#
 COPY packages/greencheck/composer.json /app/composer.json
 WORKDIR /app/
 RUN /usr/bin/composer install
 
 COPY packages/greencheck /app/
-
-# RUN ./bin/phpunit -c phpunit.xml.dist

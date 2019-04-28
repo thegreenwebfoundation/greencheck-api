@@ -1,9 +1,15 @@
 steps:
   - name: "gcr.io/cloud-builders/docker"
     args: ["build", "-t", "gcr.io/$PROJECT_ID/greencheck", "."]
-  - name: "docker/docker-compose:1.16.1"
+  - name: "docker/compose:1.23.2"
     args: ["up", "-d"]
-  - name: "docker/docker-compose:1.16.1"
-    args: ["run", "web", "bash -c './wait-for db:3306 -- ./runtests.sh"]
+  - name: "docker/compose:1.23.2"
+    args:
+      - "run"
+      - "web"
+      - "bash"
+      - "-c"
+      - "./wait-for db:3306 -- ./runtests.sh"
+
 images:
   - "gcr.io/$PROJECT_ID/greencheck"

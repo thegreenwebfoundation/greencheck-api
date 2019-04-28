@@ -1,12 +1,19 @@
-web:
-  image: greencheck
-  command: ["bash", "/app/runtests.sh"]
-  links:
-    - redis
-    - db
+version: "3.7"
+services:
+  web:
+    image: greencheck
+    # command: bash -c './wait-for db:3306 -- ./runtests.sh'
+    # volumes:
+    #   - type: bind
+    #     source: ./packages/greencheck
+    #     target: /app
 
-redis:
-  image: redis:alpine
+    links:
+      - redis
+      - db
 
-db:
-  image: circleci/mysql:5.6
+  redis:
+    image: redis:alpine
+
+  db:
+    image: circleci/mysql:5.6

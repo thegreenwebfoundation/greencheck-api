@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   web:
-    image: greencheck
+    image: gcr.io/prodsci-tgwf-0/greencheck
     # command: bash -c './wait-for db:3306 -- ./runtests.sh'
     # volumes:
     #   - type: bind

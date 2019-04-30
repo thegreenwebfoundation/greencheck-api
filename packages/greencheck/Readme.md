@@ -13,4 +13,8 @@ pecl install redis
 
 ## Running the tests
 
+```
 bin/phpunit -c configuration.xml
+```
+
+There is also experimental docker support.

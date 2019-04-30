@@ -5,6 +5,8 @@ greencheck:
     user: tgwf
     password: tgwf
     dbname: greencheck_test
+  redis:
+    host: localhost
   cachetime: 7200 # Standard cachetime is 2 hours
   cache: true
   cachetype: redis

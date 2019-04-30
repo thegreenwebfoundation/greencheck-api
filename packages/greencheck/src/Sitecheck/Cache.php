@@ -97,6 +97,16 @@ class Cache
         }
         return 'apc';
     }
+    /**
+     * @return string
+     */
+    public function getRedisHost ()
+    {
+        if (isset($this->config['greencheck']['redis']['host'])) {
+            return $this->config['greencheck']['redis']['host'];
+        }
+        return '127.0.0.1';
+    }
 
     /**
      * @todo Inject these dependencies in the constructor instead
@@ -106,15 +116,17 @@ class Cache
      */
     public function getCacheDriver($cachetype)
     {
+
         if ('memcache' == $cachetype) {
             $memcache = new \Memcache();
-            $memcache->connect('127.0.0.1', 11211);
+            $memcache->connect($host, 11211);
 
             $cache = new MemcacheCache();
             $cache->setMemcache($memcache);
         } elseif ('redis' == $cachetype) {
             $redis = new \Redis();
-            $redis->connect('redis', 6379);
+            $redishost = $this->getRedisHost();
+            $redis->connect($redishost, 6379);
 
             $cache = new RedisCache();
             $cache->setRedis($redis);

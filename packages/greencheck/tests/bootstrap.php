@@ -3,7 +3,18 @@
  * Bootstrap doctrine and configuration
  *
  */
+
+function getConfigFilePath ()
+    {
+        if (getenv('TGWF_CONFIG_FILE_PATH')) {
+            return getenv('TGWF_CONFIG_FILE_PATH');
+        }
+        return '/tests/config.yml';
+    }
+
 $rootDir = __DIR__ . '/..';
+
+$config_file_path = __DIR__ . getConfigFilePath();
 
 if (!$loader = @include $rootDir .'/vendor/autoload.php') {
     $message = <<< EOF
@@ -21,9 +32,10 @@ EOF;
     die($message);
 }
 
-if (!file_exists($rootDir .'/tests/config.yml')) {
+if (!file_exists($config_file_path)) {
     $message = <<< EOF
-<p>No config.yml found. Please copy the config.dist.yml to config.yml and configure the settings in this file:</p>
+<p>No config.yml found - (\$config_file_path: $config_file_path)</p>
+<p>Please copy the config.dist.yml to config.yml and configure the settings in this file:</p>
 <pre>
     cp config.dist.yml config.yml
     vi config.yml
@@ -49,7 +61,7 @@ use Symfony\Component\Yaml\Parser;
 
 $yaml = new Parser();
 
-$yamlconfig = $yaml->parse(file_get_contents($rootDir .'/tests/config.yml'));
+$yamlconfig = $yaml->parse(file_get_contents($config_file_path));
 
 //configuration
 $config = new Configuration();

@@ -109,6 +109,17 @@ class Cache
     }
 
     /**
+     * @return string
+     */
+    public function getMemcacheHost ()
+    {
+        if (isset($this->config['greencheck']['memcache']['host'])) {
+            return $this->config['greencheck']['memcache']['host'];
+        }
+        return '127.0.0.1';
+    }
+
+    /**
      * @todo Inject these dependencies in the constructor instead
      *
      * @param $cachetype
@@ -119,7 +130,8 @@ class Cache
 
         if ('memcache' == $cachetype) {
             $memcache = new \Memcache();
-            $memcache->connect($host, 11211);
+            $memcachehost = $this->getMemcacheHost();
+            $memcache->connect($memcachehost, 11211);
 
             $cache = new MemcacheCache();
             $cache->setMemcache($memcache);

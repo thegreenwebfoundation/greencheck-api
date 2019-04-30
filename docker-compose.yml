@@ -2,11 +2,14 @@ version: "3.7"
 services:
   web:
     image: gcr.io/prodsci-tgwf-0/greencheck
-    # command: bash -c './wait-for db:3306 -- ./runtests.sh'
+    # uncomment this to mount the greencheck code
+    # so you don't need to rebuild the image on each change
     # volumes:
     #   - type: bind
     #     source: ./packages/greencheck
     #     target: /app
+    environment:
+      TGWF_CONFIG_FILE_PATH: /config.ci.yml
 
     links:
       - redis

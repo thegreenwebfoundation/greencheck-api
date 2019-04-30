@@ -17,4 +17,6 @@ pecl install redis
 bin/phpunit -c configuration.xml
 ```
 
+If you want to run all the tests without stopping when a test fails, change `stopOnFailure="true"` to stopOnFailure="false" in `phpunit.xml.dist`.
+
 There is also experimental docker support.

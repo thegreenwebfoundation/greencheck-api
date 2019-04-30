@@ -1,12 +1,12 @@
 greencheck:
   db:
     driver: pdo_mysql
-    host: localhost
-    user: tgwf
-    password: tgwf
-    dbname: greencheck_test
+    host: db
+    user: root
+    password:
+    dbname: circle_test
   redis:
-    host: localhost
+    host: redis
   memcache:
     host: localhost
   cachetime: 7200 # Standard cachetime is 2 hours

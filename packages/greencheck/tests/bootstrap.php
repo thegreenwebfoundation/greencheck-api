@@ -14,7 +14,7 @@ function getConfigFilePath ()
 
 $rootDir = __DIR__ . '/..';
 
-$config_file_path = __DIR__ . getConfigFilePath();
+$configFilePath = __DIR__ . getConfigFilePath();
 
 if (!$loader = @include $rootDir .'/vendor/autoload.php') {
     $message = <<< EOF
@@ -32,9 +32,9 @@ EOF;
     die($message);
 }
 
-if (!file_exists($config_file_path)) {
+if (!file_exists($configFilePath)) {
     $message = <<< EOF
-<p>No config.yml found - (\$config_file_path: $config_file_path)</p>
+<p>No config.yml found - (looked at  \$configFilePath: $configFilePath)</p>
 <p>Please copy the config.dist.yml to config.yml and configure the settings in this file:</p>
 <pre>
     cp config.dist.yml config.yml
@@ -61,7 +61,7 @@ use Symfony\Component\Yaml\Parser;
 
 $yaml = new Parser();
 
-$yamlconfig = $yaml->parse(file_get_contents($config_file_path));
+$yamlconfig = $yaml->parse(file_get_contents($configFilePath));
 
 //configuration
 $config = new Configuration();

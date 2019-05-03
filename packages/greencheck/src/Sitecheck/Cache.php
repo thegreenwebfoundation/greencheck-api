@@ -130,15 +130,12 @@ class Cache
 
         if ('memcache' == $cachetype) {
             $memcache = new \Memcache();
-            $memcachehost = $this->getMemcacheHost();
-            $memcache->connect($memcachehost, 11211);
-
+            $memcache->connect($this->getMemcacheHost(), 11211);
             $cache = new MemcacheCache();
             $cache->setMemcache($memcache);
         } elseif ('redis' == $cachetype) {
             $redis = new \Redis();
-            $redishost = $this->getRedisHost();
-            $redis->connect($redishost, 6379);
+            $redis->connect($this->getRedisHost(), 6379);
 
             $cache = new RedisCache();
             $cache->setRedis($redis);

@@ -17,6 +17,8 @@ class SitecheckCachingTest extends TestCase
 
     protected $em = null;
 
+    protected $redis = null;
+
     public function setUp(): void
     {
         // reset database to known state
@@ -29,6 +31,11 @@ class SitecheckCachingTest extends TestCase
         // Setup the cache
         $cache = new Sitecheck\Cache($config);
         $cache->setCache('default');
+        $redisCache = $cache->getCache();
+        $redis = $redisCache->getRedis();
+
+        $logger = new Sitecheck\Logger($entityManager, $redis);
+
 
         // @todo mock these where needed
         $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
@@ -36,7 +43,7 @@ class SitecheckCachingTest extends TestCase
         $greencheckAsRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
         $greencheckTldRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
 
-        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, new Sitecheck\Logger($entityManager), 'test');
+        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, $logger, 'test');
 
         //Cleanup all cache entries to correctly test
         $cache = $this->sitecheck->getCache();

@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use TGWF\Greencheck\Entity\Greencheck;
 use TGWF\Greencheck\Entity\GreencheckIp;
 use TGWF\Greencheck\SitecheckResult;
+use TGWF\Greencheck\LatestResult;
 
 class Logger
 {
@@ -61,10 +62,11 @@ class Logger
         $gc->setDatum(new \DateTime('now'));
         $gc->setIp(GreencheckIp::convertIpPresentationToDecimal($ip));
 
-        $gcJson = json_encode($result);
+        $latest = new LatestResult();
+        $latest->setResult($result);
 
         $this->entityManager->persist($gc);
-        $this->redis->set("domains:$checkedUrl", $gcJson);
+        $this->redis->set("domains:$checkedUrl", json_encode($result));
         $this->entityManager->flush();
     }
 }

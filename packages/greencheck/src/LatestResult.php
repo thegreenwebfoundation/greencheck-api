@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Greencheck;
+namespace TGWF\Greencheck;
 
 use TGWF\Greencheck\SitecheckResult;
 

@@ -9,7 +9,7 @@ function getConfigFilePath ()
         if (getenv('TGWF_CONFIG_FILE_PATH')) {
             return getenv('TGWF_CONFIG_FILE_PATH');
         }
-        return '/tests/config.yml';
+        return '/config.yml';
     }
 
 $rootDir = __DIR__ . '/..';

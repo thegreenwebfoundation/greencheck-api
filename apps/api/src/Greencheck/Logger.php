@@ -100,6 +100,10 @@ class Logger
         $latest = new LatestResult();
         $latest->setResult($result);
 
+        // TODO - see about using this logger of the one in the
+        // greencheck library
+        $this->redis->set("domains:$checkedUrl", json_encode($latest));
+
         $this->redis->lpush('latest_checks', json_encode($latest));
         $this->redis->ltrim('latest_checks', 0, 999);
     }

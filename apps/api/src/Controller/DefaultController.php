@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Greencheck\ImageGenerator;
+use Predis\Client;
 use Enqueue\Client\ProducerInterface;
 use Enqueue\Util\JSON;
 use Liuggio\StatsdClient\Factory\StatsdDataFactory;
@@ -48,13 +49,16 @@ class DefaultController extends AbstractController
         StatsdClient $statsdClient,
         RequestStack $requestStack,
         ImageGenerator $imageGenerator,
-        ProducerInterface $producer
+        ProducerInterface $producer,
+        Client $redis
     ) {
         $this->statsdDataFactory = $statsdDataFactory;
         $this->statsdClient = $statsdClient;
         $this->requestStack = $requestStack;
         $this->imageGenerator = $imageGenerator;
         $this->producer = $producer;
+        $this->redis = $redis;
+
     }
 
     /**
@@ -116,6 +120,34 @@ class DefaultController extends AbstractController
         }
 
         $result = $this->doGreencheck($url, $ip, $browser, 'api', $blind);
+
+        $this->statsdClient->send($this->statsdDataFactory->increment('api.actions.greencheck.check'));
+
+        return $this->returnJson($result, true);
+    }
+
+    /**
+     * @Route(path="/greencheck-async/{url}")
+     *
+     * @param Request $request
+     * @param $url
+     *
+     * @return RedirectResponse|Response
+     */
+    public function greencheckActionAsync(Request $request, $url)
+    {
+        $ip = $request->getClientIp();
+        $browser = $request->server->get('HTTP_USER_AGENT');
+        $blind = $request->get('blind', false);
+        if (false !== $blind) {
+            $blind = true;
+        }
+
+        if ('' == $url) {
+            return $this->handleEmptyUrl($request, $url);
+        }
+
+        $result = $this->doGreencheckAsync($url, $ip, $browser, 'api', $blind);
 
         $this->statsdClient->send($this->statsdDataFactory->increment('api.actions.greencheck.check'));
 
@@ -375,6 +407,38 @@ class DefaultController extends AbstractController
 
         return $data['result'];
     }
+
+     /**
+     * @param $url
+     * @param $ip
+     * @param $browser
+     * @param string $source
+     * @param bool   $blind
+     *
+     * @return mixed
+     */
+    private function doGreencheckAsync($url, $ip, $browser, $source = 'api', $blind = false)
+    {
+        $promise = $this->producer->sendCommand('greencheck', JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]), $needReply = false);
+        $cachedLookup = $this->getGreencheckResultFromCache($url);
+
+        $data = JSON::decode($cachedLookup);
+
+        return $data['result'];
+    }
+    /**
+     * fetch the results for the URL synchronously
+     * @param $url
+     *
+     * @return mixed
+     */
+    private function getGreencheckResultFromCache($url)
+    {
+        $res = $this->redis->get($domainKey, ($latest));
+        return $res;
+    }
+
+
 
     /**
      * @param $result

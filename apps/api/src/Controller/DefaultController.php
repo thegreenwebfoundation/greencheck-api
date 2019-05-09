@@ -432,7 +432,7 @@ class DefaultController extends AbstractController
 
         $data = JSON::decode($cachedLookup);
 
-        return $data['result'];
+        return $data;
     }
     /**
      * fetch the results for the URL synchronously
@@ -442,7 +442,8 @@ class DefaultController extends AbstractController
      */
     private function getGreencheckResultFromCache($url)
     {
-        $res = $this->redis->get($url);
+        $res = $this->redis->get("domains:$url");
+
         return $res;
     }
 

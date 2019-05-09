@@ -58,18 +58,23 @@ class SitecheckHashCachingTest extends TestCase
         // $cache = $this->sitecheck->getCacheObject();
         // $redisCache = $cache->getCache();
 
-        $logger = new SQLLogger();
-        $this->em->getConnection()->getConfiguration()->setSQLLogger($logger);
+        // $logger = new SQLLogger();
+        // $this->em->getConnection()->getConfiguration()->setSQLLogger($logger);
 
         $date = new \DateTime('now');
+        $formattedDate = $date->format("Y-m-d");
 
         $result = $this->sitecheck->check('www.nu.nl');
         $redis = $cache->getRedis();
 
+        $allKeys = $redis->keys("domains*");
+
         $cachedUrlData = $redis->get('domains:www.nu.nl');
 
         $jsonDecodedData = json_decode($cachedUrlData);
-        $this->assertEquals($date, $jsonDecodedData);
+        $this->assertEquals("www.nu.nl", $jsonDecodedData->url);
+        $this->assertEquals(false, $jsonDecodedData->green);
+        $this->assertStringContainsString($formattedDate, $jsonDecodedData->date);
     }
 
 }

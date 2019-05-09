@@ -65,8 +65,10 @@ class Logger
         $latest = new LatestResult();
         $latest->setResult($result);
 
+        $domainKey = "domains:$checkedUrl";
+
         $this->entityManager->persist($gc);
-        $this->redis->set("domains:$checkedUrl", json_encode($result));
+        $this->redis->set($domainKey, json_encode($latest));
         $this->entityManager->flush();
     }
 }

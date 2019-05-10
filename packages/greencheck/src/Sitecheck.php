@@ -2,11 +2,13 @@
 
 namespace TGWF\Greencheck;
 
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 use TGWF\Greencheck\Repository\GreencheckAsRepository;
 use TGWF\Greencheck\Repository\GreencheckIpRepository;
 use TGWF\Greencheck\Repository\GreencheckTldRepository;
 use TGWF\Greencheck\Repository\GreencheckUrlRepository;
-use TGWF\Greencheck\Sitecheck\Cache;
 use TGWF\Greencheck\Sitecheck\DnsFetcher;
 use TGWF\Greencheck\Sitecheck\Logger;
 use TGWF\Greencheck\Sitecheck\Validator;
@@ -14,7 +16,7 @@ use TGWF\Greencheck\Sitecheck\Validator;
 /**
  * Sitecheck class.
  *
- * The sitecheck handles all actions with regard to the Green Web Foundation greencheck.
+ * The sitecheck handles all actions with regard to the Green Web Foundation Greencheck.
  *
  * Flow :
  * - Check the cached records for an url, if found return
@@ -47,7 +49,7 @@ class Sitecheck
     protected $validator;
 
     /**
-     * @var Sitecheck\Cache
+     * @var CacheInterface
      */
     protected $cache;
 
@@ -114,13 +116,19 @@ class Sitecheck
     private $dnsFetcher;
 
     /**
+     * Keeps track if a results is a cache hit or miss
+     * @var bool
+     */
+    private $isHit;
+
+    /**
      * Construct the sitecheck.
      *
      * @param GreencheckUrlRepository $greencheckUrlRepository
      * @param GreencheckIpRepository  $greencheckIpRepository
      * @param GreencheckAsRepository  $greencheckAsRepository
      * @param GreencheckTldRepository $greencheckTldRepository
-     * @param Cache $cache
+     * @param CacheInterface $cache
      * @param string $calledfrom [description]
      */
     public function __construct(
@@ -128,7 +136,7 @@ class Sitecheck
         GreencheckIpRepository $greencheckIpRepository,
         GreencheckAsRepository $greencheckAsRepository,
         GreencheckTldRepository $greencheckTldRepository,
-        Cache $cache,
+        CacheInterface $cache,
         Logger $logger,
         $calledfrom = 'website',
         DnsFetcher $dnsFetcher = null
@@ -185,7 +193,11 @@ class Sitecheck
      *
      * @param string $url The url to check
      *
+     * @param string $checked_by
+     * @param string $checked_browser
+     * @param string $checked_through
      * @return SitecheckResult|false
+     * @throws \Exception
      */
     public function check($url, $checked_by = '0', $checked_browser = '', $checked_through = '')
     {
@@ -202,22 +214,66 @@ class Sitecheck
         }
 
         // Result is cached, then return result
-        if ($result = $this->getCache('result')->fetch(sha1($url))) {
+        $this->isHit = true;
+        $result = $this->cache->get(sha1($url), function (ItemInterface $item) use ($url, $checked_by, $checked_browser, $checked_through){
+            $item->expiresAfter(3600);
+            $this->isHit = false;
+
+
+            $result = new SitecheckResult($url, $this->getIpForUrl($url));
+
             $result->setCalledFrom(
                 [
                     'checked_by' => $checked_by,
                     'checked_browser' => $checked_browser,
                     'checked_through' => $checked_through,
-                    ]
+                ]
             );
-            $result->setCheckedAt(new \DateTime('now'));
+
+            // Check both www.domain.tld and domain.tld
+            if (strpos($url, 'www.') === 0) {
+                $strippedurl = substr($url, 4);
+            } else {
+                $strippedurl = 'www.'.$url;
+            }
+
+            // Compensated/Greened by Cleanbits?
+            $customerResult = $this->greencheckUrlRepository->checkUrl($url);
+            if ($customerResult !== null) {
+                return $this->updateCustomerResult($result, $customerResult);
+            }
+
+            // Recheck
+            $customerResult = $this->greencheckUrlRepository->checkUrl($strippedurl);
+            if ($customerResult !== null) {
+                return $this->updateCustomerResult($result, $customerResult);
+            }
+
+            // Not compensated, check in IP database
+            $ipResult = $this->checkIp($url);
+            if ($ipResult !== null) {
+                $matchtext = $ipResult->getIpStart().' - '.$ipResult->getIpEind();
+
+                return $this->updateResult($result, $matchtext, 'ip', $ipResult);
+            }
+
+            // Not compensated, check in AS database
+            $asResult = $this->checkAs($url);
+            if ($asResult !== null) {
+                $matchtext = $asResult->getAsn();
+
+                return $this->updateResult($result, $matchtext, 'as', $asResult);
+            }
+
+            // Check if we have hosting providers for this domain
+            $result = $this->checkTld($url, $result);
+
+            // Not found, then not green by default
+            $result->setGreen(false);
             $this->logResult($result);
-            $result->setCached(true);
 
             return $result;
-        }
-
-        $result = new SitecheckResult($url, $this->getIpForUrl($url));
+        });
 
         $result->setCalledFrom(
             [
@@ -226,48 +282,8 @@ class Sitecheck
                 'checked_through' => $checked_through,
             ]
         );
-
-        // Check both www.domain.tld and domain.tld
-        if (strpos($url, 'www.') === 0) {
-            $strippedurl = substr($url, 4);
-        } else {
-            $strippedurl = 'www.'.$url;
-        }
-
-        // Compensated/Greened by Cleanbits?
-        $customerResult = $this->greencheckUrlRepository->checkUrl($url);
-        if ($customerResult !== null) {
-            return $this->updateCustomerResult($result, $customerResult);
-        }
-
-        // Recheck
-        $customerResult = $this->greencheckUrlRepository->checkUrl($strippedurl);
-        if ($customerResult !== null) {
-            return $this->updateCustomerResult($result, $customerResult);
-        }
-
-        // Not compensated, check in IP database
-        $ipResult = $this->checkIp($url);
-        if ($ipResult !== null) {
-            $matchtext = $ipResult->getIpStart().' - '.$ipResult->getIpEind();
-
-            return $this->updateResult($result, $matchtext, 'ip', $ipResult);
-        }
-
-        // Not compensated, check in AS database
-        $asResult = $this->checkAs($url);
-        if ($asResult !== null) {
-            $matchtext = $asResult->getAsn();
-
-            return $this->updateResult($result, $matchtext, 'as', $asResult);
-        }
-
-        // Check if we have hosting providers for this domain
-        $result = $this->checkTld($url, $result);
-
-        // Not found, then not green by default
-        $result->setGreen(false);
-        $this->cache->setItem('result', $url, clone $result);
+        $result->setCheckedAt(new \DateTime('now'));
+        $result->setCached($this->isHit);
         $this->logResult($result);
 
         return $result;
@@ -361,18 +377,8 @@ class Sitecheck
             return $this->ipForUrl[$url];
         }
 
-        if ($this->validator->isUrlAValidIpAddress($url)) {
-            // Valid non public ip adress, return false
-            $this->ipForUrl[$url]['ipv4'] = false;
-            $this->ipForUrl[$url]['ipv6'] = false;
-
-            return $this->ipForUrl[$url];
-        }
-
-        // if we get a null value passed into the sitecheck, it
-        // gets coerced to "". We change it here so the return values
-        // for $url are in one place
-        if ("" == $url) {
+        if ($this->validator->isUrlAValidIpAddress($url) || "" == $url) {
+            // Valid non public ip adress or empty url, return false
             $this->ipForUrl[$url]['ipv4'] = false;
             $this->ipForUrl[$url]['ipv6'] = false;
 
@@ -407,18 +413,16 @@ class Sitecheck
      */
     public function getHostByName($url)
     {
-        if ($result = $this->getCache('hostbynamelookups')->fetch(sha1('hostbyname'.$url))) {
-            $result['cached'] = true;
+        $this->isHitHostname = true;
+        $result = $this->cache->get(sha1('hostbyname'.$url), function (ItemInterface $item) use($url) {
+            $item->expiresAfter(86400);
+            $this->isHitHostname = false;
 
-            return $result;
-        }
+            // Ignore dns warnings
+            return $this->dnsFetcher->getIpAddressesForUrl($url);
+        });
 
-        // Ignore dns warnings
-        $result = $this->dnsFetcher->getIpAddressesForUrl($url);
-
-        $result['cached'] = false;
-        $this->cache->setItem('hostbynamelookups', 'hostbyname'.$url, $result);
-
+        $result['cached'] = $this->isHitHostname;
         return $result;
     }
 
@@ -515,31 +519,6 @@ class Sitecheck
         $this->logChecks = false;
     }
 
-    public function disableCache()
-    {
-        $this->cache->disableCache();
-    }
-
-    public function resetCache($key)
-    {
-        $this->cache->resetCache($key);
-    }
-
-    public function setCache($key, $cache = null)
-    {
-        $this->cache->setCache($key, $cache);
-    }
-
-    public function getCache($key = 'default')
-    {
-        return $this->cache->getCache($key);
-    }
-
-    public function getCacheObject()
-    {
-        return $this->cache;
-    }
-
     /**
      * Update the sitecheckresult with a hostingprovider enttiy, log the result and cache the result.
      *
@@ -563,7 +542,6 @@ class Sitecheck
         $result->setHostingProvider($hpnew);
 
         $this->logResult($result);
-        $this->cache->setItem('result', $result->getCheckedUrl(), $result);
 
         return $result;
     }
@@ -572,7 +550,6 @@ class Sitecheck
     {
         $result->setGreen(true);
         $result->setMatch($customerResult->getId(), 'url');
-        $this->cache->setItem('result', $result->getCheckedUrl(), $result);
         $this->logResult($result);
 
         return $result;

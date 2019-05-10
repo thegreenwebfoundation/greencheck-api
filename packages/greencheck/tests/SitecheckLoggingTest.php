@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/TestConfiguration.php';
+require_once __DIR__ . '/SitecheckTestCase.php';
 
 use TGWF\Greencheck\Sitecheck;
 use TGWF\Greencheck\Table;
@@ -8,7 +9,7 @@ use TGWF\Greencheck\Logger\SQLLogger;
 use Symfony\Component\Validator\ValidatorBuilder;
 use PHPUnit\Framework\TestCase;
 
-class SitecheckLoggingTest extends TestCase
+class SitecheckLoggingTest extends SitecheckTestCase
 {
     /**
      *
@@ -20,37 +21,6 @@ class SitecheckLoggingTest extends TestCase
 
     protected $redis = null;
 
-    public function setUp(): void
-    {
-        // reset database to known state
-        TestConfiguration::setupDatabase();
-
-        $config     = TestConfiguration::$config;
-        $entityManager   = TestConfiguration::$em;
-        $this->em = $entityManager;
-
-        // Setup the cache
-        $cache = new Sitecheck\Cache($config);
-        $cache->setCache('default');
-        $redisCache = $cache->getCache();
-
-
-        $logger = new Sitecheck\Logger($entityManager, $redisCache);
-
-
-        // @todo mock these where needed
-        $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
-        $greencheckIpRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
-        $greencheckAsRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
-        $greencheckTldRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
-
-        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, $logger, 'test');
-
-        //Cleanup all cache entries to correctly test
-        $cache = $this->sitecheck->getCache();
-        $cache->deleteAll();
-    }
-
     public function testGreencheckTableShouldContainCheckedUrls()
     {
         $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\Greencheck");
@@ -60,16 +30,16 @@ class SitecheckLoggingTest extends TestCase
 
     public function testCheckShouldBeLoggedByDefault()
     {
-        $result    = $this->sitecheck->check('www.bliin.com');
+        $result    = $this->sitecheck->check('www.nu.nl');
 
         $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\Greencheck");
         $result = $greencheck->findBy(array());
-        $this->assertEquals(5, count($result));
+        $this->assertEquals(6, count($result));
     }
 
     public function testLoggingShouldContainDate()
     {
-        $result    = $this->sitecheck->check('www.bliin.com');
+        $result    = $this->sitecheck->check('www.nu.nl');
 
         $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\Greencheck");
         $result = $greencheck->findBy(array());
@@ -79,18 +49,18 @@ class SitecheckLoggingTest extends TestCase
 
     public function testLoggingCheckShouldContainCorrectResults()
     {
-        $result    = $this->sitecheck->check('www.bliin.com');
+        $result    = $this->sitecheck->check('www.nu.nl');
 
         $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\Greencheck");
         $result = $greencheck->findBy(array());
         $result = end($result);
-        $this->assertEquals('www.bliin.com', $result->getUrl());
+        $this->assertEquals('www.nu.nl', $result->getUrl());
     }
 
     public function testDisableLoggingShouldBePossible()
     {
         $this->sitecheck->disableLog();
-        $result    = $this->sitecheck->check('www.bliin.com');
+        $result    = $this->sitecheck->check('www.nu.nl');
 
         $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\Greencheck");
         $result = $greencheck->findBy(array());

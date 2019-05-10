@@ -2,17 +2,11 @@
 
 namespace TGWF\Greencheck\Sitecheck;
 
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+
 /**
- * Sitecheck class.
- *
- * The sitecheck handles all actions with regard to the Green Web Foundation greencheck.
- *
- * Flow :
- * - Check the cached records for an url, if found return
- * - Check the customer records for an url, if found return
- * - Check the ip records for an url, if found return
- * - Check the as records for an url, if found return
- * - None found, then return url = grey
+ * The ASchecker retrieves and parses AS output to map ip adresses to as networks
  *
  * @author Arend-Jan Tetteroo <aj@arendjantetteroo.nl>
  */
@@ -24,9 +18,17 @@ class Aschecker
     protected $cache = null;
 
     /**
-     * Construct the sitecheck.
+     * Keeps track if the result was from the cache
+     *
+     * @var bool
      */
-    public function __construct(Cache $cache)
+    private $isHIt;
+
+    /**
+     * Construct the sitecheck.
+     * @param CacheInterface $cache
+     */
+    public function __construct(CacheInterface $cache)
     {
         // Setup the cache
         $this->cache = $cache;
@@ -110,19 +112,18 @@ class Aschecker
      */
     public function getAsForIpv4($ip)
     {
-        if ($result = $this->getCache('aslookups')->fetch(sha1('as'.$ip))) {
-            $result['cached'] = true;
+        $this->isHit = true;
+        $result =  $this->cache->get(sha1('as'.$ip), function (ItemInterface $item) use($ip) {
+            $item->expiresAfter(86400);
+            $this->isHit = false;
 
+            $asresult = @dns_get_record(self::ipv4ToReverseDnsAdressNotation($ip).'.origin.asn.cymru.com', DNS_TXT);
+
+            $result = $this->getAsFromOutput($asresult, $ip, 'ipv4');
             return $result;
-        }
-        $asresult = @dns_get_record(self::ipv4ToReverseDnsAdressNotation($ip).'.origin.asn.cymru.com', DNS_TXT);
+        });
 
-        $result = $this->getAsFromOutput($asresult, $ip, 'ipv4');
-        if (is_countable($asresult) && count($asresult) > 0) {
-            $result['cached'] = false;
-        }
-        $this->cache->setItem('aslookups', 'as'.$ip, $result);
-
+        $result['cached'] = $this->isHit;
         return $result;
     }
 
@@ -135,19 +136,18 @@ class Aschecker
      */
     public function getAsForIpv6($ip)
     {
-        if ($result = $this->getCache('aslookups')->fetch(sha1('as'.$ip))) {
-            $result['cached'] = true;
+        $this->isHit = true;
+        $result = $this->cache->get(sha1('as'.$ip), function (ItemInterface $item) use($ip) {
+            $item->expiresAfter(86400);
+            $this->isHit = false;
 
+            $asresult = @dns_get_record(self::ipv6ToReverseDnsAdressNotation($ip).'.origin6.asn.cymru.com', DNS_TXT);
+
+            $result = $this->getAsFromOutput($asresult, $ip, 'ipv6');
             return $result;
-        }
-        $asresult = @dns_get_record(self::ipv6ToReverseDnsAdressNotation($ip).'.origin6.asn.cymru.com', DNS_TXT);
+        });
 
-        $result = $this->getAsFromOutput($asresult, $ip, 'ipv6');
-        if (is_countable($asresult) && count($asresult) > 0) {
-            $result['cached'] = false;
-        }
-        $this->cache->setItem('aslookups', 'as'.$ip, $result);
-
+        $result['cached'] = $this->isHit;
         return $result;
     }
 
@@ -178,14 +178,5 @@ class Aschecker
         $ipv6 = implode('.', $arr);
 
         return $ipv6;
-    }
-
-    /**
-     * @param string $key
-     * @return mixed|\TGWF\Greencheck\Cache\DisabledCache
-     */
-    private function getCache($key = 'default')
-    {
-        return $this->cache->getCache($key);
     }
 }

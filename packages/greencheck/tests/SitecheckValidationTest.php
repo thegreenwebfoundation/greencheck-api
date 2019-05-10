@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/TestConfiguration.php';
 
+require_once __DIR__ . '/SitecheckTestCase.php';
+
 use TGWF\Greencheck\Sitecheck;
 use TGWF\Greencheck\Table;
 use TGWF\Greencheck\Logger\SQLLogger;
@@ -8,7 +10,7 @@ use TGWF\Greencheck\Logger\SQLLogger;
 use Symfony\Component\Validator\ValidatorBuilder;
 use PHPUnit\Framework\TestCase;
 
-class SitecheckValidationTest extends TestCase
+class SitecheckValidationTest extends SitecheckTestCase
 {
     /**
      *
@@ -18,38 +20,6 @@ class SitecheckValidationTest extends TestCase
 
     protected $redis = null;
 
-
-    public function setUp(): void
-    {
-        // reset database to known state
-        TestConfiguration::setupDatabase();
-
-        $config     = TestConfiguration::$config;
-        $entityManager   = TestConfiguration::$em;
-
-        // Setup the cache
-        $cache = new Sitecheck\Cache($config);
-        $cache->setCache('default');
-        $redisCache = $cache->getCache();
-
-
-        $logger = new Sitecheck\Logger($entityManager, $redisCache);
-
-        // @todo mock these where needed
-        $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
-        $greencheckIpRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
-        $greencheckAsRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
-        $greencheckTldRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
-
-        $dns = $this->createMock(Sitecheck\DnsFetcher::class);
-        $dns->method('getIpAddressesForUrl')->will($this->returnValueMap(TestConfiguration::getIpUrlMapping()));
-
-        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, $logger, 'test', $dns);
-
-        //Cleanup all cache entries to correctly test
-        $cache = $this->sitecheck->getCache();
-        $cache->deleteAll();
-    }
 
     /**
      * Before we can check an url, we need to validate the url to check if it's a correct url

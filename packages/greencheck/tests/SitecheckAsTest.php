@@ -1,13 +1,10 @@
 <?php
 require_once __DIR__ . '/TestConfiguration.php';
+require_once __DIR__ . '/SitecheckTestCase.php';
 
-use phpmock\phpunit\PHPMock;
-use Symfony\Bridge\PhpUnit\DnsMock;
 use TGWF\Greencheck\Sitecheck;
 
-use PHPUnit\Framework\TestCase;
-
-class SitecheckAsTest extends TestCase
+class SitecheckAsTest extends SitecheckTestCase
 {
     /**
      *
@@ -19,32 +16,7 @@ class SitecheckAsTest extends TestCase
 
     public function setUp() :void
     {
-        // reset database to known state
-        TestConfiguration::setupDatabase();
-
-        $config     = TestConfiguration::$config;
-        $entityManager   = TestConfiguration::$em;
-
-        // Setup the cache
-        $cache = new Sitecheck\Cache($config);
-
-        $logger = new Sitecheck\Logger($entityManager, $config);
-
-
-        // @todo mock these where needed
-        $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
-        $greencheckIpRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
-        $greencheckAsRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
-        $greencheckTldRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
-
-        $dns = $this->createMock(Sitecheck\DnsFetcher::class);
-        $dns->method('getIpAddressesForUrl')->will($this->returnValueMap(TestConfiguration::getIpUrlMapping()));
-
-        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, $logger, 'test', $dns);
-
-        //Cleanup all cache entries to correctly test
-        $cache = $this->sitecheck->getCache();
-        $cache->deleteAll();
+        parent::setUp();
     }
 
     /**
@@ -143,4 +115,5 @@ class SitecheckAsTest extends TestCase
         $this->assertEquals('2011-09-20', $result['date']);
         $this->assertEquals('159.253.0.50', $result['ip']);
     }
+
 }

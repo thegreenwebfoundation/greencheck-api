@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/TestConfiguration.php';
+require_once __DIR__ . '/SitecheckTestCase.php';
 
 use TGWF\Greencheck\Sitecheck;
 use TGWF\Greencheck\Table;
@@ -7,11 +8,11 @@ use TGWF\Greencheck\Logger\SQLLogger;
 
 use Symfony\Component\Validator\ValidatorBuilder;
 use PHPUnit\Framework\TestCase;
-class SitecheckCachingTest extends TestCase
+class SitecheckCachingTest extends SitecheckTestCase
 {
     /**
      *
-     * @var Greencheck_Sitecheck
+     * @var Sitecheck
      */
     protected $sitecheck = null;
 
@@ -19,36 +20,6 @@ class SitecheckCachingTest extends TestCase
 
     protected $redis = null;
 
-    public function setUp(): void
-    {
-        // reset database to known state
-        TestConfiguration::setupDatabase();
-
-        $config     = TestConfiguration::$config;
-        $entityManager   = TestConfiguration::$em;
-        $this->em = $entityManager;
-
-        // Setup the cache
-        $cache = new Sitecheck\Cache($config);
-        $cache->setCache('default');
-        $redisCache = $cache->getCache();
-
-
-        $logger = new Sitecheck\Logger($entityManager, $redisCache);
-
-
-        // @todo mock these where needed
-        $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
-        $greencheckIpRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
-        $greencheckAsRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
-        $greencheckTldRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
-
-        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, $logger, 'test');
-
-        //Cleanup all cache entries to correctly test
-        $cache = $this->sitecheck->getCache();
-        $cache->deleteAll();
-    }
 
     public function testSecondCheckShouldBeCached()
     {
@@ -59,7 +30,7 @@ class SitecheckCachingTest extends TestCase
 
         $result = $this->sitecheck->check('www.nu.nl');
         $this->assertFalse($result->isCached());
-        $this->assertEquals(8, count($logger->getQueries()));
+        $this->assertEquals(11, count($logger->getQueries()));
 
         sleep(1);
 
@@ -94,14 +65,14 @@ class SitecheckCachingTest extends TestCase
         $this->assertFalse($result->isCached());
 
         $result = $greencheck->findBy(array());
-        $this->assertEquals(5, count($result));
+        $this->assertEquals(6, count($result));
         $this->assertEquals('www.nu.nl', $result[4]->getUrl());
 
         $result = $this->sitecheck->check('www.nu.nl');
         $this->assertTrue($result->isCached());
 
         $result = $greencheck->findBy(array());
-        $this->assertEquals(6, count($result));
+        $this->assertEquals(7, count($result));
         $this->assertEquals('www.nu.nl', $result[5]->getUrl());
 
         $result = $this->sitecheck->check('www.netexpo.nl');
@@ -114,15 +85,8 @@ class SitecheckCachingTest extends TestCase
         $this->assertTrue($result->isCached());
 
         $result = $greencheck->findBy(array());
-        $this->assertEquals(8, count($result));
+        $this->assertEquals(10, count($result));
         $this->assertEquals('www.netexpo.nl', $result[7]->getUrl());
-    }
-
-    public function testResultCachingHasLifetimeOf1Hour()
-    {
-        $cache = $this->sitecheck->getCacheObject();
-
-        $this->assertEquals(3600, $cache->getTtl('result'));
     }
 
     public function testResultCachingCanBeReset()
@@ -133,17 +97,10 @@ class SitecheckCachingTest extends TestCase
         $result = $this->sitecheck->check('www.nu.nl');
         $this->assertTrue($result->isCached());
 
-        $this->sitecheck->resetCache('result');
+        $this->cache->reset();
 
         $result = $this->sitecheck->check('www.nu.nl');
         $this->assertFalse($result->isCached());
-    }
-
-    public function testHostnameLookupsCachingHasLifetimeOf1Day()
-    {
-        $cache = $this->sitecheck->getCacheObject();
-
-        $this->assertEquals(3600*24, $cache->getTtl('hostbynamelookups'));
     }
 
     public function testHostnameLookupsShouldComeFromCacheSecondTime()
@@ -199,37 +156,5 @@ class SitecheckCachingTest extends TestCase
         $result = $this->sitecheck->checkIp('www.netexpo.nl');
 
         $this->assertEquals(0, count($logger->getQueries()));
-    }
-
-    public function testAsLookupsCachingHasLifetimeOf1Day()
-    {
-        $cache = $this->sitecheck->getCacheObject();
-
-        $this->assertEquals(3600*24, $cache->getTtl('aslookups'));
-    }
-
-    public function testNotConfiguredCachingHasLifetimeOf2Hours()
-    {
-        $cache = $this->sitecheck->getCacheObject();
-
-        $this->assertEquals(3600*2, $cache->getTtl('testlookups'));
-    }
-
-    public function testCacheCanBeSet()
-    {
-        $cache = new \Doctrine\Common\Cache\FilesystemCache('/tmp');
-        
-        $this->sitecheck->setCache('test', $cache);
-        $this->assertEquals($cache, $this->sitecheck->getCache('test'));
-    }
-
-    public function testCacheCanBeDisabled()
-    {
-        $this->sitecheck->disableCache();
-        $result = $this->sitecheck->check('www.nu.nl');
-        $this->assertFalse($result->isCached());
-
-        $result = $this->sitecheck->check('www.nu.nl');
-        $this->assertFalse($result->isCached());
     }
 }

@@ -1,15 +1,11 @@
 <?php
 require_once __DIR__ . '/TestConfiguration.php';
+require_once __DIR__ . '/SitecheckTestCase.php';
 
 use TGWF\Greencheck\Sitecheck;
-use TGWF\Greencheck\Table;
-use TGWF\Greencheck\Logger\SQLLogger;
-
-use Symfony\Component\Validator\ValidatorBuilder;
-use PHPUnit\Framework\TestCase;
 use Predis\Client;
 
-class SitecheckHashCachingTest extends TestCase
+class SitecheckHashCachingTest extends SitecheckTestCase
 {
     /**
      *
@@ -21,49 +17,15 @@ class SitecheckHashCachingTest extends TestCase
 
     protected $em = null;
 
-    public function setUp(): void
-    {
-        // reset database to known state
-        TestConfiguration::setupDatabase();
-
-        $config     = TestConfiguration::$config;
-        $entityManager   = TestConfiguration::$em;
-        $this->em = $entityManager;
-
-        // Setup the cache
-        $cache = new Sitecheck\Cache($config);
-        $cache->setCache('default');
-        $redisCache = $cache->getCache();
-
-
-        $logger = new Sitecheck\Logger($entityManager, $config);
-
-        // @todo mock these where needed
-        $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
-        $greencheckIpRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
-        $greencheckAsRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
-        $greencheckTldRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
-
-
-
-        $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, $logger, 'test');
-
-        //Cleanup all cache entries to correctly test
-        // $cache = $this->sitecheck->getCache();
-        // $cache->deleteAll();
-
-    }
-
     public function testRunningCheckAddsToDomainCache()
     {
-
-
         $date = new \DateTime('now');
         $formattedDate = $date->format("Y-m-d");
 
         $result = $this->sitecheck->check('www.nu.nl');
 
-        $cachedUrlData = $this->redis->get('domains:www.nu.nl');
+        $redis = new Client();
+        $cachedUrlData = json_decode($redis->get('domains:www.nu.nl'));
         $this->assertEquals("www.nu.nl", $cachedUrlData->url);
         $this->assertEquals(false, $cachedUrlData->green);
         $this->assertStringContainsString($formattedDate, $cachedUrlData->date);

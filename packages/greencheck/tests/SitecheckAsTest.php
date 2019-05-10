@@ -27,11 +27,8 @@ class SitecheckAsTest extends TestCase
 
         // Setup the cache
         $cache = new Sitecheck\Cache($config);
-        $cache->setCache('default');
-        $redisCache = $cache->getCache();
 
-
-        $logger = new Sitecheck\Logger($entityManager, $redisCache);
+        $logger = new Sitecheck\Logger($entityManager, $config);
 
 
         // @todo mock these where needed

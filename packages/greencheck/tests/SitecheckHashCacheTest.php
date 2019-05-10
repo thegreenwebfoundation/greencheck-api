@@ -17,7 +17,7 @@ class SitecheckHashCachingTest extends TestCase
      */
     protected $sitecheck = null;
 
-    protected $redis = null;
+    public $redis = null;
 
     protected $em = null;
 
@@ -36,7 +36,7 @@ class SitecheckHashCachingTest extends TestCase
         $redisCache = $cache->getCache();
 
 
-        $logger = new Sitecheck\Logger($entityManager, $redisCache);
+        $logger = new Sitecheck\Logger($entityManager, $config);
 
         // @todo mock these where needed
         $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
@@ -56,19 +56,14 @@ class SitecheckHashCachingTest extends TestCase
 
     public function testRunningCheckAddsToDomainCache()
     {
-        $cache = $this->sitecheck->getCache();
-        // $cache = $this->sitecheck->getCacheObject();
-        // $redisCache = $cache->getCache();
 
-        // $logger = new SQLLogger();
-        // $this->em->getConnection()->getConfiguration()->setSQLLogger($logger);
 
         $date = new \DateTime('now');
         $formattedDate = $date->format("Y-m-d");
 
         $result = $this->sitecheck->check('www.nu.nl');
 
-        $cachedUrlData = $cache->fetch('domains:www.nu.nl');
+        $cachedUrlData = $this->redis->get('domains:www.nu.nl');
         $this->assertEquals("www.nu.nl", $cachedUrlData->url);
         $this->assertEquals(false, $cachedUrlData->green);
         $this->assertStringContainsString($formattedDate, $cachedUrlData->date);
@@ -76,7 +71,7 @@ class SitecheckHashCachingTest extends TestCase
         // this might be better in a teardown method, but because we go through
         // the PredisCache, their interface doesn't support a `deleteAll()` method
         // or similar
-        $cachedUrlData = $cache->delete('domains:www.nu.nl');
+        // $cachedUrlData = $cache->delete('domains:www.nu.nl');
     }
 
 }

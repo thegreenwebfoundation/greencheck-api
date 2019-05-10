@@ -3,13 +3,12 @@
 
 namespace TGWF\Greencheck\Sitecheck;
 
-use Doctrine\Common\Cache\RedisCache;
 use Doctrine\ORM\EntityManager;
 use TGWF\Greencheck\Entity\Greencheck;
 use TGWF\Greencheck\Entity\GreencheckIp;
 use TGWF\Greencheck\SitecheckResult;
 use TGWF\Greencheck\LatestResult;
-use Doctrine\Common\Cache\PredisCache;
+use Predis\Client;
 
 class Logger
 {
@@ -18,13 +17,40 @@ class Logger
      */
     private $entityManager;
 
-    public function __construct(
-        EntityManager $entityManager,
-        PredisCache $cache
-        )
+    /**
+     * @var Client
+     */
+    public $redis;
+
+    /**
+     * @var config
+     */
+    private $config;
+
+    public function __construct(EntityManager $entityManager, $config)
     {
         $this->entityManager = $entityManager;
-        $this->cache = $cache;
+        $this->config;
+
+        // set up our redis connection here
+        $this->setRedis();
+    }
+    /**
+     * Set redis with the info from our config object
+     *
+     */
+    public function setRedis()
+    {
+        if (isset($this->config['greencheck']['redis']['host'])) {
+            $redis = new Client([
+                'host' => $this->config['greencheck']['redis']['host']
+            ]);
+            $this->redis = $redis;
+        }
+        else {
+            $redis = new Client();
+            $this->redis = $redis;
+        }
     }
 
     /**
@@ -67,11 +93,12 @@ class Logger
         $latest->setResult($result);
 
         $domainKey = "domains:$checkedUrl";
-        // $encoded = json_encode($latest);
+        $encoded = json_encode($latest);
 
+        $this->redis->set("domains:$checkedUrl", json_encode($latest));
 
         $this->entityManager->persist($gc);
-        $this->cache->save($domainKey, $latest);
+
         $this->entityManager->flush();
     }
 }

@@ -5,7 +5,10 @@ namespace TGWF\Greencheck\Sitecheck;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\MemcacheCache;
 use Doctrine\Common\Cache\RedisCache;
+use Doctrine\Common\Cache\PredisCache;
 use TGWF\Greencheck\Cache\DisabledCache;
+
+use Predis\Client;
 
 /**
  * Sitecheck class.
@@ -134,11 +137,10 @@ class Cache
             $cache = new MemcacheCache();
             $cache->setMemcache($memcache);
         } elseif ('redis' == $cachetype) {
-            $redis = new \Redis();
-            $redis->connect($this->getRedisHost(), 6379);
-
-            $cache = new RedisCache();
-            $cache->setRedis($redis);
+            $client = new Client([
+                'host' => $this->getRedisHost()
+            ]);
+            $cache = new PredisCache($client);
         } else {
             $cache = new ApcCache();
         }

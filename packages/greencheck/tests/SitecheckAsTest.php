@@ -29,9 +29,10 @@ class SitecheckAsTest extends TestCase
         $cache = new Sitecheck\Cache($config);
         $cache->setCache('default');
         $redisCache = $cache->getCache();
-        $redis = $redisCache->getRedis();
 
-        $logger = new Sitecheck\Logger($entityManager, $redis);
+
+        $logger = new Sitecheck\Logger($entityManager, $redisCache);
+
 
         // @todo mock these where needed
         $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");

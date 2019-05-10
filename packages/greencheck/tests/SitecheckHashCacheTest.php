@@ -7,6 +7,8 @@ use TGWF\Greencheck\Logger\SQLLogger;
 
 use Symfony\Component\Validator\ValidatorBuilder;
 use PHPUnit\Framework\TestCase;
+use Predis\Client;
+
 class SitecheckHashCachingTest extends TestCase
 {
     /**
@@ -32,9 +34,9 @@ class SitecheckHashCachingTest extends TestCase
         $cache = new Sitecheck\Cache($config);
         $cache->setCache('default');
         $redisCache = $cache->getCache();
-        $redis = $redisCache->getRedis();
 
-        $logger = new Sitecheck\Logger($entityManager, $redis);
+
+        $logger = new Sitecheck\Logger($entityManager, $redisCache);
 
         // @todo mock these where needed
         $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
@@ -47,8 +49,8 @@ class SitecheckHashCachingTest extends TestCase
         $this->sitecheck = new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, $logger, 'test');
 
         //Cleanup all cache entries to correctly test
-        $cache = $this->sitecheck->getCache();
-        $cache->deleteAll();
+        // $cache = $this->sitecheck->getCache();
+        // $cache->deleteAll();
 
     }
 
@@ -65,16 +67,16 @@ class SitecheckHashCachingTest extends TestCase
         $formattedDate = $date->format("Y-m-d");
 
         $result = $this->sitecheck->check('www.nu.nl');
-        $redis = $cache->getRedis();
 
-        $allKeys = $redis->keys("domains*");
+        $cachedUrlData = $cache->fetch('domains:www.nu.nl');
+        $this->assertEquals("www.nu.nl", $cachedUrlData->url);
+        $this->assertEquals(false, $cachedUrlData->green);
+        $this->assertStringContainsString($formattedDate, $cachedUrlData->date);
 
-        $cachedUrlData = $redis->get('domains:www.nu.nl');
-
-        $jsonDecodedData = json_decode($cachedUrlData);
-        $this->assertEquals("www.nu.nl", $jsonDecodedData->url);
-        $this->assertEquals(false, $jsonDecodedData->green);
-        $this->assertStringContainsString($formattedDate, $jsonDecodedData->date);
+        // this might be better in a teardown method, but because we go through
+        // the PredisCache, their interface doesn't support a `deleteAll()` method
+        // or similar
+        $cachedUrlData = $cache->delete('domains:www.nu.nl');
     }
 
 }

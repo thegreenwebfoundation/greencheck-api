@@ -9,6 +9,7 @@ use TGWF\Greencheck\Entity\Greencheck;
 use TGWF\Greencheck\Entity\GreencheckIp;
 use TGWF\Greencheck\SitecheckResult;
 use TGWF\Greencheck\LatestResult;
+use Doctrine\Common\Cache\PredisCache;
 
 class Logger
 {
@@ -19,11 +20,11 @@ class Logger
 
     public function __construct(
         EntityManager $entityManager,
-        \Redis $redis
+        PredisCache $cache
         )
     {
         $this->entityManager = $entityManager;
-        $this->redis = $redis;
+        $this->cache = $cache;
     }
 
     /**
@@ -66,9 +67,11 @@ class Logger
         $latest->setResult($result);
 
         $domainKey = "domains:$checkedUrl";
+        // $encoded = json_encode($latest);
+
 
         $this->entityManager->persist($gc);
-        $this->redis->set($domainKey, json_encode($latest));
+        $this->cache->save($domainKey, $latest);
         $this->entityManager->flush();
     }
 }

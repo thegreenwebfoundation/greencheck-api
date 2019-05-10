@@ -24,7 +24,7 @@ class SitecheckHashCachingTest extends SitecheckTestCase
 
         $result = $this->sitecheck->check('www.nu.nl');
 
-        $redis = new Client();
+        $redis = new Client(TestConfiguration::$config['greencheck']['redis']['host']);
         $cachedUrlData = json_decode($redis->get('domains:www.nu.nl'));
         $this->assertEquals("www.nu.nl", $cachedUrlData->url);
         $this->assertEquals(false, $cachedUrlData->green);

@@ -7,17 +7,3 @@ greencheck:
     dbname: greencheck_test
   redis:
     host: localhost
-  memcache:
-    host: localhost
-  cachetime: 7200 # Standard cachetime is 2 hours
-  cache: true
-  cachetype: redis
-  result:
-    cachetime: 3600 # Result cached for one hour
-    cache: true
-  hostbynamelookups:
-    cachetime: 86400 # Hostname lookups cached for 1 day
-    cache: true
-  aslookups:
-    cachetime: 86400 # As lookups cached for one day
-    cache: true

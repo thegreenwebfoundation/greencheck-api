@@ -64,9 +64,9 @@ class Logger
         $match = $result->getMatch();
 
         // Make sure we don't have '\' in urls
-        $checked_url = str_replace('\\', '', $result->getCheckedUrl());
+        $checkedUrl = str_replace('\\', '', $result->getCheckedUrl());
 
-        $tld = $this->getTld($checked_url);
+        $tld = $this->getTld($checkedUrl);
 
         // No matches, then assign none for logging
         if (!isset($match['id'])) {
@@ -92,7 +92,7 @@ class Logger
         }
         $gc->setType($match['type']);
         $gc->setGreen($result->isGreen());
-        $gc->setUrl($checked_url);
+        $gc->setUrl($checkedUrl);
         $gc->setDatum($result->getCheckedAt());
         $gc->setIp($ip);
         $gc->setTld($tld);
@@ -103,7 +103,7 @@ class Logger
 
         // TODO - see about using this logger of the one in the
         // greencheck library
-        $this->redis->set("domains:$checked_url", json_encode($latest));
+        $this->redis->set("domains:$checkedUrl", json_encode($latest));
 
         $this->redis->lpush('latest_checks', json_encode($latest));
         $this->redis->ltrim('latest_checks', 0, 999);

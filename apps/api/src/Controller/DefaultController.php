@@ -419,7 +419,8 @@ class DefaultController extends AbstractController
      */
     private function doGreencheckAsync($url, $ip, $browser, $source = 'api', $blind = false)
     {
-        $promise = $this->producer->sendCommand('greencheck', JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]), $needReply = false);
+        $this->producer->sendCommand('greencheck', JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]), $needReply = false);
+
         $cachedLookup = $this->getGreencheckResultFromCache($url);
 
         if (null === $cachedLookup) {
@@ -430,7 +431,7 @@ class DefaultController extends AbstractController
             );
         }
 
-        $data = JSON::decode($cachedLookup);
+        $data = json_decode($cachedLookup);
 
         return $data;
     }
@@ -442,9 +443,7 @@ class DefaultController extends AbstractController
      */
     private function getGreencheckResultFromCache($url)
     {
-        $res = $this->redis->get("domains:$url");
-
-        return $res;
+        return $this->redis->get("domains:$url");
     }
 
 

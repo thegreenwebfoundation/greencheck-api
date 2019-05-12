@@ -10,6 +10,7 @@ use TGWF\Greencheck\Entity\GreencheckIp;
 use TGWF\PublicSuffix\ManageSLD;
 use TGWF\PublicSuffix\RedisRuleStoreSLD;
 use TGWF\Greencheck\SitecheckResult;
+use TGWF\Greencheck\LatestResult;
 
 class Logger
 {
@@ -102,7 +103,7 @@ class Logger
 
         // TODO - see about using this logger of the one in the
         // greencheck library
-        $this->redis->set("domains:$checkedUrl", json_encode($latest));
+        $this->redis->set("domains:$checked_url", json_encode($latest));
 
         $this->redis->lpush('latest_checks', json_encode($latest));
         $this->redis->ltrim('latest_checks', 0, 999);

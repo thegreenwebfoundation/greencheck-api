@@ -30,7 +30,7 @@ class Logger
     public function __construct(EntityManager $entityManager, $config)
     {
         $this->entityManager = $entityManager;
-        $this->config;
+        $this->config = $config;
 
         // set up our redis connection here
         $this->setRedis();

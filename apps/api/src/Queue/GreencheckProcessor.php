@@ -14,13 +14,15 @@ use Enqueue\Consumption\Result;
 use Liuggio\StatsdClient\Factory\StatsdDataFactory;
 use Liuggio\StatsdClient\StatsdClient;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use TGWF\Greencheck\Repository\GreencheckAsRepository;
 use TGWF\Greencheck\Repository\GreencheckIpRepository;
 use TGWF\Greencheck\Repository\GreencheckTldRepository;
 use TGWF\Greencheck\Repository\GreencheckUrlRepository;
 use TGWF\Greencheck\Sitecheck;
-use TGWF\Greencheck\Sitecheck\Cache;
+use Predis\Client;
+
 
 class GreencheckProcessor implements Processor, CommandSubscriberInterface
 {
@@ -126,8 +128,10 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
 
         $config = $this->params->get('greencheck');
 
-        $cache = new Cache($config);
-        $cache->setCache('default');
+        $client = new Client();
+        $cache = new RedisAdapter($client);
+
+        $logger = new Sitecheck\Logger($this->entityManager,$client);
 
         // @todo inject these in constructor
         $this->greencheckUrlRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
@@ -135,7 +139,7 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
         $this->greencheckAsRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
         $this->greencheckTldRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
 
-        $siteCheck = new Sitecheck($this->greencheckUrlRepository, $this->greencheckIpRepository, $this->greencheckAsRepository, $this->greencheckTldRepository, $cache, new Sitecheck\Logger($this->entityManager), 'api');
+        $siteCheck = new Sitecheck($this->greencheckUrlRepository, $this->greencheckIpRepository, $this->greencheckAsRepository, $this->greencheckTldRepository, $cache, $logger, 'api');
         $siteCheck->disableLog();
 
         // @todo make this a proper service and inject it

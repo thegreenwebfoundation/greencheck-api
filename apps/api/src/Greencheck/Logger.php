@@ -25,7 +25,7 @@ class Logger
     /**
      * @var Client
      */
-    private $redis;
+    public $redis;
     /**
      * @var LoggerInterface
      */

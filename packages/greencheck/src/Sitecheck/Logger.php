@@ -22,35 +22,10 @@ class Logger
      */
     public $redis;
 
-    /**
-     * @var config
-     */
-    private $config;
-
-    public function __construct(EntityManager $entityManager, $config)
+    public function __construct(EntityManager $entityManager, Client $redis)
     {
         $this->entityManager = $entityManager;
-        $this->config = $config;
-
-        // set up our redis connection here
-        $this->setRedis();
-    }
-    /**
-     * Set redis with the info from our config object
-     *
-     */
-    public function setRedis()
-    {
-        if (isset($this->config['greencheck']['redis']['host'])) {
-            $redis = new Client([
-                'host' => $this->config['greencheck']['redis']['host']
-            ]);
-            $this->redis = $redis;
-        }
-        else {
-            $redis = new Client();
-            $this->redis = $redis;
-        }
+        $this->redis = $redis;
     }
 
     /**

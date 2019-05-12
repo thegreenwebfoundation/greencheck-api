@@ -5,6 +5,7 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use TGWF\Greencheck\Sitecheck;
 
 use PHPUnit\Framework\TestCase;
+use Predis\Client;
 
 class SitecheckTestCase extends TestCase
 {
@@ -55,7 +56,12 @@ class SitecheckTestCase extends TestCase
      */
     public function setupSitechecker($entityManager, $config, $cache)
     {
-        $logger = new Sitecheck\Logger($entityManager, $config);
+        $redis = new Client([
+            "host" => TestConfiguration::$config['greencheck']['redis']['host']
+        ]);
+        $this->redis = $redis;
+
+        $logger = new Sitecheck\Logger($entityManager, $redis);
 
         // @todo mock these where needed
         $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");

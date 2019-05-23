@@ -135,8 +135,6 @@ class Checker
                 $this->statsdClient->send($this->statsdDataFactory->increment('api.greencheck_job.cached'));
             }
 
-            $this->storeResult($resultobject);
-
             if (false == $blind) {
                 $this->logResult($resultobject);
             }
@@ -148,6 +146,7 @@ class Checker
             }
 
             $result = ['green' => $resultobject->isGreen(),
+                'checked_on' => (new \DateTime())->format('c'),
                 'url' => mb_convert_encoding($resultobject->getCheckedUrl(), 'UTF-8', 'UTF-8'),
                 'data' => $resultobject->isData(), ];
             if ('85.17.167.138' == $resultobject->getIpAddress()) {
@@ -168,6 +167,7 @@ class Checker
                     }
                 }
             }
+            $this->storeResult($result);
         } else {
             $result = ['error' => 'Invalid url'];
             $data = $this->statsdDataFactory->increment('api.greencheck_job.invalidurl');
@@ -214,15 +214,12 @@ class Checker
     }
 
     /**
-     * @param SitecheckResult $result
+     * @param array $result
      */
-    private function storeResult(SitecheckResult $result)
+    private function storeResult($result)
     {
-        $latest = new LatestResult();
-        $latest->setResult($result);
+        $checkedUrl = str_replace('\\', '', $result['url']);
 
-        $checkedUrl = str_replace('\\', '', $result->getCheckedUrl());
-
-        $this->redis->set("domains:$checkedUrl", json_encode($latest));
+        $this->redis->set("domains:$checkedUrl", json_encode($result));
     }
 }

@@ -74,6 +74,10 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
      * @var GreencheckTldRepository
      */
     private $greencheckTldRepository;
+    /**
+     * @var Client
+     */
+    private $redis;
 
     public function __construct(
         ParameterBagInterface $params,
@@ -81,7 +85,8 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
         StatsdClient $statsdClient,
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
-        ProducerInterface $producer
+        ProducerInterface $producer,
+        Client $redis
     ) {
         $this->params = $params;
         $this->statsdDataFactory = $statsdDataFactory;
@@ -89,6 +94,7 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
         $this->entityManager = $entityManager;
         $this->logger = $logger;
         $this->producer = $producer;
+        $this->redis = $redis;
     }
 
     public function process(Message $message, Context $context)
@@ -128,8 +134,7 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
 
         $config = $this->params->get('greencheck');
 
-        $client = new Client();
-        $cache = new RedisAdapter($client);
+        $cache = new RedisAdapter($this->redis);
 
         // @todo inject these in constructor
         $this->greencheckUrlRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
@@ -140,6 +145,6 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
         $siteCheck = new Sitecheck($this->greencheckUrlRepository, $this->greencheckIpRepository, $this->greencheckAsRepository, $this->greencheckTldRepository, $cache, 'api');
 
         // @todo make this a proper service and inject it
-        return $this->checker = new Checker($siteCheck, $this->statsdDataFactory, $this->statsdClient, $this->logger, $this->producer, $config['mock']);
+        return $this->checker = new Checker($siteCheck, $this->statsdDataFactory, $this->statsdClient, $this->logger, $this->producer, $this->redis, $config['mock']);
     }
 }

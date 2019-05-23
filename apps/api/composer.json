@@ -43,6 +43,7 @@
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "^4.0",
         "symfony/monolog-bundle": "~3.3",
+        "symfony/polyfill-php73": "^1.11",
         "symfony/web-server-bundle": "^4.0",
         "symfony/yaml": "^4.0",
         "thegreenwebfoundation/greencheck": "*@dev",

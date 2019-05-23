@@ -101,8 +101,6 @@ class Logger
         $latest = new LatestResult();
         $latest->setResult($result);
 
-        $this->redis->set("domains:$checked_url", json_encode($latest));
-
         $this->redis->lpush('latest_checks', json_encode($latest));
         $this->redis->ltrim('latest_checks', 0, 999);
     }

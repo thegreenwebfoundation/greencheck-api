@@ -131,16 +131,13 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
         $client = new Client();
         $cache = new RedisAdapter($client);
 
-        $logger = new Sitecheck\Logger($this->entityManager,$client);
-
         // @todo inject these in constructor
         $this->greencheckUrlRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
         $this->greencheckIpRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
         $this->greencheckAsRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
         $this->greencheckTldRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
 
-        $siteCheck = new Sitecheck($this->greencheckUrlRepository, $this->greencheckIpRepository, $this->greencheckAsRepository, $this->greencheckTldRepository, $cache, $logger, 'api');
-        $siteCheck->disableLog();
+        $siteCheck = new Sitecheck($this->greencheckUrlRepository, $this->greencheckIpRepository, $this->greencheckAsRepository, $this->greencheckTldRepository, $cache, 'api');
 
         // @todo make this a proper service and inject it
         return $this->checker = new Checker($siteCheck, $this->statsdDataFactory, $this->statsdClient, $this->logger, $this->producer, $config['mock']);

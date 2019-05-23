@@ -61,8 +61,6 @@ class SitecheckTestCase extends TestCase
         ]);
         $this->redis = $redis;
 
-        $logger = new Sitecheck\Logger($entityManager, $redis);
-
         // @todo mock these where needed
         $greencheckUrlRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
         $greencheckIpRepository = $entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
@@ -72,6 +70,6 @@ class SitecheckTestCase extends TestCase
         $dns = $this->createMock(Sitecheck\DnsFetcher::class);
         $dns->method('getIpAddressesForUrl')->will($this->returnValueMap(TestConfiguration::getIpUrlMapping()));
 
-        return new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, $logger, 'test', $dns);
+        return new Sitecheck($greencheckUrlRepository, $greencheckIpRepository, $greencheckAsRepository, $greencheckTldRepository, $cache, 'test', $dns);
     }
 }

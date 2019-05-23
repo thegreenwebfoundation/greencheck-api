@@ -30,7 +30,7 @@ class SitecheckCachingTest extends SitecheckTestCase
 
         $result = $this->sitecheck->check('www.nu.nl');
         $this->assertFalse($result->isCached());
-        $this->assertEquals(11, count($logger->getQueries()));
+        $this->assertEquals(5, count($logger->getQueries()));
 
         sleep(1);
 
@@ -45,48 +45,11 @@ class SitecheckCachingTest extends SitecheckTestCase
         $this->assertTrue($result->getCheckedAt() >= $newdate);
         
         /*
-         * Only do queries to store the result
+         * No extra queries done
          *
          * Start transaction, greencheck table, commit
          */
-        $this->assertEquals(3, count($logger->getQueries()));
-    }
-
-    /**
-     * Test for #11 : Log every request even if cached
-     */
-    public function testSecondCheckWhenCachedShouldBeLogged()
-    {
-        $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\Greencheck");
-        $result = $greencheck->findBy(array());
-        $this->assertEquals(4, count($result));
-
-        $result = $this->sitecheck->check('www.nu.nl');
-        $this->assertFalse($result->isCached());
-
-        $result = $greencheck->findBy(array());
-        $this->assertEquals(6, count($result));
-        $this->assertEquals('www.nu.nl', $result[4]->getUrl());
-
-        $result = $this->sitecheck->check('www.nu.nl');
-        $this->assertTrue($result->isCached());
-
-        $result = $greencheck->findBy(array());
-        $this->assertEquals(7, count($result));
-        $this->assertEquals('www.nu.nl', $result[5]->getUrl());
-
-        $result = $this->sitecheck->check('www.netexpo.nl');
-        $this->assertFalse($result->isCached());
-
-        $this->assertEquals(true, $result->isGreen());
-        $this->assertEquals('AS Hoster', $result->getHostingProvider()->getNaam());
-
-        $result = $this->sitecheck->check('www.netexpo.nl');
-        $this->assertTrue($result->isCached());
-
-        $result = $greencheck->findBy(array());
-        $this->assertEquals(10, count($result));
-        $this->assertEquals('www.netexpo.nl', $result[7]->getUrl());
+        $this->assertEquals(0, count($logger->getQueries()));
     }
 
     public function testResultCachingCanBeReset()

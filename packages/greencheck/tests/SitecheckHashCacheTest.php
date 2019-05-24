@@ -14,6 +14,7 @@ class SitecheckHashCachingTest extends SitecheckTestCase
 
     public function testRunningCheckAddsToDomainCache()
     {
+        $this->markTestIncomplete("Move to api");
         $date = new \DateTime('now');
         $formattedDate = $date->format("Y-m-d");
 

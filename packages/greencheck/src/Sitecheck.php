@@ -37,13 +37,6 @@ class Sitecheck
     protected $errorMessages;
 
     /**
-     * Should the checks be logged.
-     *
-     * @var boolean, defaults to true
-     */
-    protected $logChecks = true;
-
-    /**
      * @var Validator
      */
     protected $validator;
@@ -105,10 +98,6 @@ class Sitecheck
      * @var GreencheckTldRepository
      */
     private $greencheckTldRepository;
-    /**
-     * @var Logger
-     */
-    private $logger;
 
     /**
      * @var DnsFetcher
@@ -137,7 +126,6 @@ class Sitecheck
         GreencheckAsRepository $greencheckAsRepository,
         GreencheckTldRepository $greencheckTldRepository,
         CacheInterface $cache,
-        Logger $logger,
         $calledfrom = 'website',
         DnsFetcher $dnsFetcher = null
     ) {
@@ -155,7 +143,6 @@ class Sitecheck
         $this->greencheckTldRepository = $greencheckTldRepository;
 
         $this->cache = $cache;
-        $this->logger = $logger;
     }
 
     /**
@@ -270,7 +257,6 @@ class Sitecheck
 
             // Not found, then not green by default
             $result->setGreen(false);
-            $this->logResult($result);
 
             return $result;
         });
@@ -284,7 +270,6 @@ class Sitecheck
         );
         $result->setCheckedAt(new \DateTime('now'));
         $result->setCached($this->isHit);
-        $this->logResult($result);
 
         return $result;
     }
@@ -336,20 +321,6 @@ class Sitecheck
         }
 
         return $this->countryTlds;
-    }
-
-    /**
-     * Log the request to the logtable, for clientlist and statistics.
-     *
-     * @param SitecheckResult $result
-     */
-    public function logResult($result)
-    {
-        if (!$this->logChecks) {
-            return;
-        }
-
-        $this->logger->logResult($result);
     }
 
     /**
@@ -541,8 +512,6 @@ class Sitecheck
         $result->setHostingProviderId($hpnew->getId());
         $result->setHostingProvider($hpnew);
 
-        $this->logResult($result);
-
         return $result;
     }
 
@@ -550,7 +519,6 @@ class Sitecheck
     {
         $result->setGreen(true);
         $result->setMatch($customerResult->getId(), 'url');
-        $this->logResult($result);
 
         return $result;
     }

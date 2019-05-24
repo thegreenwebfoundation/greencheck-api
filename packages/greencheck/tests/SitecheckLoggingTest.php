@@ -2,27 +2,11 @@
 require_once __DIR__ . '/TestConfiguration.php';
 require_once __DIR__ . '/SitecheckTestCase.php';
 
-use TGWF\Greencheck\Sitecheck;
-use TGWF\Greencheck\Table;
-use TGWF\Greencheck\Logger\SQLLogger;
-
-use Symfony\Component\Validator\ValidatorBuilder;
-use PHPUnit\Framework\TestCase;
-
 class SitecheckLoggingTest extends SitecheckTestCase
 {
-    /**
-     *
-     * @var Greencheck_Sitecheck
-     */
-    protected $sitecheck = null;
-
-    protected $em = null;
-
-    protected $redis = null;
-
     public function testGreencheckTableShouldContainCheckedUrls()
     {
+        $this->markTestIncomplete("Move to api");
         $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\Greencheck");
         $result = $greencheck->findBy(array());
         $this->assertEquals(4, count($result));
@@ -30,6 +14,7 @@ class SitecheckLoggingTest extends SitecheckTestCase
 
     public function testCheckShouldBeLoggedByDefault()
     {
+        $this->markTestIncomplete("Move to api");
         $result    = $this->sitecheck->check('www.nu.nl');
 
         $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\Greencheck");
@@ -39,6 +24,7 @@ class SitecheckLoggingTest extends SitecheckTestCase
 
     public function testLoggingShouldContainDate()
     {
+        $this->markTestIncomplete("Move to api");
         $result    = $this->sitecheck->check('www.nu.nl');
 
         $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\Greencheck");
@@ -49,6 +35,7 @@ class SitecheckLoggingTest extends SitecheckTestCase
 
     public function testLoggingCheckShouldContainCorrectResults()
     {
+        $this->markTestIncomplete("Move to api");
         $result    = $this->sitecheck->check('www.nu.nl');
 
         $greencheck = $this->em->getRepository("TGWF\Greencheck\Entity\Greencheck");
@@ -59,6 +46,7 @@ class SitecheckLoggingTest extends SitecheckTestCase
 
     public function testDisableLoggingShouldBePossible()
     {
+        $this->markTestIncomplete("Move to api");
         $this->sitecheck->disableLog();
         $result    = $this->sitecheck->check('www.nu.nl');
 
@@ -69,6 +57,7 @@ class SitecheckLoggingTest extends SitecheckTestCase
     
     public function testLoggingCheckShouldContainHostingProviderId()
     {
+        $this->markTestIncomplete("Move to api");
         $result = $this->sitecheck->check('www.netexpo.nl');
 
         $this->assertEquals(true, $result->isGreen());

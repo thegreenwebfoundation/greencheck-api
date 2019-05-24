@@ -5,8 +5,10 @@ namespace App\Greencheck;
 use Enqueue\Client\ProducerInterface;
 use Liuggio\StatsdClient\Factory\StatsdDataFactory;
 use Liuggio\StatsdClient\StatsdClient;
+use Predis\Client;
 use Psr\Log\LoggerInterface;
 use TGWF\Greencheck\Entity\Hostingprovider;
+use TGWF\Greencheck\LatestResult;
 use TGWF\Greencheck\Sitecheck;
 use TGWF\Greencheck\SitecheckResult;
 
@@ -39,6 +41,10 @@ class Checker
      * @var
      */
     private $mock;
+    /**
+     * @var Client
+     */
+    private $redis;
 
     /**
      * Checker constructor.
@@ -55,6 +61,7 @@ class Checker
         StatsdClient $statsdClient,
         LoggerInterface $logger,
         ProducerInterface $producer,
+        Client $redis,
         $mock
     ) {
         $this->checker = $checker;
@@ -63,6 +70,7 @@ class Checker
         $this->logger = $logger;
         $this->producer = $producer;
         $this->mock = $mock;
+        $this->redis = $redis;
     }
 
     /**
@@ -138,6 +146,7 @@ class Checker
             }
 
             $result = ['green' => $resultobject->isGreen(),
+                'checked_on' => (new \DateTime())->format('c'),
                 'url' => mb_convert_encoding($resultobject->getCheckedUrl(), 'UTF-8', 'UTF-8'),
                 'data' => $resultobject->isData(), ];
             if ('85.17.167.138' == $resultobject->getIpAddress()) {
@@ -158,6 +167,7 @@ class Checker
                     }
                 }
             }
+            $this->storeResult($result);
         } else {
             $result = ['error' => 'Invalid url'];
             $data = $this->statsdDataFactory->increment('api.greencheck_job.invalidurl');
@@ -193,7 +203,7 @@ class Checker
     }
 
     /**
-     * Send the result to the gearman logger.
+     * Send the result to the log processor for async logging.
      *
      * @param SitecheckResult $result The result from the greencheck
      */
@@ -201,5 +211,15 @@ class Checker
     {
         $taskdata = ['result' => $result];
         $this->producer->sendEvent('greencheck_log', serialize($taskdata));
+    }
+
+    /**
+     * @param array $result
+     */
+    private function storeResult($result)
+    {
+        $checkedUrl = str_replace('\\', '', $result['url']);
+
+        $this->redis->set("domains:$checkedUrl", json_encode($result));
     }
 }

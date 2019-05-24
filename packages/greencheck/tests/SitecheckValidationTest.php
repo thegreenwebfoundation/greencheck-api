@@ -18,9 +18,6 @@ class SitecheckValidationTest extends SitecheckTestCase
      */
     protected $sitecheck = null;
 
-    protected $redis = null;
-
-
     /**
      * Before we can check an url, we need to validate the url to check if it's a correct url
      *

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "13006e852d2e893a68d740e41b104613",
+    "content-hash": "f8a4884b79dc90c664caa244ee9f96ba",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -4627,8 +4627,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/greencheck",
-                "reference": "6cdfb9378b7696d7cbf69ddc924fd9d42a9a3c80",
-                "shasum": null
+                "reference": "6cdfb9378b7696d7cbf69ddc924fd9d42a9a3c80"
             },
             "require": {
                 "doctrine/orm": "~2.3",
@@ -4663,8 +4662,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/publicsuffix",
-                "reference": "5d530dd2a258955eef7bd1a03b63a0860bd9b1c9",
-                "shasum": null
+                "reference": "5d530dd2a258955eef7bd1a03b63a0860bd9b1c9"
             },
             "require": {
                 "php": ">=5.3.0"

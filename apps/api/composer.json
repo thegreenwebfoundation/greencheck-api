@@ -31,6 +31,7 @@
         "doctrine/data-fixtures": "dev-master",
         "doctrine/doctrine-bundle": "~1.2",
         "doctrine/orm": "~2.3",
+        "enqueue/amqp-ext": "^0.9.2",
         "enqueue/amqp-lib": "^0.9.8",
         "enqueue/enqueue-bundle": "^0.9.8",
         "enqueue/fs": "^0.9.8",

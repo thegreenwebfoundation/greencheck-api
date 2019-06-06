@@ -116,7 +116,7 @@ class DefaultController extends AbstractController
         }
 
         if ('' == $url) {
-            return $this->handleEmptyUrl($request, $url);
+            return $this->handleEmptyUrl($request);
         }
 
         $result = $this->doGreencheck($url, $ip, $browser, 'api', $blind);
@@ -127,32 +127,20 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route(path="/greencheck-async/{url}")
+     * Avoid stupid 404's from pingdom
+     *
+     * @Route(path="/greencheck")
      *
      * @param Request $request
-     * @param $url
      *
      * @return RedirectResponse|Response
      */
-    public function greencheckActionAsync(Request $request, $url)
+    public function greencheckEmptyAction(Request $request)
     {
-        $ip = $request->getClientIp();
-        $browser = $request->server->get('HTTP_USER_AGENT');
-        $blind = $request->get('blind', false);
-        if (false !== $blind) {
-            $blind = true;
-        }
-
-        if ('' == $url) {
-            return $this->handleEmptyUrl($request, $url);
-        }
-
-        $result = $this->doGreencheckAsync($url, $ip, $browser, 'api', $blind);
-
-        $this->statsdClient->send($this->statsdDataFactory->increment('api.actions.greencheck.check'));
-
-        return $this->returnJson($result, true);
+        return $this->handleEmptyUrl($request);
     }
+
+
 
     /**
      * @Route(path="/greencheckimage/{url}")

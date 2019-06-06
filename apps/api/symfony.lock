@@ -68,6 +68,15 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "enqueue/amqp-ext": {
+        "version": "0.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.7",
+            "ref": "6b6182674f551225f4f9997f5efb7cdc71822e05"
+        }
+    },
     "enqueue/amqp-lib": {
         "version": "0.7",
         "recipe": {

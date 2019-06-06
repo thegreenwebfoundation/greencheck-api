@@ -112,7 +112,7 @@ class DefaultController extends AbstractController
         }
 
         if ('' == $url) {
-            return $this->handleEmptyUrl($request, $url);
+            return $this->handleEmptyUrl($request);
         }
 
         $result = $this->doGreencheck($url, $ip, $browser, 'api', $blind);
@@ -120,6 +120,20 @@ class DefaultController extends AbstractController
         $this->statsdClient->send($this->statsdDataFactory->increment('api.actions.greencheck.check'));
 
         return $this->returnJson($result, true);
+    }
+
+    /**
+     * Avoid stupid 404's from pingdom
+     *
+     * @Route(path="/greencheck")
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
+    public function greencheckEmptyAction(Request $request)
+    {
+        return $this->handleEmptyUrl($request);
     }
 
     /**

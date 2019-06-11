@@ -354,6 +354,7 @@ class DefaultController extends AbstractController
     {
         $promises = [];
         foreach ($data as $key => $url) {
+            
             $taskdata = ['key' => $url, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind];
             $promises[] = $this->producer->sendCommand('greencheck', JSON::encode($taskdata), $needReply = true);
         }
@@ -383,7 +384,14 @@ class DefaultController extends AbstractController
      */
     private function doGreencheck($url, $ip, $browser, $source = 'api', $blind = false)
     {
-        $promise = $this->producer->sendCommand('greencheck', JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]), $needReply = true);
+
+        $message = new Message(JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]));
+
+        // We still want incoming requests to take precedence over this
+        $message->setPriority(10);
+
+
+        $promise = $this->producer->sendCommand('greencheck', $message, $needReply = true);
         $replyMessage = $promise->receive();
         $data = JSON::decode($replyMessage->getBody());
 

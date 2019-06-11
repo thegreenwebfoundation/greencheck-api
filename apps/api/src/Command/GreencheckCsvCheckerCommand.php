@@ -2,6 +2,7 @@
 namespace App\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use Enqueue\Client\ProducerInterface;
+use Enqueue\Client\Message;
 use Enqueue\Util\JSON;
 use Predis\Client;
 use Symfony\Component\Console\Command\Command;
@@ -51,7 +52,13 @@ class GreencheckCsvCheckerCommand extends Command
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                 $domainToCheck = $data[0];
                 echo $domainToCheck;
-                $this->producer->sendCommand('greencheck', JSON::encode(['key' => 0, 'url' => $domainToCheck, 'ip' => '127.0.0.1', 'browser' => 'cli', 'source' => 'cli', 'blind' => true]), $needReply = false);
+
+                $message = new Message(JSON::encode(['key' => 0, 'url' => $domainToCheck, 'ip' => '127.0.0.1', 'browser' => 'cli', 'source' => 'cli', 'blind' => true]));
+
+                // We still want incoming requests to take precedence over this
+                $message->setPriority(5);
+
+                $this->producer->sendCommand('greencheck', $message, $needReply = false);
             }
             fclose($handle);
         }

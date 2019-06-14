@@ -15,6 +15,7 @@ use Liuggio\StatsdClient\Factory\StatsdDataFactory;
 use Liuggio\StatsdClient\StatsdClient;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Predis\Client;
 use TGWF\Greencheck\Repository\GreencheckAsRepository;
 use TGWF\Greencheck\Repository\GreencheckIpRepository;
 use TGWF\Greencheck\Repository\GreencheckTldRepository;
@@ -129,6 +130,8 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
         $cache = new Cache($config);
         $cache->setCache('default');
 
+        $redis = new Client();
+
         // @todo inject these in constructor
         $this->greencheckUrlRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
         $this->greencheckIpRepository = $this->entityManager->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
@@ -139,6 +142,6 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
         $siteCheck->disableLog();
 
         // @todo make this a proper service and inject it
-        return $this->checker = new Checker($siteCheck, $this->statsdDataFactory, $this->statsdClient, $this->logger, $this->producer, $config['mock']);
+        return $this->checker = new Checker($siteCheck, $this->statsdDataFactory, $this->statsdClient, $this->logger, $this->producer, $redis, $config['mock']);
     }
 }

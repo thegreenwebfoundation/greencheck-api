@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Greencheck\ImageGenerator;
 use Enqueue\Client\ProducerInterface;
+use Enqueue\Client\Message;
+use Enqueue\Client\MessagePriority;
 use Enqueue\Util\JSON;
 use Liuggio\StatsdClient\Factory\StatsdDataFactory;
 use Liuggio\StatsdClient\StatsdClient;
@@ -354,7 +356,7 @@ class DefaultController extends AbstractController
     {
         $promises = [];
         foreach ($data as $key => $url) {
-            
+
             $taskdata = ['key' => $url, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind];
             $promises[] = $this->producer->sendCommand('greencheck', JSON::encode($taskdata), $needReply = true);
         }
@@ -388,8 +390,7 @@ class DefaultController extends AbstractController
         $message = new Message(JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]));
 
         // We still want incoming requests to take precedence over this
-        $message->setPriority(10);
-
+        $message->setPriority(MessagePriority::VERY_HIGH);
 
         $promise = $this->producer->sendCommand('greencheck', $message, $needReply = true);
         $replyMessage = $promise->receive();

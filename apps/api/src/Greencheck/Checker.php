@@ -62,6 +62,7 @@ class Checker
         StatsdClient $statsdClient,
         LoggerInterface $logger,
         ProducerInterface $producer,
+        Client $redis,
         $mock
     ) {
         $this->checker = $checker;
@@ -69,7 +70,7 @@ class Checker
         $this->statsdClient = $statsdClient;
         $this->logger = $logger;
         $this->producer = $producer;
-        $this->redis = new Client();
+        $this->redis = $redis;
         $this->mock = $mock;
 
 

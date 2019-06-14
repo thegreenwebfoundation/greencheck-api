@@ -50,23 +50,22 @@ class GreencheckCsvCheckerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        
         if (($handle = fopen("tgwf-check.csv", "r")) !== FALSE) {
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                 $position  = $data[0];
                 $domainToCheck = $data[1];
-                echo "$position - $domainToCheck\n";
+                // echo "$position - $domainToCheck\n";
 
                 $message = new Message(JSON::encode(['key' => 0, 'url' => $domainToCheck, 'ip' => '127.0.0.1', 'browser' => 'cli', 'source' => 'cli', 'blind' => true]));
 
                 // We still want incoming requests to take precedence over this
                 $message->setPriority(MessagePriority::VERY_LOW);
 
-                $this->producer->sendCommand('greencheck', $message, $needReply = false);
+                $this->producer->sendCommand('greencheck_prio', $message, $needReply = false);
             }
             fclose($handle);
         }
         $output->writeln("");
-        $output->writeln('Check tgwf-dump.csv');
+        $output->writeln('Check tgwf-logger.csv');
     }
 }

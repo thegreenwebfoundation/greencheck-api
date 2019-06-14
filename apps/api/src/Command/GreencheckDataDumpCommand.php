@@ -28,11 +28,9 @@ class GreencheckDataDumpCommand extends Command
     private $client;
     public function __construct(
         $name = null,
-        ParameterBagInterface $params,
         Client $client
     ) {
         parent::__construct($name);
-        $this->params = $params;
         $this->client = $client;
     }
     /**

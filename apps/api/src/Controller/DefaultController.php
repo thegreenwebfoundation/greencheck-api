@@ -389,7 +389,7 @@ class DefaultController extends AbstractController
 
         $message = new Message(JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]));
 
-        // We still want incoming requests to take precedence over this
+        // Messages created from incoming requests should have priority over batch jobs
         $message->setPriority(MessagePriority::VERY_HIGH);
 
         $promise = $this->producer->sendCommand('greencheck_prio', $message, $needReply = true);

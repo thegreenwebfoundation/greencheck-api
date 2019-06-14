@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use TGWF\Greencheck\Entity\Hostingprovider;
 use TGWF\Greencheck\Sitecheck;
 use TGWF\Greencheck\SitecheckResult;
+use Predis\Client;
 
 class Checker
 {
@@ -36,6 +37,11 @@ class Checker
     private $producer;
 
     /**
+     * @var Client
+     */
+    private $redis;
+
+    /**
      * @var
      */
     private $mock;
@@ -48,6 +54,7 @@ class Checker
      * @param StatsdClient      $statsdClient
      * @param LoggerInterface   $logger
      * @param ProducerInterface $producer
+     * @param Client            $redis - PredisClient
      */
     public function __construct(
         Sitecheck $checker,
@@ -62,7 +69,10 @@ class Checker
         $this->statsdClient = $statsdClient;
         $this->logger = $logger;
         $this->producer = $producer;
+        $this->redis = new Client();
         $this->mock = $mock;
+
+
     }
 
     /**
@@ -158,6 +168,7 @@ class Checker
                     }
                 }
             }
+            $this->storeResultinCache($result);
         } else {
             $result = ['error' => 'Invalid url'];
             $data = $this->statsdDataFactory->increment('api.greencheck_job.invalidurl');
@@ -201,5 +212,15 @@ class Checker
     {
         $taskdata = ['result' => $result];
         $this->producer->sendEvent('greencheck_log', serialize($taskdata));
+    }
+
+
+    /**
+     * @param array $result
+     */
+    private function storeResultinCache($result)
+    {
+        $checkedUrl = str_replace('\\', '', $result['url']);
+        $this->redis->set("domains:$checkedUrl", json_encode($result));
     }
 }

@@ -107,9 +107,9 @@ class GreencheckProcessor implements Processor, CommandSubscriberInterface
     public static function getSubscribedCommand()
     {
         return [
-            'processorName' => 'greencheck',
+            'processorName' => 'greencheck_prio',
             // these are optional, setting these option we make the migration smooth and backward compatible.
-            'queueName' => 'greencheck',
+            'queueName' => 'greencheck_prio',
             'queueNameHardcoded' => true,
             'exclusive' => true,
         ];

@@ -392,7 +392,7 @@ class DefaultController extends AbstractController
         // We still want incoming requests to take precedence over this
         $message->setPriority(MessagePriority::VERY_HIGH);
 
-        $promise = $this->producer->sendCommand('greencheck', $message, $needReply = true);
+        $promise = $this->producer->sendCommand('greencheck_prio', $message, $needReply = true);
         $replyMessage = $promise->receive();
         $data = JSON::decode($replyMessage->getBody());
 

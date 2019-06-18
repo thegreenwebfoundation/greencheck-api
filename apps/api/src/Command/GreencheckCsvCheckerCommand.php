@@ -51,9 +51,7 @@ class GreencheckCsvCheckerCommand extends Command
 
         if (($handle = fopen("tgwf-check.csv", "r")) !== FALSE) {
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                $position  = $data[0];
-                $domainToCheck = $data[1];
-                // echo "$position - $domainToCheck\n";
+                $domainToCheck = $data[0];
 
                 $message = new Message(JSON::encode(['key' => 0, 'url' => $domainToCheck, 'ip' => '127.0.0.1', 'browser' => 'cli', 'source' => 'cli', 'blind' => true]));
 

@@ -56,6 +56,10 @@ services:
         tags:
             - { name: 'enqueue.command_subscriber' }
 
+    App\Queue\GreencheckDataDumpProcessor:
+        tags:
+          - { name: "enqueue.command_subscriber" }
+
     App\Queue\GreencheckLogProcessor:
         tags:
             - { name: 'enqueue.topic_subscriber' }

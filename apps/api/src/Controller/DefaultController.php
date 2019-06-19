@@ -392,7 +392,7 @@ class DefaultController extends AbstractController
         // Messages created from incoming requests should have priority over batch jobs
         $message->setPriority(MessagePriority::VERY_HIGH);
 
-        $promise = $this->producer->sendCommand('greencheck_prio', $message, $needReply = true);
+        $promise = $this->producer->sendCommand('webrequests', $message, $needReply = true);
         $replyMessage = $promise->receive();
         $data = JSON::decode($replyMessage->getBody());
 

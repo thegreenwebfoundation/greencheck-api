@@ -111,15 +111,6 @@
             "config/packages/test/enqueue.yaml"
         ]
     },
-    "enqueue/fs": {
-        "version": "0.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "0.4",
-            "ref": "4d45d1e6b113832ad13f6d321506c004ed12fe2e"
-        }
-    },
     "enqueue/null": {
         "version": "0.9.2"
     },
@@ -161,9 +152,6 @@
     },
     "liuggio/statsd-php-client": {
         "version": "v1.0.18"
-    },
-    "makasim/temp-file": {
-        "version": "0.2.0"
     },
     "monolog/monolog": {
         "version": "1.24.0"

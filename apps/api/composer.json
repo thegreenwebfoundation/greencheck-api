@@ -29,7 +29,11 @@
     },
     {
       "type": "vcs",
-      "url": "https://github.com/thegreenwebfoundation/enqueue-dev"
+      "url": "https://github.com/thegreenwebfoundation/enqueue"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/thegreenwebfoundation/enqueue-bundle"
     }
   ],
   "minimum-stability": "stable",
@@ -40,9 +44,8 @@
     "doctrine/orm": "~2.3",
     "enqueue/amqp-ext": "^0.9.2",
     "enqueue/amqp-lib": "^0.9.8",
-    "enqueue/enqueue-bundle": "^0.9.8",
-    "enqueue/enqueue-dev": "dev-ca-rabbitmqdriver-lazy-support",
-    "enqueue/fs": "^0.9.8",
+    "enqueue/enqueue-bundle": "dev-rabbit-lazy-queues",
+    "enqueue/enqueue": "dev-rabbit-lazy-queues",
     "gedmo/doctrine-extensions": "~2.3",
     "liuggio/statsd-client-bundle": "*@dev",
     "predis/predis": "*",

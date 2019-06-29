@@ -1458,12 +1458,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thegreenwebfoundation/enqueue.git",
-                "reference": "3aee9ec5192c15d651e772af71e6837c3a665071"
+                "reference": "aa962da526726dc448e55be6153192d8c6e654d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thegreenwebfoundation/enqueue/zipball/3aee9ec5192c15d651e772af71e6837c3a665071",
-                "reference": "3aee9ec5192c15d651e772af71e6837c3a665071",
+                "url": "https://api.github.com/repos/thegreenwebfoundation/enqueue/zipball/aa962da526726dc448e55be6153192d8c6e654d0",
+                "reference": "aa962da526726dc448e55be6153192d8c6e654d0",
                 "shasum": ""
             },
             "require": {
@@ -1544,7 +1544,7 @@
                 "source": "https://github.com/php-enqueue/enqueue-dev",
                 "docs": "https://github.com/php-enqueue/enqueue-dev/blob/master/docs/index.md"
             },
-            "time": "2019-06-28T10:08:47+00:00"
+            "time": "2019-06-29T10:13:07+00:00"
         },
         {
             "name": "enqueue/enqueue-bundle",

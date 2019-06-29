@@ -1,4 +1,8 @@
 enqueue:
-    default:
-        transport: '%env(resolve:ENQUEUE_DSN)%'
-        client: ~
+  default:
+    transport:
+      dsn: "%env(resolve:ENQUEUE_DSN)%"
+
+    client:
+      driver_options:
+        - rabbit_mq_lazy_queues: ["greencheck"]

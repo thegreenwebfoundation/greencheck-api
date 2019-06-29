@@ -149,6 +149,7 @@ class Checker
             }
 
             $result = ['green' => $resultobject->isGreen(),
+                'checked_on' => (new \DateTime())->format('c'),
                 'url' => mb_convert_encoding($resultobject->getCheckedUrl(), 'UTF-8', 'UTF-8'),
                 'data' => $resultobject->isData(), ];
             if ('85.17.167.138' == $resultobject->getIpAddress()) {

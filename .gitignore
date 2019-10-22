@@ -4,3 +4,4 @@
 *.phpunit.result.cache
 *.retry
 .DS_Store
+packages/publicsuffix/vendor/*

@@ -9,6 +9,7 @@ use Enqueue\Client\MessagePriority;
 use Enqueue\Util\JSON;
 use Liuggio\StatsdClient\Factory\StatsdDataFactory;
 use Liuggio\StatsdClient\StatsdClient;
+use Predis\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -44,19 +45,25 @@ class DefaultController extends AbstractController
      * @var ProducerInterface
      */
     private $producer;
+    /**
+     * @var Client
+     */
+    private $client;
 
     public function __construct(
         StatsdDataFactory $statsdDataFactory,
         StatsdClient $statsdClient,
         RequestStack $requestStack,
         ImageGenerator $imageGenerator,
-        ProducerInterface $producer
+        ProducerInterface $producer,
+        Client $client
     ) {
         $this->statsdDataFactory = $statsdDataFactory;
         $this->statsdClient = $statsdClient;
         $this->requestStack = $requestStack;
         $this->imageGenerator = $imageGenerator;
         $this->producer = $producer;
+        $this->client = $client;
     }
 
     /**
@@ -356,9 +363,23 @@ class DefaultController extends AbstractController
     {
         $promises = [];
         foreach ($data as $key => $url) {
+            $result = $this->getResultFromRedis($url);
+            if ($result) {
+                // set on results
+                $results->$url = JSON::decode($result);
 
-            $taskdata = ['key' => $url, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind];
-            $promises[] = $this->producer->sendCommand('greencheck', JSON::encode($taskdata), $needReply = true);
+                // push in for later processing
+                $taskdata = ['key' => $url, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind];
+                $message = new Message(JSON::encode($taskdata));
+                $message->setPriority(MessagePriority::VERY_LOW);
+                $this->producer->sendCommand('greencheck_prio', $message, false);
+            } else {
+                // not found in cache, get from queue
+                $taskdata = ['key' => $url, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind];
+                $message = new Message(JSON::encode($taskdata));
+                $message->setPriority(MessagePriority::HIGH);
+                $promises[] = $this->producer->sendCommand('greencheck_prio', $message, $needReply = true);
+            }
         }
 
         foreach ($promises as $promise) {
@@ -386,12 +407,18 @@ class DefaultController extends AbstractController
      */
     private function doGreencheck($url, $ip, $browser, $source = 'api', $blind = false)
     {
-
-        $message = new Message(JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]));
+        $result = $this->getResultFromRedis($url);
+        if ($result) {
+            // We already have a cached result, so we just put it in the queue with low priority and without needing a reply
+            $message = new Message(JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]));
+            $message->setPriority(MessagePriority::VERY_LOW);
+            $this->producer->sendCommand('greencheck_prio', $message, false);
+            return JSON::decode($result);
+        }
 
         // Messages created from incoming requests should have priority over batch jobs
+        $message = new Message(JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]));
         $message->setPriority(MessagePriority::VERY_HIGH);
-
         $promise = $this->producer->sendCommand('greencheck_prio', $message, $needReply = true);
         $replyMessage = $promise->receive();
         $data = JSON::decode($replyMessage->getBody());
@@ -425,5 +452,15 @@ class DefaultController extends AbstractController
         }
 
         return $response;
+    }
+
+    /**
+     * @param $url
+     * @return string
+     */
+    private function getResultFromRedis($url)
+    {
+        $checkedUrl = str_replace('\\', '', $url);
+        return $this->client->get("domains:$checkedUrl");
     }
 }

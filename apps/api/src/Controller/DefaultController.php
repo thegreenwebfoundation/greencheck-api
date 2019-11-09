@@ -9,6 +9,7 @@ use Enqueue\Client\MessagePriority;
 use Enqueue\Util\JSON;
 use Liuggio\StatsdClient\Factory\StatsdDataFactory;
 use Liuggio\StatsdClient\StatsdClient;
+use Predis\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -44,19 +45,25 @@ class DefaultController extends AbstractController
      * @var ProducerInterface
      */
     private $producer;
+    /**
+     * @var Client
+     */
+    private $client;
 
     public function __construct(
         StatsdDataFactory $statsdDataFactory,
         StatsdClient $statsdClient,
         RequestStack $requestStack,
         ImageGenerator $imageGenerator,
-        ProducerInterface $producer
+        ProducerInterface $producer,
+        Client $client
     ) {
         $this->statsdDataFactory = $statsdDataFactory;
         $this->statsdClient = $statsdClient;
         $this->requestStack = $requestStack;
         $this->imageGenerator = $imageGenerator;
         $this->producer = $producer;
+        $this->client = $client;
     }
 
     /**
@@ -386,12 +393,19 @@ class DefaultController extends AbstractController
      */
     private function doGreencheck($url, $ip, $browser, $source = 'api', $blind = false)
     {
-
-        $message = new Message(JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]));
+        $checkedUrl = str_replace('\\', '', $url);
+        $result = $this->client->get("domains:$checkedUrl");
+        if ($result) {
+            // We already have a cached result, so we just put it in the queue with low priority and without needing a reply
+            $message = new Message(JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]));
+            $message->setPriority(MessagePriority::VERY_LOW);
+            $this->producer->sendCommand('greencheck_prio', $message, false);
+            return JSON::decode($result);
+        }
 
         // Messages created from incoming requests should have priority over batch jobs
+        $message = new Message(JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]));
         $message->setPriority(MessagePriority::VERY_HIGH);
-
         $promise = $this->producer->sendCommand('greencheck_prio', $message, $needReply = true);
         $replyMessage = $promise->receive();
         $data = JSON::decode($replyMessage->getBody());

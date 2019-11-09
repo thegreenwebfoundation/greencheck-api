@@ -5883,38 +5883,44 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/greencheck",
-                "reference": "516d3ba187388cede6e5bd4de43ad514f2b5f7a8"
+                "reference": "b8b36c2fd17cf9ec2b4215ef41a33ca9d7e7c3d3"
             },
             "require": {
                 "doctrine/orm": "~2.3",
                 "gedmo/doctrine-extensions": "~2.3",
                 "php": ">=5.3.3",
+                "predis/predis": "*",
+                "symfony/polyfill-php73": "^1.11",
                 "symfony/validator": "~2.3|3.*|4.*",
                 "symfony/yaml": "~2.3|3.*|4.*",
                 "zendframework/zend-validator": "~2.0"
             },
             "require-dev": {
                 "doctrine/data-fixtures": "dev-master",
-                "phpunit/phpunit": "3.7.*"
+                "friendsofphp/php-cs-fixer": "^2.14",
+                "phpunit/phpunit": "^8.0"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "TGWF": "src/"
+                "psr-4": {
+                    "TGWF\\Greencheck\\": "src/"
                 }
             },
+            "license": [
+                "Apache-2.0"
+            ],
             "authors": [
                 {
                     "name": "Arend-Jan Tetteroo",
-                    "email": "aj@thegreenwebfoundation.org"
+                    "email": "aj@arendjantetteroo.nl"
                 }
             ],
-            "description": "The Green Web Foundation Greencheck module",
+            "description": "The Green Web Foundation Greencheck package",
             "homepage": "http://www.thegreenwebfoundation.org"
         },
         {
             "name": "thegreenwebfoundation/publicsuffix",
-            "version": "dev-master",
+            "version": "dev-cached",
             "dist": {
                 "type": "path",
                 "url": "../../packages/publicsuffix",
@@ -6042,47 +6048,16 @@
                     "Zend\\Stdlib\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "ZendTest\\Stdlib\\": "test/",
-                    "ZendBench\\Stdlib\\": "benchmark/"
-                }
-            },
-            "scripts": {
-                "check": [
-                    "@cs-check",
-                    "@test"
-                ],
-                "cs-check": [
-                    "phpcs"
-                ],
-                "cs-fix": [
-                    "phpcbf"
-                ],
-                "test": [
-                    "phpunit --colors=always"
-                ],
-                "test-coverage": [
-                    "phpunit --colors=always --coverage-clover clover.xml"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
             "description": "SPL extensions, array utilities, error handlers, and more",
             "keywords": [
+                "ZendFramework",
                 "stdlib",
-                "zendframework",
                 "zf"
             ],
-            "support": {
-                "docs": "https://docs.zendframework.com/zend-stdlib/",
-                "issues": "https://github.com/zendframework/zend-stdlib/issues",
-                "source": "https://github.com/zendframework/zend-stdlib",
-                "rss": "https://github.com/zendframework/zend-stdlib/releases.atom",
-                "slack": "https://zendframework-slack.herokuapp.com",
-                "forum": "https://discourse.zendframework.com/c/questions/components"
-            },
             "time": "2018-08-28T21:34:05+00:00"
         },
         {

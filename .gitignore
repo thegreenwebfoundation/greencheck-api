@@ -10,3 +10,4 @@ packages/greencheck/bin/doctrine-dbal
 packages/greencheck/bin/php-cs-fixer
 packages/greencheck/bin/phpunit
 packages/greencheck/src/EntityProxy/*
+packages/publicsuffix/vendor/*

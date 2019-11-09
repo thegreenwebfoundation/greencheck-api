@@ -27,7 +27,7 @@
     ],
     "minimum-stability" : "stable",
     "require": {
-        "php": "^7.1.0",
+        "php": "^7.2.0",
         "doctrine/data-fixtures": "dev-master",
         "doctrine/doctrine-bundle": "~1.2",
         "doctrine/orm": "~2.3",
@@ -82,7 +82,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "4.2.*"
+            "require": "4.3.*"
         }
     }
 }

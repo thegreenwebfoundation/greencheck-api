@@ -363,9 +363,23 @@ class DefaultController extends AbstractController
     {
         $promises = [];
         foreach ($data as $key => $url) {
+            $result = $this->getResultFromRedis($url);
+            if ($result) {
+                // set on results
+                $results->$url = JSON::decode($result);
 
-            $taskdata = ['key' => $url, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind];
-            $promises[] = $this->producer->sendCommand('greencheck', JSON::encode($taskdata), $needReply = true);
+                // push in for later processing
+                $taskdata = ['key' => $url, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind];
+                $message = new Message(JSON::encode($taskdata));
+                $message->setPriority(MessagePriority::VERY_LOW);
+                $this->producer->sendCommand('greencheck_prio', $message, false);
+            } else {
+                // not found in cache, get from queue
+                $taskdata = ['key' => $url, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind];
+                $message = new Message(JSON::encode($taskdata));
+                $message->setPriority(MessagePriority::HIGH);
+                $promises[] = $this->producer->sendCommand('greencheck_prio', $message, $needReply = true);
+            }
         }
 
         foreach ($promises as $promise) {
@@ -393,8 +407,7 @@ class DefaultController extends AbstractController
      */
     private function doGreencheck($url, $ip, $browser, $source = 'api', $blind = false)
     {
-        $checkedUrl = str_replace('\\', '', $url);
-        $result = $this->client->get("domains:$checkedUrl");
+        $result = $this->getResultFromRedis($url);
         if ($result) {
             // We already have a cached result, so we just put it in the queue with low priority and without needing a reply
             $message = new Message(JSON::encode(['key' => 0, 'url' => $url, 'ip' => $ip, 'browser' => $browser, 'source' => $source, 'blind' => $blind]));
@@ -439,5 +452,15 @@ class DefaultController extends AbstractController
         }
 
         return $response;
+    }
+
+    /**
+     * @param $url
+     * @return string
+     */
+    private function getResultFromRedis($url)
+    {
+        $checkedUrl = str_replace('\\', '', $url);
+        return $this->client->get("domains:$checkedUrl");
     }
 }

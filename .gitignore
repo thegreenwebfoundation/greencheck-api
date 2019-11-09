@@ -1,7 +1,13 @@
-/.idea
-
 *.php_cs.cache
 *.phpunit.result.cache
 *.retry
 .DS_Store
+vendor
+.idea
+packages/greencheck/.phpunit.result.cache
+packages/greencheck/bin/doctrine
+packages/greencheck/bin/doctrine-dbal
+packages/greencheck/bin/php-cs-fixer
+packages/greencheck/bin/phpunit
+packages/greencheck/src/EntityProxy/*
 packages/publicsuffix/vendor/*

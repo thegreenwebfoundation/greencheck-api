@@ -58,7 +58,7 @@ class GreencheckCsvCheckerCommand extends Command
                 // We still want incoming requests to take precedence over this
                 $message->setPriority(MessagePriority::VERY_LOW);
 
-                $this->producer->sendCommand('greencheck', $message, $needReply = false);
+                $this->producer->sendCommand('greencheck_prio', $message, $needReply = false);
             }
             fclose($handle);
         }

@@ -64,9 +64,9 @@ class GreencheckLogProcessor implements Processor, TopicSubscriberInterface
             $this->entityManager->flush();
             $this->count = 0;
             ++$this->diecount;
-            if (10 == $this->diecount) {
+            if (20 == $this->diecount) {
                 $this->logger->debug('Sleeping for supervisor');
-                sleep(10);
+                sleep(1);
                 die('Processed enough, quitting');
             }
         }

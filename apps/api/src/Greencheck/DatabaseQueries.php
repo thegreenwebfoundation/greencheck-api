@@ -279,7 +279,8 @@ class DatabaseQueries
     {
         $query = "SELECT STR_TO_DATE(concat(year,week,' Monday'), '%X%V %W') as datum, url_perc
                  FROM `greencheck_weekly`
-                 WHERE year >= DATE_SUB(NOW(), INTERVAL 12 MONTH) order by datum desc limit 52";
+                 ORDER BY datum DESC 
+                 LIMIT 52";
         $result = $this->connection->fetchAll($query);
         foreach ($result as $row) {
             if (is_null($row['datum'])) {

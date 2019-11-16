@@ -14,14 +14,6 @@ use Psr\Log\LoggerInterface;
 class GreencheckLogProcessor implements Processor, TopicSubscriberInterface
 {
     /**
-     * Protection at memory exhaustion.
-     *
-     * @var int
-     */
-    private $count = 0;
-    private $diecount = 0;
-
-    /**
      * @var Logger
      */
     private $greencheckLogger;
@@ -56,20 +48,6 @@ class GreencheckLogProcessor implements Processor, TopicSubscriberInterface
         $request = unserialize($message->getBody());
 
         $greencheckLogger->logResult($request['result']);
-
-        ++$this->count;
-        $this->logger->debug('Counting logs to persist: '.$this->count);
-        if (50 == $this->count) {
-            $this->logger->debug('Flushing to database');
-            $this->entityManager->flush();
-            $this->count = 0;
-            ++$this->diecount;
-            if (20 == $this->diecount) {
-                $this->logger->debug('Sleeping for supervisor');
-                sleep(1);
-                die('Processed enough, quitting');
-            }
-        }
 
         return self::ACK;
     }

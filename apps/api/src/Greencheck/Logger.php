@@ -5,7 +5,6 @@ namespace App\Greencheck;
 use Doctrine\ORM\EntityManagerInterface;
 use Predis\Client;
 use Psr\Log\LoggerInterface;
-use TGWF\Greencheck\Entity\Greencheck;
 use TGWF\Greencheck\Entity\GreencheckIp;
 use TGWF\PublicSuffix\ManageSLD;
 use TGWF\PublicSuffix\RedisRuleStoreSLD;
@@ -82,20 +81,16 @@ class Logger
         }
         $ip = GreencheckIp::convertIpPresentationToDecimal($ip);
 
-        $gc = new Greencheck();
-        $gc->setIdGreencheck($match['id']);
-        if ($result->isHostingProvider()) {
-            $gc->setIdHp($result->getHostingProviderId());
-        } else {
-            $gc->setIdHp(0);
-        }
-        $gc->setType($match['type']);
-        $gc->setGreen($result->isGreen());
-        $gc->setUrl($checked_url);
-        $gc->setDatum($result->getCheckedAt());
-        $gc->setIp($ip);
-        $gc->setTld($tld);
-        $this->entityManager->persist($gc);
+        $this->entityManager->getConnection()->insert("greencheck", [
+            "id_greencheck" => $match['id'],
+            "id_hp" => $result->isHostingProvider() ? $result->getHostingProviderId() : 0,
+            "green" => $result->isGreen(),
+            "type" => $match['type'],
+            'url' => $checked_url,
+            'datum' => $result->getCheckedAt()->format("Y-m-d H:i:s"),
+            "ip" => $ip,
+            "tld" => $tld
+        ]);
 
         $latest = new LatestResult();
         $latest->setResult($result);

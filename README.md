@@ -18,7 +18,7 @@ When requests come in, symfony accepts and validates the request, and creates a 
 ![API](./img/components-api-server.jpg)
 
 
-See the [project readme](apps/api/readme.txt) for further installation and deployment instructions.
+See the [project readme](apps/api/Readme.md) for further installation and deployment instructions.
 
 # Packages - Greencheck
 

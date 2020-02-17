@@ -16,7 +16,7 @@ parameters:
                 cachetime:    3600 # Result cached for one hour
                 cache:        true
             hostbynamelookups:
-                cachetime:     86400 # Hostname lookups cached for 1 day
+                cachetime:     3600 # Hostname lookups cached for 1 hour
                 cache:         true
             aslookups:
                 cachetime:     86400 # As lookups cached for one day

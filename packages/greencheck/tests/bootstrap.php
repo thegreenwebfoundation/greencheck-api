@@ -5,12 +5,12 @@
  */
 
 function getConfigFilePath ()
-    {
-        if (getenv('TGWF_CONFIG_FILE_PATH')) {
-            return getenv('TGWF_CONFIG_FILE_PATH');
-        }
-        return '/tests/config.yml';
+{
+    if (getenv('TGWF_CONFIG_FILE_PATH')) {
+        return getenv('TGWF_CONFIG_FILE_PATH');
     }
+    return '/tests/config.yml';
+}
 
 $rootDir = __DIR__ . '/..';
 

@@ -138,6 +138,9 @@
     "gedmo/doctrine-extensions": {
         "version": "v2.4.36"
     },
+    "guzzlehttp/guzzle": {
+        "version": "6.5.2"
+    },
     "guzzlehttp/promises": {
         "version": "v1.3.1"
     },
@@ -177,6 +180,9 @@
     "paragonie/random_compat": {
         "version": "v9.99.99"
     },
+    "php": {
+        "version": "7.3"
+    },
     "php-amqplib/php-amqplib": {
         "version": "v2.8.1"
     },
@@ -186,11 +192,11 @@
     "php-http/client-common": {
         "version": "2.0.0"
     },
-    "php-http/curl-client": {
-        "version": "2.0.0"
-    },
     "php-http/discovery": {
         "version": "1.6.1"
+    },
+    "php-http/guzzle6-adapter": {
+        "version": "v2.0.1"
     },
     "php-http/httplug": {
         "version": "v2.0.0"
@@ -203,6 +209,9 @@
     },
     "php-http/promise": {
         "version": "v1.0.0"
+    },
+    "phpseclib/phpseclib": {
+        "version": "2.0.23"
     },
     "predis/predis": {
         "version": "v1.1.1"
@@ -291,6 +300,9 @@
     },
     "symfony/dotenv": {
         "version": "v4.2.4"
+    },
+    "symfony/error-handler": {
+        "version": "v4.4.4"
     },
     "symfony/event-dispatcher": {
         "version": "v4.2.4"
@@ -386,6 +398,9 @@
     "symfony/polyfill-php73": {
         "version": "v1.12.0"
     },
+    "symfony/polyfill-uuid": {
+        "version": "v1.14.0"
+    },
     "symfony/process": {
         "version": "v4.2.4"
     },
@@ -472,9 +487,6 @@
     },
     "twig/twig": {
         "version": "v2.6.2"
-    },
-    "zendframework/zend-diactoros": {
-        "version": "2.1.2"
     },
     "zendframework/zend-stdlib": {
         "version": "3.2.1"

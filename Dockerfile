@@ -34,14 +34,14 @@ COPY runtests.sh /app/runtests.sh
 COPY runphpstan.sh /app/runphpstan.sh
 COPY packages/greencheck /app/
 COPY * /app/source/
-WORKDIR /app/source/apps/api
+WORKDIR /app/source/apps/api/
 RUN ls -l
 RUN /usr/bin/composer install
 
-WORKDIR /app/source/packages/greencheck
+WORKDIR /app/source/packages/greencheck/
 RUN /usr/bin/composer install
 
-WORKDIR /app/source/packages/publicsuffix
+WORKDIR /app/source/packages/publicsuffix/
 RUN /usr/bin/composer install
 
 WORKDIR /app/

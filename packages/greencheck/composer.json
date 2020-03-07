@@ -1,38 +1,39 @@
 {
-  "name": "thegreenwebfoundation/greencheck",
-  "type": "library",
-  "version": "1.0",
-  "license": "Apache-2.0",
-  "description": "The Green Web Foundation Greencheck package",
-  "homepage": "http://www.thegreenwebfoundation.org",
-  "authors": [
-    {
-      "name": "Arend-Jan Tetteroo",
-      "email": "aj@arendjantetteroo.nl"
+    "name": "thegreenwebfoundation/greencheck",
+    "type": "library",
+    "version": "1.0",
+    "license": "Apache-2.0",
+    "description": "The Green Web Foundation Greencheck package",
+    "homepage": "http://www.thegreenwebfoundation.org",
+    "authors": [
+        {
+            "name": "Arend-Jan Tetteroo",
+            "email": "aj@arendjantetteroo.nl"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "laminas/laminas-validator": "~2.0",
+        "doctrine/orm": "~2.3",
+        "symfony/validator": "~2.3|3.*|4.*",
+        "symfony/yaml": "~2.3|3.*|4.*",
+        "gedmo/doctrine-extensions": "~2.3",
+        "predis/predis": "*",
+        "symfony/polyfill-php73": "^1.11",
+        "laminas/laminas-dependency-plugin": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0",
+        "doctrine/data-fixtures": "dev-master",
+        "friendsofphp/php-cs-fixer": "^2.14"
+    },
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "TGWF\\Greencheck\\": "src/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
     }
-  ],
-  "require": {
-    "php": ">=5.3.3",
-    "zendframework/zend-validator": "~2.0",
-    "doctrine/orm": "~2.3",
-    "symfony/validator": "~2.3|3.*|4.*",
-    "symfony/yaml": "~2.3|3.*|4.*",
-    "gedmo/doctrine-extensions": "~2.3",
-    "predis/predis": "*",
-    "symfony/polyfill-php73": "^1.11"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^8.0",
-    "doctrine/data-fixtures": "dev-master",
-    "friendsofphp/php-cs-fixer": "^2.14"
-  },
-  "minimum-stability": "stable",
-  "autoload": {
-    "psr-4": {
-      "TGWF\\Greencheck\\": "src/"
-    }
-  },
-  "config": {
-    "bin-dir": "bin"
-  }
 }

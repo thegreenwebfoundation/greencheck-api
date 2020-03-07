@@ -4,7 +4,7 @@ namespace TGWF\Greencheck\Sitecheck;
 
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints\Ip;
-use Zend\Validator\Hostname;
+use Laminas\Validator\Hostname;
 
 /**
  * Sitecheck validation class.

@@ -129,7 +129,8 @@ class SitecheckAsTest extends TestCase
      */
     public function testGetSmallestAsForIpv4()
     {
-        $result = $this->sitecheck->getAsForUrl('159.253.0.50');
+        $this->markTestIncomplete("This AS number/ip range does not return anything anymore. Find another for this test");
+        $result = $this->sitecheck->getAsForUrl('159.253.1.1');
         // "61387 | 159.253.0.0/24 | NL | ripencc | 2011-09-20" <- This one is smallest, should be returned
         // "50673 | 159.253.0.0/21 | NL | ripencc | 2011-09-20"
         $this->assertEquals(array('60775'), $result['as']);

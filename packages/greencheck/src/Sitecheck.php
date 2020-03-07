@@ -415,6 +415,10 @@ class Sitecheck
 
         // Ignore dns warnings
         $result = $this->dnsFetcher->getIpAddressesForUrl($url);
+        if ($result['ip'] === false && $result['ipv6'] === false) {
+           // don't cache, something went wrong with the dns request
+           return $result;
+        }
 
         $result['cached'] = false;
         $this->cache->setItem('hostbynamelookups', 'hostbyname'.$url, $result);

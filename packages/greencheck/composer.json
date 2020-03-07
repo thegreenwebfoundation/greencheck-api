@@ -13,18 +13,18 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "laminas/laminas-validator": "~2.0",
         "doctrine/orm": "~2.3",
+        "gedmo/doctrine-extensions": "~2.3",
+        "laminas/laminas-dependency-plugin": "^1.0",
+        "laminas/laminas-validator": "~2.0",
+        "predis/predis": "1.1.*",
         "symfony/validator": "~2.3|3.*|4.*",
         "symfony/yaml": "~2.3|3.*|4.*",
-        "gedmo/doctrine-extensions": "~2.3",
-        "predis/predis": "*",
-        "symfony/polyfill-php73": "^1.11",
-        "laminas/laminas-dependency-plugin": "^1.0"
+        "symfony/polyfill-php73": "^1.11"
     },
     "require-dev": {
+        "doctrine/data-fixtures": "1.4.*",
         "phpunit/phpunit": "^8.0",
-        "doctrine/data-fixtures": "dev-master",
         "friendsofphp/php-cs-fixer": "^2.14"
     },
     "minimum-stability": "stable",

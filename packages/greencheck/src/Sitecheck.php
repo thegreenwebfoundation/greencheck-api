@@ -3,9 +3,13 @@
 namespace TGWF\Greencheck;
 
 use TGWF\Greencheck\Repository\GreencheckAsRepository;
+use TGWF\Greencheck\Repository\GreencheckAsRepositoryInterface;
 use TGWF\Greencheck\Repository\GreencheckIpRepository;
+use TGWF\Greencheck\Repository\GreencheckIpRepositoryInterface;
 use TGWF\Greencheck\Repository\GreencheckTldRepository;
+use TGWF\Greencheck\Repository\GreencheckTldRepositoryInterface;
 use TGWF\Greencheck\Repository\GreencheckUrlRepository;
+use TGWF\Greencheck\Repository\GreencheckUrlRepositoryInterface;
 use TGWF\Greencheck\Sitecheck\Cache;
 use TGWF\Greencheck\Sitecheck\DnsFetcher;
 use TGWF\Greencheck\Sitecheck\Logger;
@@ -80,17 +84,17 @@ class Sitecheck
     protected $countryTlds;
 
     /**
-     * @var GreencheckUrlRepository
+     * @var GreencheckUrlRepositoryInterface
      */
     protected $greencheckUrlRepository;
 
     /**
-     * @var GreencheckIpRepository
+     * @var GreencheckIpRepositoryInterface
      */
     protected $greencheckIpRepository;
 
     /**
-     * @var GreencheckAsRepository
+     * @var GreencheckAsRepositoryInterface
      */
     protected $greencheckAsRepository;
 
@@ -100,7 +104,7 @@ class Sitecheck
     protected $aschecker;
 
     /**
-     * @var GreencheckTldRepository
+     * @var GreencheckTldRepositoryInterface
      */
     private $greencheckTldRepository;
     /**
@@ -113,21 +117,11 @@ class Sitecheck
      */
     private $dnsFetcher;
 
-    /**
-     * Construct the sitecheck.
-     *
-     * @param GreencheckUrlRepository $greencheckUrlRepository
-     * @param GreencheckIpRepository  $greencheckIpRepository
-     * @param GreencheckAsRepository  $greencheckAsRepository
-     * @param GreencheckTldRepository $greencheckTldRepository
-     * @param Cache $cache
-     * @param string $calledfrom [description]
-     */
     public function __construct(
-        GreencheckUrlRepository $greencheckUrlRepository,
-        GreencheckIpRepository $greencheckIpRepository,
-        GreencheckAsRepository $greencheckAsRepository,
-        GreencheckTldRepository $greencheckTldRepository,
+        GreencheckUrlRepositoryInterface $greencheckUrlRepository,
+        GreencheckIpRepositoryInterface $greencheckIpRepository,
+        GreencheckAsRepositoryInterface $greencheckAsRepository,
+        GreencheckTldRepositoryInterface $greencheckTldRepository,
         Cache $cache,
         Logger $logger,
         $calledfrom = 'website',
@@ -153,11 +147,11 @@ class Sitecheck
     /**
      * Check if the given url is a valid Hostname, and if so, check that it returns a valid ip adress.
      *
-     * @param string $url
+     * @param null|string $url
      *
      * @return bool
      */
-    public function validate($url)
+    public function validate(?string $url): bool
     {
         $url = $this->validator->getHostname($url);
         $ips = $this->getIpForUrl($url);

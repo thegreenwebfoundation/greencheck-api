@@ -61,10 +61,17 @@ services:
             - { name: 'enqueue.topic_subscriber' }
 
     # Sitecheck service
-    TGWF\Greencheck\Repository\GreencheckUrlRepository: ~
-    TGWF\Greencheck\Repository\GreencheckIpRepository: ~
-    TGWF\Greencheck\Repository\GreencheckAsRepository: ~
-    TGWF\Greencheck\Repository\GreencheckTldRepository: ~
+    TGWF\Greencheck\Repository\GreencheckUrlRepositoryInterface:
+        alias: App\Repository\GreencheckUrlRepository
+
+    TGWF\Greencheck\Repository\GreencheckIpRepositoryInterface:
+        alias: App\Repository\GreencheckIpRepository
+
+    TGWF\Greencheck\Repository\GreencheckAsRepositoryInterface:
+        alias: App\Repository\GreencheckAsRepository
+
+    TGWF\Greencheck\Repository\GreencheckTldRepositoryInterface:
+        alias: App\Repository\GreencheckTldRepository
 
     TGWF\Greencheck\Sitecheck\Cache:
         arguments: ["%greencheck%"]

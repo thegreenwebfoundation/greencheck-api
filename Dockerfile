@@ -33,6 +33,6 @@ COPY wait-for /app/wait-for
 COPY runtests.sh /app/runtests.sh
 COPY runphpstan.sh /app/runphpstan.sh
 COPY packages/greencheck /app/
-COPY * /app/source
+COPY * /app/source/
 
 # RUN ./bin/phpunit -c phpunit.xml.dist

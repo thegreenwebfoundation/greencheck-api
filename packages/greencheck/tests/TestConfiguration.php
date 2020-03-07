@@ -7,7 +7,6 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use TGWF\Greencheck\Fixtures\LoadIpData;
 use TGWF\Greencheck\Fixtures\LoadUrlData;
 use TGWF\Greencheck\Fixtures\LoadAsData;
-use TGWF\Greencheck\Fixtures\LoadEnergyData;
 use TGWF\Greencheck\Fixtures\LoadTldData;
 use TGWF\Greencheck\Fixtures\LoadGreencheckData;
 

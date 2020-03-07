@@ -29,15 +29,21 @@ class GreencheckTryoutCommand extends Command
      * @var EntityManagerInterface
      */
     private $entityManager;
+    /**
+     * @var Sitecheck
+     */
+    private $sitecheck;
 
     public function __construct(
         $name = null,
         ParameterBagInterface $params,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+    Sitecheck $sitecheck
     ) {
         parent::__construct($name);
         $this->params = $params;
         $this->entityManager = $entityManager;
+        $this->sitecheck = $sitecheck;
     }
 
     /**
@@ -63,22 +69,8 @@ class GreencheckTryoutCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $config = $this->params->get('greencheck');
-        $em = $this->entityManager;
-
-        // Setup the cache
-        $this->cache = new Sitecheck\Cache($config);
-        $this->cache->setCache('default');
-        $this->cache->disableCache();
-
-        // @todo inject these in constructor
-        $this->greencheckUrlRepository = $em->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
-        $this->greencheckIpRepository = $em->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
-        $this->greencheckAsRepository = $em->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
-        $this->greencheckTldRepository = $em->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
-
-        $this->checker = new Sitecheck($this->greencheckUrlRepository, $this->greencheckIpRepository, $this->greencheckAsRepository, $this->greencheckTldRepository, $this->cache, new Sitecheck\Logger($this->entityManager), 'api');
-        $this->checker->disableLog();
+        $this->sitecheck->disableLog();
+        $this->sitecheck->disableCache();
 
         $this->output = $output;
 
@@ -107,43 +99,42 @@ class GreencheckTryoutCommand extends Command
      * @param string $browser Browser user agent from client
      * @param string $source  Source of the check ('api','apisearch','browser')
      *
-     * @return [type] [description]
+     * @return array
      */
     public function check($url, $ip, $browser, $source)
     {
-        $checker = $this->checker;
-        $valid = $checker->validate($url);
-        if ($valid) {
-            $resultobject = $checker->check($url, $ip, $browser, $source);
-            if ($resultobject->isCached()) {
-                $this->output->writeln('Result was from cache');
-            }
+        $valid = $this->sitecheck->validate($url);
+        if ($valid === false) {
+            return ['error' => 'Invalid url'];
+        }
 
-            $result = ['green' => $resultobject->isGreen(),
-                            'url' => $resultobject->getCheckedUrl(),
-                            'data' => $resultobject->isData(), ];
-            if ('85.17.167.138' == $resultobject->getIpAddress()) {
-                $result['icon'] = 'green';
-            }
-            if ($resultobject->isHostingProvider()) {
-                $hp = $resultobject->getHostingProvider();
-                if (!is_null($hp)) {
-                    $result['hostedby'] = $hp->getNaam();
-                    $result['hostedbyid'] = $hp->getId();
-                    $result['hostedbywebsite'] = $hp->getWebsite();
-                    $result['partner'] = $hp->getPartner();
-                    if ('' != $hp->getIcon() && !isset($result['icon'])) {
-                        $result['icon'] = $hp->getIcon();
-                        if ('' != $hp->getIconUrl() && !isset($result['iconurl'])) {
-                            $result['iconurl'] = $hp->getIconUrl();
-                        }
+        $sitecheckResult = $this->sitecheck->check($url, $ip, $browser, $source);
+        if ($sitecheckResult->isCached()) {
+            $this->output->writeln('Result was from cache');
+        }
+
+        $result = ['green' => $sitecheckResult->isGreen(),
+                        'url' => $sitecheckResult->getCheckedUrl(),
+                        'data' => $sitecheckResult->isData(), ];
+        if ($sitecheckResult->getIpAddress() === '85.17.167.138') {
+            $result['icon'] = 'green';
+        }
+
+        if ($sitecheckResult->isHostingProvider()) {
+            $hostingProvider = $sitecheckResult->getHostingProvider();
+            if ($hostingProvider !== null) {
+                $result['hostedby'] = $hostingProvider->getNaam();
+                $result['hostedbyid'] = $hostingProvider->getId();
+                $result['hostedbywebsite'] = $hostingProvider->getWebsite();
+                $result['partner'] = $hostingProvider->getPartner();
+                if (!isset($result['icon']) && $hostingProvider->getIcon() !== '') {
+                    $result['icon'] = $hostingProvider->getIcon();
+                    if (!isset($result['iconurl']) && $hostingProvider->getIconUrl() !== '') {
+                        $result['iconurl'] = $hostingProvider->getIconUrl();
                     }
                 }
             }
-        } else {
-            $result = ['error' => 'Invalid url'];
         }
-
         return $result;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace TGWF\Greencheck\Entity;
 
-use Doctrine\Common\Collections\Collection;
+use BadMethodCallException;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -113,11 +113,6 @@ class Hostingprovider implements \ArrayAccess
     protected $greencheckrecords;
 
     /**
-     * \\ORM\OneToMany(targetEntity="DatacenterHostingprovider",mappedBy="hostingprovider").
-     **/
-    protected $datacenters;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="partner", type="string")
@@ -224,52 +219,6 @@ class Hostingprovider implements \ArrayAccess
         return $this->showonwebsite;
     }
 
-    /**
-     * Add asnumbers.
-     *
-     * @param GreencheckAs $asnumbers
-     */
-    public function addGreencheckAs(GreencheckAs $asnumbers)
-    {
-        $this->asnumbers[] = $asnumbers;
-    }
-
-    /**
-     * Get asnumbers.
-     *
-     * @return Collection
-     */
-    public function getAsnumbers()
-    {
-        return $this->asnumbers;
-    }
-
-    /**
-     * Add iprecords.
-     *
-     * @param GreencheckIp $iprecords
-     */
-    public function addGreencheckIp(GreencheckIp $iprecords)
-    {
-        $this->iprecords[] = $iprecords;
-    }
-
-    /**
-     * Get iprecords.
-     *
-     * @return Collection
-     */
-    public function getIprecords()
-    {
-        $data = [];
-        foreach ($this->iprecords as $ip) {
-            $data[ip2long($ip->getIpStart())] = $ip;
-        }
-        ksort($data);
-
-        return $data;
-    }
-
     public function __toString()
     {
         return $this->naam;
@@ -293,76 +242,6 @@ class Hostingprovider implements \ArrayAccess
     public function getCountrydomain()
     {
         return $this->countrydomain;
-    }
-
-    /**
-     * Add greencheckrecords.
-     *
-     * @param Greencheck $greencheckrecords
-     */
-    public function addGreencheck(Greencheck $greencheckrecords)
-    {
-        $this->greencheckrecords[] = $greencheckrecords;
-    }
-
-    /**
-     * Get greencheckrecords.
-     *
-     * @return Collection
-     */
-    public function getGreencheckrecords()
-    {
-        return $this->greencheckrecords;
-    }
-
-    /**
-     * Get asnumbersapprove.
-     *
-     * @return Collection
-     */
-    public function getAsnumbersapprove()
-    {
-        return $this->asnumbersapprove;
-    }
-
-    /**
-     * Get iprecordsapprove.
-     *
-     * @return Collection
-     */
-    public function getIprecordsapprove()
-    {
-        return $this->iprecordsapprove;
-    }
-
-    /**
-     * Add datacenter.
-     *
-     * @param Datacenter $datacenter
-     */
-    public function addDatacenter(Datacenter $datacenter)
-    {
-        $this->datacenters[] = $datacenter;
-    }
-
-    /**
-     * Get datacenters.
-     *
-     * @return Collection
-     */
-    public function getDatacenters()
-    {
-        return $this->datacenters;
-    }
-
-    /**
-     * Add datacenters.
-     *
-     * @param DatacenterHostingprovider $datacenters
-     */
-    public function addDatacenterHostingprovider(DatacenterHostingprovider $datacenters)
-    {
-        $this->datacenters[] = $datacenters;
     }
 
     /**
@@ -423,122 +302,6 @@ class Hostingprovider implements \ArrayAccess
     public function getIconurl()
     {
         return $this->iconurl;
-    }
-
-    /**
-     * Add certificates.
-     *
-     * @param HostingproviderCertificate $certificates
-     *
-     * @return Hostingprovider
-     */
-    public function addCertificate(HostingproviderCertificate $certificates)
-    {
-        $this->certificates[] = $certificates;
-
-        return $this;
-    }
-
-    /**
-     * Get certificates.
-     *
-     * @return Collection
-     */
-    public function getCertificates()
-    {
-        return $this->certificates;
-    }
-
-    /**
-     * Remove certificates.
-     *
-     * @param HostingproviderCertificate $certificates
-     */
-    public function removeCertificate(HostingproviderCertificate $certificates)
-    {
-        $this->certificates->removeElement($certificates);
-    }
-
-    /**
-     * Add asnumbers.
-     *
-     * @param GreencheckAs $asnumbers
-     *
-     * @return Hostingprovider
-     */
-    public function addAsnumber(GreencheckAs $asnumbers)
-    {
-        $this->asnumbers[] = $asnumbers;
-
-        return $this;
-    }
-
-    /**
-     * Remove asnumbers.
-     *
-     * @param GreencheckAs $asnumbers
-     */
-    public function removeAsnumber(GreencheckAs $asnumbers)
-    {
-        $this->asnumbers->removeElement($asnumbers);
-    }
-
-    /**
-     * Add iprecords.
-     *
-     * @param GreencheckIp $iprecords
-     *
-     * @return Hostingprovider
-     */
-    public function addIprecord(GreencheckIp $iprecords)
-    {
-        $this->iprecords[] = $iprecords;
-
-        return $this;
-    }
-
-    /**
-     * Remove iprecords.
-     *
-     * @param GreencheckIp $iprecords
-     */
-    public function removeIprecord(GreencheckIp $iprecords)
-    {
-        $this->iprecords->removeElement($iprecords);
-    }
-
-    /**
-     * Add greencheckrecords.
-     *
-     * @param Greencheck $greencheckrecords
-     *
-     * @return Hostingprovider
-     */
-    public function addGreencheckrecord(Greencheck $greencheckrecords)
-    {
-        $this->greencheckrecords[] = $greencheckrecords;
-
-        return $this;
-    }
-
-    /**
-     * Remove greencheckrecords.
-     *
-     * @param Greencheck $greencheckrecords
-     */
-    public function removeGreencheckrecord(Greencheck $greencheckrecords)
-    {
-        $this->greencheckrecords->removeElement($greencheckrecords);
-    }
-
-    /**
-     * Remove datacenters.
-     *
-     * @param DatacenterHostingprovider $datacenters
-     */
-    public function removeDatacenter(DatacenterHostingprovider $datacenters)
-    {
-        $this->datacenters->removeElement($datacenters);
     }
 
     public function setEntity(Hostingprovider $hp)

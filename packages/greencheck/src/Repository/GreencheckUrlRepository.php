@@ -2,15 +2,21 @@
 
 namespace TGWF\Greencheck\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Persistence\ManagerRegistry;
 use TGWF\Greencheck\Entity\GreencheckUrl;
 
 /**
  * GreencheckUrlRepository.
  */
-class GreencheckUrlRepository extends EntityRepository
+class GreencheckUrlRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, GreencheckUrl::class);
+    }
+
     /**
      * Check if the given url is compensated.
      *

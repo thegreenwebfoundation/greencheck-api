@@ -59,3 +59,15 @@ services:
     App\Queue\GreencheckLogProcessor:
         tags:
             - { name: 'enqueue.topic_subscriber' }
+
+    # Sitecheck service
+    TGWF\Greencheck\Repository\GreencheckUrlRepository: ~
+    TGWF\Greencheck\Repository\GreencheckIpRepository: ~
+    TGWF\Greencheck\Repository\GreencheckAsRepository: ~
+    TGWF\Greencheck\Repository\GreencheckTldRepository: ~
+
+    TGWF\Greencheck\Sitecheck\Cache:
+        arguments: ["%greencheck%"]
+
+    TGWF\Greencheck\Sitecheck\Logger: ~
+    TGWF\Greencheck\Sitecheck: ~

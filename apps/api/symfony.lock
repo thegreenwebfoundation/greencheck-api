@@ -222,6 +222,9 @@
     "phpseclib/phpseclib": {
         "version": "2.0.23"
     },
+    "phpstan/phpstan": {
+        "version": "0.12.14"
+    },
     "predis/predis": {
         "version": "v1.1.1"
     },

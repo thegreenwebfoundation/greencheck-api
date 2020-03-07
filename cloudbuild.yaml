@@ -10,6 +10,14 @@ steps:
       - "bash"
       - "-c"
       - "./wait-for db:3306 -- ./runtests.sh"
+  - name: "docker/compose:1.23.2"
+    args:
+      - "run"
+      - "web"
+      - "bash"
+      - "-c"
+      - "./runphpstan.sh"
+
 
 images:
   - "gcr.io/$PROJECT_ID/greencheck"

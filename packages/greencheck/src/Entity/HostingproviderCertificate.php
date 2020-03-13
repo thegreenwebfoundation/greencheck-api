@@ -40,7 +40,7 @@ class HostingproviderCertificate
     protected $url;
 
     /**
-     * @var date
+     * @var \DateTimeInterface
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="valid_from", type="date")
@@ -48,7 +48,7 @@ class HostingproviderCertificate
     protected $valid_from;
 
     /**
-     * @var date
+     * @var \DateTimeInterface
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="valid_to", type="date")

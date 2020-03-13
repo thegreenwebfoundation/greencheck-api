@@ -3,6 +3,8 @@
 namespace TGWF\Greencheck\Repository;
 
 
+use TGWF\Greencheck\Entity\GreencheckIp;
+
 /**
  * GreencheckIpRepository.
  *
@@ -14,7 +16,7 @@ interface GreencheckIpRepositoryInterface
      *
      * @param string $ip
      *
-     * @return array|null
+     * @return GreencheckIp|null
      */
-    public function checkIp($ip);
+    public function checkIp($ip): ?GreencheckIp;
 }

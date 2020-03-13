@@ -13,9 +13,9 @@ trait GreencheckIpTrait
      *
      * @param string $ip
      *
-     * @return array|null
+     * @return GreencheckIp|null
      */
-    public function checkIp($ip)
+    public function checkIp($ip): ?GreencheckIp
     {
         $ipDecimal = GreencheckIp::convertIpPresentationToDecimal($ip);
 

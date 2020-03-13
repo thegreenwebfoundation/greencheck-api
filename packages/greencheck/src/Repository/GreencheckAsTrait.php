@@ -3,7 +3,7 @@
 
 namespace TGWF\Greencheck\Repository;
 
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\QueryBuilder;
 use TGWF\Greencheck\Entity\GreencheckAs;
 
 trait GreencheckAsTrait

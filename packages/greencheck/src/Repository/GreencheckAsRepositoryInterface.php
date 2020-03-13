@@ -17,7 +17,7 @@ interface GreencheckAsRepositoryInterface
      *
      * @param int $as
      *
-     * @return array|null
+     * @return GreencheckAs|null
      */
     public function checkAs(int $as): ?GreencheckAs;
 }

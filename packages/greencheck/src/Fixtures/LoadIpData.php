@@ -7,12 +7,13 @@ use Doctrine\Persistence\ObjectManager;
 
 use TGWF\Greencheck\Entity\GreencheckIp;
 use TGWF\Greencheck\Entity\GreencheckAs;
+use TGWF\Greencheck\Entity\Hostingprovider;
 
 class LoadIpData implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $hostingprovider = new \TGWF\Greencheck\Entity\Hostingprovider();
+        $hostingprovider = new Hostingprovider();
         $hostingprovider->setCountrydomain('NL');
         $hostingprovider->setNaam('Groene Hosting');
         $hostingprovider->setWebsite('http://www.groenehosting.nl');
@@ -30,7 +31,7 @@ class LoadIpData implements FixtureInterface
 
         $manager->persist($ip);
 
-        $hostingprovider = new \TGWF\Greencheck\Entity\Hostingprovider();
+        $hostingprovider = new Hostingprovider();
         $hostingprovider->setCountrydomain('NL');
         $hostingprovider->setNaam('Xs4all');
         $hostingprovider->setWebsite('http://www.xs4all.nl');
@@ -72,10 +73,7 @@ class LoadIpData implements FixtureInterface
         
         $manager->persist($ip);
         
-        /**
-         * @todo this needs to move to LoadAsData, and get a reference to the xs4all hostingprovider
-         * @var GreencheckAs
-         */
+        // @todo this needs to move to LoadAsData, and get a reference to the xs4all hostingprovider
         $as = new GreencheckAs();
         $as->setAsn(3265);
         $as->setActive(true);
@@ -83,11 +81,8 @@ class LoadIpData implements FixtureInterface
 
         $manager->persist($as);
 
-        /**
-         * Store ipv6 data
-         * @var [type]
-         */
-        $hostingprovider = new \TGWF\Greencheck\Entity\Hostingprovider();
+        // Store ipv6 data
+        $hostingprovider = new Hostingprovider();
         $hostingprovider->setCountrydomain('NL');
         $hostingprovider->setNaam('Netcompany');
         $hostingprovider->setWebsite('http://www.netcompany.nl');

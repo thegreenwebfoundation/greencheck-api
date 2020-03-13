@@ -122,12 +122,11 @@ class Cache
     /**
      * @todo Inject these dependencies in the constructor instead
      *
-     * @param $cachetype
+     * @param string $cachetype
      * @return ApcCache|MemcacheCache|RedisCache
      */
-    public function getCacheDriver($cachetype)
+    public function getCacheDriver(string $cachetype)
     {
-
         if ('memcache' == $cachetype) {
             $memcache = new \Memcache();
             $memcache->connect($this->getMemcacheHost(), 11211);
@@ -172,18 +171,12 @@ class Cache
         $this->disabled = true;
     }
 
-    /**
-     * @return bool
-     */
-    public function isDisabled()
+    public function isDisabled(): bool
     {
         return $this->disabled;
     }
 
-    /**
-     * @param $key
-     */
-    public function resetCache($key)
+    public function resetCache(string $key)
     {
         if (isset($this->cache[$key])) {
             $cache = $this->cache[$key];
@@ -193,7 +186,7 @@ class Cache
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @param null $cache
      */
     public function setCache($key, $cache = null)
@@ -223,9 +216,9 @@ class Cache
     }
 
     /**
-     * @param $cache
-     * @param $key
-     * @param $data
+     * @param string $cache
+     * @param string $key
+     * @param mixed $data
      */
     public function setItem($cache, $key, $data)
     {

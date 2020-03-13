@@ -6,10 +6,10 @@ class DnsFetcher
 {
 
     /**
-     * @param $url
+     * @param string $url
      * @return array
      */
-    public function getIpAddressesForUrl($url)
+    public function getIpAddressesForUrl(string $url): array
     {
         // Initialize as false
         $result = [];

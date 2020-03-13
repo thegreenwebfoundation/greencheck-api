@@ -61,7 +61,7 @@ class Hostingprovider implements \ArrayAccess
     protected $countrydomain;
 
     /**
-     * @var string
+     * @var bool
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="customer", type="boolean", nullable=false)
@@ -249,7 +249,7 @@ class Hostingprovider implements \ArrayAccess
      *
      * @param bool $customer
      */
-    public function setCustomer($customer)
+    public function setCustomer($customer): void
     {
         $this->customer = $customer;
     }
@@ -259,7 +259,7 @@ class Hostingprovider implements \ArrayAccess
      *
      * @return bool
      */
-    public function getCustomer()
+    public function getCustomer(): bool
     {
         return $this->customer;
     }

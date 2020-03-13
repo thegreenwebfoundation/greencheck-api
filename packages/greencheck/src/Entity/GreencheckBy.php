@@ -34,7 +34,7 @@ class GreencheckBy
     private $datum;
 
     /**
-     * @var int
+     * @var string
      *
      * @ORM\Column(name="checked_by", type="string",length=40, nullable=false)
      */
@@ -94,7 +94,7 @@ class GreencheckBy
     /**
      * Set checkedBy.
      *
-     * @param int $checkedBy
+     * @param string $checkedBy
      */
     public function setCheckedBy($checkedBy)
     {
@@ -104,7 +104,7 @@ class GreencheckBy
     /**
      * Get checkedBy.
      *
-     * @return int
+     * @return string
      */
     public function getCheckedBy()
     {

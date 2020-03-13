@@ -2,4 +2,4 @@ cd packages/greencheck
 
 composer install
 
-./bin/phpstan analyse src --level=2
+./bin/phpstan analyse src --level=3

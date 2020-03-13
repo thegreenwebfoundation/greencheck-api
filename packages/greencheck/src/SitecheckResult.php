@@ -78,7 +78,7 @@ class SitecheckResult
      * Setup the sitecheck result object.
      *
      * @param string $url
-     * @param string $ip
+     * @param array $ip
      * @throws \Exception
      */
     public function __construct($url, $ip)

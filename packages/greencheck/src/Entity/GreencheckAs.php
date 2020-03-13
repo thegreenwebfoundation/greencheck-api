@@ -39,7 +39,7 @@ class GreencheckAs
     private $asn;
 
     /**
-     * @var int
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      * @Gedmo\Versioned

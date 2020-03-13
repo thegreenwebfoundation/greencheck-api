@@ -23,16 +23,13 @@ class GreencheckClearCacheListenerCommand extends Command
      */
     private $predis;
 
-    public function __construct($name = null, KernelInterface $kernel, Client $client)
+    public function __construct($name = 'tgwf:greencheck:clearcache:listener', KernelInterface $kernel, Client $client)
     {
         parent::__construct($name);
         $this->kernel = $kernel;
         $this->predis = $client;
     }
 
-    /**
-     * Configure the command.
-     */
     protected function configure()
     {
         $this
@@ -40,18 +37,11 @@ class GreencheckClearCacheListenerCommand extends Command
             ->setDescription('Listens for clearcache field and then clears the greencheck cache');
     }
 
-    /**
-     * Execute the command.
-     *
-     * @param InputInterface  $input  Input
-     * @param OutputInterface $output Output
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('Checking cache clear flag');
 
-        $clearcache = $this->predis->get('tgwf_reset_cache');
-        if (1 == $clearcache) {
+        if ($this->predis->get('tgwf_reset_cache') === 1) {
             $output->writeln('Cache clear flag is set, clearing ...');
 
             $command = $this->getApplication()->find('tgwf:greencheck:clearcache');
@@ -62,13 +52,14 @@ class GreencheckClearCacheListenerCommand extends Command
             ];
 
             $input = new ArrayInput($arguments);
-            $returnCode = $command->run($input, $output);
+            $command->run($input, $output);
 
             $output->writeln('Deleting Cache clear flag ...');
             $this->predis->del('tgwf_reset_cache');
             $output->writeln('Everything done.');
-        } else {
-            $output->writeln('Flag not set');
+            return;
         }
+
+        $output->writeln('Flag not set');
     }
 }

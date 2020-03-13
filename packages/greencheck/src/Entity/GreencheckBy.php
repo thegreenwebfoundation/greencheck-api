@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * TGWF\GreencheckAdminBundle\Entity\Greencheck.
  *
  * @ORM\Table(name="greencheck_by",indexes={
- *  @ORM\Index(name="datum", columns={"datum"}),
+ *  @ORM\Index(name="greencheck_by_datum", columns={"datum"}),
  *  @ORM\Index(name="checked_through", columns={"checked_through"}),
  *  @ORM\Index(name="checked_by", columns={"checked_by"})
  *  }

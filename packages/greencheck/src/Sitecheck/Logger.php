@@ -3,8 +3,7 @@
 
 namespace TGWF\Greencheck\Sitecheck;
 
-
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use TGWF\Greencheck\Entity\Greencheck;
 use TGWF\Greencheck\Entity\GreencheckIp;
 use TGWF\Greencheck\SitecheckResult;
@@ -12,20 +11,15 @@ use TGWF\Greencheck\SitecheckResult;
 class Logger
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $entityManager;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * Log the request to the logtable, for clientlist and statistics.
-     *
-     * @param SitecheckResult $result
-     */
     public function logResult(SitecheckResult $result)
     {
         $match = $result->getMatch();

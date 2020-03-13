@@ -82,10 +82,11 @@ class Aschecker
                 }
             }
             $results = count($result);
-            if (1 == $results) {
+            if (1 == $results && isset($as)) {
                 return $result[$as];
             }
             if ($results > 1) {
+                $ipranges = [];
                 foreach ($result as $as) {
                     $range = explode('/', $as['iprange']);
                     $iprange = $range[1];

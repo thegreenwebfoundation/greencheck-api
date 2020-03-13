@@ -1,12 +1,12 @@
 greencheck:
   db:
-    driver: pdo_mysql
-    host: db
-    user: root
+    driver: pdo_pgsql
+    host: 127.0.0.1
+    user: postgres
     password:
-    dbname: circle_test
+    dbname: tgwf_test
   redis:
-    host: redis
+    host: 127.0.0.1
   memcache:
     host: localhost
   cachetime: 7200 # Standard cachetime is 2 hours

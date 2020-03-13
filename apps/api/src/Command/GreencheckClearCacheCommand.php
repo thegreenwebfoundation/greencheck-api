@@ -17,29 +17,23 @@ use TGWF\Greencheck\Sitecheck;
 class GreencheckClearCacheCommand extends Command
 {
     /**
-     * @var ParameterBagInterface
-     */
-    private $params;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-    /**
      * @var KernelInterface
      */
     private $kernel;
 
+    /**
+     * @var Sitecheck
+     */
+    private $sitecheck;
+
     public function __construct(
         $name = null,
-        ParameterBagInterface $params,
-        EntityManagerInterface $entityManager,
-        KernelInterface $kernel
+        KernelInterface $kernel,
+        Sitecheck $sitecheck
     ) {
         parent::__construct($name);
-        $this->params = $params;
-        $this->entityManager = $entityManager;
         $this->kernel = $kernel;
+        $this->sitecheck = $sitecheck;
     }
 
     /**
@@ -60,21 +54,7 @@ class GreencheckClearCacheCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $config = $this->params->get('greencheck');
-        $em = $this->entityManager;
-
-        // Setup the cache
-        $this->cache = new Sitecheck\Cache($config);
-        $this->cache->setCache('default');
-
-        // @todo inject these in constructor
-        $this->greencheckUrlRepository = $em->getRepository("TGWF\Greencheck\Entity\GreencheckUrl");
-        $this->greencheckIpRepository = $em->getRepository("TGWF\Greencheck\Entity\GreencheckIp");
-        $this->greencheckAsRepository = $em->getRepository("TGWF\Greencheck\Entity\GreencheckAs");
-        $this->greencheckTldRepository = $em->getRepository("TGWF\Greencheck\Entity\GreencheckTld");
-
-        $this->checker = new Sitecheck($this->greencheckUrlRepository, $this->greencheckIpRepository, $this->greencheckAsRepository, $this->greencheckTldRepository, $this->cache, new Sitecheck\Logger($this->entityManager), 'api');
-        $this->checker->disableLog();
+        $this->sitecheck->disableLog();
 
         $output->writeln('Clearing doctrine cache');
 
@@ -87,12 +67,12 @@ class GreencheckClearCacheCommand extends Command
             '--env' => $this->kernel->getEnvironment(),
         ];
 
-        $input = new ArrayInput($arguments);
-        $returnCode = $command->run($input, $output);
+        $commandInput = new ArrayInput($arguments);
+        $command->run($commandInput, $output);
 
         //Cleanup all result cache entries in the database
         $output->writeln('Clearing greencheck result cache');
-        $cache = $this->checker->getCache('result');
+        $cache = $this->sitecheck->getCache('result');
         $cache->flushAll();
 
         /*

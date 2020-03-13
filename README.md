@@ -6,7 +6,7 @@ In this repo you can find the source code for the API and checking code that the
 
 Following [Simon Brown's C4 model](http://c4model.com/) this repo includes the API server code in `apps/api`, along with the green check worker code in `packages/greencheck`.
 
-![API](./img/containers-api.jpg)
+![API](./docs/img/containers-api.jpg)
 
 # Apps - API Server at [api.thegreenwebfoundation.org](http://api.thegreenwebfoundation.org/)
 
@@ -15,7 +15,7 @@ In `/apps/api` is the code served to you when you visit http://api.thegreenwebfo
 
 When requests come in, symfony accepts and validates the request, and creates a job for enqeueue to service with a worker.
 
-![API](./img/components-api-server.jpg)
+![API](./docs/img/components-api-server.jpg)
 
 
 See the [project readme](apps/api/Readme.md) for further installation and deployment instructions.
@@ -25,7 +25,7 @@ See the [project readme](apps/api/Readme.md) for further installation and deploy
 In `packages/greencheck` is the library used for carrying out checks against the Green Web Foundation Database. Workers take jobs in a RabbitMQ queue, and call the greencheck code to return the result quickly, before passing the result, RPC-style to the original calling code in symfony API server.
 
 
-![API](./img/components-api-worker.jpg)
+![API](./docs/img/components-api-worker.jpg)
 
 # Packages - public suffix
 

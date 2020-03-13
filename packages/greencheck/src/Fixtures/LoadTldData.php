@@ -2,8 +2,8 @@
 
 namespace TGWF\Greencheck\Fixtures;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 use TGWF\Greencheck\Entity\GreencheckTld;
 

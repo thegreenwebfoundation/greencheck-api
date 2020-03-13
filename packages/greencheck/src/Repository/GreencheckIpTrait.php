@@ -3,6 +3,7 @@
 
 namespace TGWF\Greencheck\Repository;
 
+use Doctrine\ORM\QueryBuilder;
 use TGWF\Greencheck\Entity\GreencheckIp;
 
 trait GreencheckIpTrait
@@ -18,12 +19,13 @@ trait GreencheckIpTrait
     {
         $ipDecimal = GreencheckIp::convertIpPresentationToDecimal($ip);
 
+        /** @var QueryBuilder $qb */
         $qb = $this->createQueryBuilder('i');
 
         // Don't use parameters as they will quote the ip as string and then the query won't work
         $query = $qb->where($qb->expr()->lte('i.ipStartLong', $ipDecimal))
             ->andWhere($qb->expr()->gte('i.ipEindLong', $ipDecimal))
-            ->andWhere('i.active = 1')
+            ->andWhere($qb->expr()->eq('i.active', 'true'))
             ->orderBy('i.ipEindLong')
             ->getQuery();
         $query->enableResultCache(3600);

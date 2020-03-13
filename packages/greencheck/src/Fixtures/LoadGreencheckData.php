@@ -2,12 +2,11 @@
 
 namespace TGWF\Greencheck\Fixtures;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 use TGWF\Greencheck\Entity\Greencheck;
 use TGWF\Greencheck\Entity\GreencheckIp;
-use TGWF\Greencheck\Entity\GreencheckBy;
 
 class LoadGreencheckData implements FixtureInterface
 {

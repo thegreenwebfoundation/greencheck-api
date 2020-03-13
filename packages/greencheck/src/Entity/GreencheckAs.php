@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * TGWF\GreencheckAdminBundle\Entity\GreencheckAs.
  *
  * @Gedmo\Loggable
- * @ORM\Table(name="greencheck_as",indexes={@ORM\Index(name="asn", columns={"asn"})})
+ * @ORM\Table(name="greencheck_as",indexes={@ORM\Index(name="greencheck_as_asn", columns={"asn"})})
  * @ORM\Entity(repositoryClass="TGWF\Greencheck\Repository\GreencheckAsRepository")
  */
 class GreencheckAs

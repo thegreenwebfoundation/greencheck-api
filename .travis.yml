@@ -1,0 +1,18 @@
+language: php
+php:
+  - '7.3'
+dist: bionic
+env:
+  - TGWF_CONFIG_FILE_PATH=/config.ci.mysql.yml
+  - TGWF_CONFIG_FILE_PATH=/config.ci.postgres.yml
+services:
+  - mysql
+  - redis
+  - postgresql
+script:
+  - sh ./scripts/greencheck-runphpstan.sh
+  - sh ./scripts/greencheck-runtests.sh
+before_install:
+  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - mysql -e 'CREATE DATABASE tgwf_test;'
+  - psql -c 'create database tgwf_test;' -U postgres

@@ -3,6 +3,7 @@
 
 namespace TGWF\Greencheck\Repository;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use TGWF\Greencheck\Entity\GreencheckAs;
 
 trait GreencheckAsTrait
@@ -16,10 +17,11 @@ trait GreencheckAsTrait
      */
     public function checkAs(int $as): ?GreencheckAs
     {
-        $qb = $this->createQueryBuilder('i');
-        $query = $qb
-            ->where($qb->expr()->eq('i.asn', ':as'))
-            ->andWhere('i.active = 1')
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = $this->createQueryBuilder('i');
+        $query = $queryBuilder
+            ->where($queryBuilder->expr()->eq('i.asn', ':as'))
+            ->andWhere($queryBuilder->expr()->eq('i.active','true'))
             ->setParameters(['as' => $as])
             ->getQuery();
         $query->enableResultCache(3600);

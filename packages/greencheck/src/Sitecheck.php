@@ -469,7 +469,7 @@ class Sitecheck
             }
         }
 
-        return $result;
+        return null;
     }
 
     /**

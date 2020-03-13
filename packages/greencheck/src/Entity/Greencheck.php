@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * TGWF\GreencheckAdminBundle\Entity\Greencheck.
  *
  * @ORM\Table(name="greencheck",indexes={
- *  @ORM\Index(name="green", columns={"green"}),
- *  @ORM\Index(name="url", columns={"url"}),
- *  @ORM\Index(name="datum", columns={"datum"}),
+ *  @ORM\Index(name="greencheck_idx_green", columns={"green"}),
+ *  @ORM\Index(name="greencheck_idx_url", columns={"url"}),
+ *  @ORM\Index(name="greencheck_idx_datum", columns={"datum"}),
  *  }
  * )
  * @ORM\Entity

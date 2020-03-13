@@ -40,7 +40,7 @@ class HostingproviderCertificate
     protected $url;
 
     /**
-     * @var date
+     * @var \DateTimeInterface
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="valid_from", type="date")
@@ -48,7 +48,7 @@ class HostingproviderCertificate
     protected $valid_from;
 
     /**
-     * @var date
+     * @var \DateTimeInterface
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="valid_to", type="date")
@@ -113,7 +113,7 @@ class HostingproviderCertificate
     /**
      * Set valid_from.
      *
-     * @param \DateTime $validFrom
+     * @param \DateTimeInterface $validFrom
      *
      * @return self
      */
@@ -127,7 +127,7 @@ class HostingproviderCertificate
     /**
      * Get valid_from.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidFrom()
     {
@@ -137,7 +137,7 @@ class HostingproviderCertificate
     /**
      * Set valid_to.
      *
-     * @param \DateTime $validTo
+     * @param \DateTimeInterface $validTo
      *
      * @return self
      */
@@ -151,7 +151,7 @@ class HostingproviderCertificate
     /**
      * Get valid_to.
      *
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
     public function getValidTo()
     {

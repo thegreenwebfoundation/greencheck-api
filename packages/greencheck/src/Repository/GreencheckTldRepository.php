@@ -16,7 +16,7 @@ class GreencheckTldRepository extends EntityRepository implements GreencheckTldR
     /**
      * Get all domain tld's we have data for.
      *
-     * @return string
+     * @return array
      */
     public function getTLDsWithData(): array
     {

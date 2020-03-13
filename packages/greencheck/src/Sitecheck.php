@@ -2,14 +2,13 @@
 
 namespace TGWF\Greencheck;
 
-use TGWF\Greencheck\Repository\GreencheckAsRepository;
+use TGWF\Greencheck\Entity\GreencheckAs;
+use TGWF\Greencheck\Entity\GreencheckIp;
 use TGWF\Greencheck\Repository\GreencheckAsRepositoryInterface;
-use TGWF\Greencheck\Repository\GreencheckIpRepository;
 use TGWF\Greencheck\Repository\GreencheckIpRepositoryInterface;
-use TGWF\Greencheck\Repository\GreencheckTldRepository;
 use TGWF\Greencheck\Repository\GreencheckTldRepositoryInterface;
-use TGWF\Greencheck\Repository\GreencheckUrlRepository;
 use TGWF\Greencheck\Repository\GreencheckUrlRepositoryInterface;
+use TGWF\Greencheck\Sitecheck\Aschecker;
 use TGWF\Greencheck\Sitecheck\Cache;
 use TGWF\Greencheck\Sitecheck\DnsFetcher;
 use TGWF\Greencheck\Sitecheck\Logger;
@@ -99,7 +98,7 @@ class Sitecheck
     protected $greencheckAsRepository;
 
     /**
-     * @var
+     * @var Aschecker
      */
     protected $aschecker;
 
@@ -130,7 +129,7 @@ class Sitecheck
         $this->calledFrom = $calledfrom;
 
         $this->validator = new Validator();
-        if (null == $dnsFetcher) {
+        if (null === $dnsFetcher) {
             $dnsFetcher = new DnsFetcher();
         }
         $this->dnsFetcher = $dnsFetcher;
@@ -335,9 +334,9 @@ class Sitecheck
      *
      * @param string $url
      *
-     * @return string|false
+     * @return array
      */
-    public function getIpForUrl($url)
+    public function getIpForUrl($url): array
     {
         if ($this->validator->isUrlAValidPublicIpAddress($url)) {
             $ip = $url;
@@ -379,14 +378,12 @@ class Sitecheck
             $hostname = $this->getHostByName($url);
 
             $ip = $hostname['ip'];
-            if (false != $ip && $this->validator->isValidIpAddressForType($ip, '4')) {
+            $this->ipForUrl[$url]['ipv4'] = false;
+            if (false !== $ip && $this->validator->isValidIpAddressForType($ip, '4')) {
                 $this->ipForUrl[$url]['ipv4'] = $ip;
-            } else {
-                $this->ipForUrl[$url]['ipv4'] = false;
             }
 
-            $ipv6 = $hostname['ipv6'];
-            $this->ipForUrl[$url]['ipv6'] = $ipv6;
+            $this->ipForUrl[$url]['ipv6'] = $hostname['ipv6'];
         }
 
         return $this->ipForUrl[$url];
@@ -425,19 +422,19 @@ class Sitecheck
      *
      * @param string $url
      *
-     * @return array|null
+     * @return GreencheckIp|null
      */
-    public function checkIp($url)
+    public function checkIp($url): ?GreencheckIp
     {
         $ip = $this->getIpForUrl($url);
-        if (false !== $ip['ipv4']) {
+        if ($ip['ipv4'] !== false) {
             $result = $this->greencheckIpRepository->checkIp($ip['ipv4']);
             if ($result !== null) {
                 return $result;
             }
         }
 
-        if (false !== $ip['ipv6']) {
+        if ($ip['ipv6'] !== false) {
             $result = $this->greencheckIpRepository->checkIp($ip['ipv6']);
         }
 
@@ -453,9 +450,9 @@ class Sitecheck
      *
      * @param string $url
      *
-     * @return array|null
+     * @return GreencheckAs|null
      */
-    public function checkAs($url)
+    public function checkAs($url): ?GreencheckAs
     {
         $as = $this->getAsForUrl($url);
 
@@ -479,24 +476,24 @@ class Sitecheck
      *
      * @return array
      */
-    public function getAsForUrl($url)
+    public function getAsForUrl($url): array
     {
         $aschecker = $this->getAsChecker();
 
         // Get the ip adress for this url
         $ip = $this->getIpForUrl($url);
-        if (false !== $ip['ipv4']) {
+        if ($ip['ipv4'] !== false) {
             return $aschecker->getAsForIpv4($ip['ipv4']);
         }
 
-        if (false !== $ip['ipv6']) {
+        if ($ip['ipv6'] !== false) {
             return $aschecker->getAsForIpv6($ip['ipv6']);
         }
 
-        return false; // This should not happen
+        return []; // This should not happen
     }
 
-    public function getAsChecker()
+    public function getAsChecker(): Sitecheck\Aschecker
     {
         if ($this->aschecker === null) {
             $this->aschecker = new Sitecheck\Aschecker($this->cache);
@@ -508,22 +505,22 @@ class Sitecheck
     /**
      * Disable the logging of checks.
      */
-    public function disableLog()
+    public function disableLog(): void
     {
         $this->logChecks = false;
     }
 
-    public function disableCache()
+    public function disableCache(): void
     {
         $this->cache->disableCache();
     }
 
-    public function resetCache($key)
+    public function resetCache($key): void
     {
         $this->cache->resetCache($key);
     }
 
-    public function setCache($key, $cache = null)
+    public function setCache($key, $cache = null): void
     {
         $this->cache->setCache($key, $cache);
     }
@@ -541,14 +538,14 @@ class Sitecheck
     /**
      * Update the sitecheckresult with a hostingprovider enttiy, log the result and cache the result.
      *
-     * @param [type] $result      [description]
-     * @param [type] $matchtext   [description]
-     * @param [type] $matchtype   [description]
-     * @param [type] $matchobject [description]
+     * @param SitecheckResult $result
+     * @param string $matchtext
+     * @param string $matchtype
+     * @param object $matchobject
      *
      * @return SitecheckResult
      */
-    private function updateResult($result, $matchtext, $matchtype, $matchobject)
+    private function updateResult($result, $matchtext, $matchtype, $matchobject): SitecheckResult
     {
         // Need an entity and not a proxy object for serializing in the cache
         $hp = $matchobject->getHostingprovider();

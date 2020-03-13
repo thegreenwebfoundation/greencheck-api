@@ -49,37 +49,14 @@ class SitecheckResult
      *
      * @var int
      */
-    private $idHostingProvider = null;
+    private $idHostingProvider;
 
     /**
      * Hosting provider.
      *
      * @var Hostingprovider
      */
-    private $hostingProvider = null;
-
-    /**
-     * Is this result powered by a green energy provider.
-     *
-     * @var bool
-     */
-    private $poweredby = false;
-
-    /**
-     * Energy provider.
-     *
-     * @todo remove?
-     *
-     * @var
-     */
-    private $energyProvider;
-
-    /**
-     * Organisation name for energy output.
-     *
-     * @var string
-     */
-    private $organisation;
+    private $hostingProvider;
 
     /**
      * Ip belonging to the checked url.
@@ -95,13 +72,14 @@ class SitecheckResult
      */
     private $matchtype = [];
 
+    /** @var array */
     private $calledfrom;
 
     /**
      * Setup the sitecheck result object.
      *
      * @param string $url
-     * @param $ip
+     * @param array $ip
      * @throws \Exception
      */
     public function __construct($url, $ip)
@@ -113,11 +91,11 @@ class SitecheckResult
 
     /**
      * Rgister on what was matched.
-     * @param $id
-     * @param $type
+     * @param string $id
+     * @param string $type
      * @param string $identifier
      */
-    public function setMatch($id, $type, $identifier = '')
+    public function setMatch($id, $type, $identifier = ''): void
     {
         $this->matchtype = ['id' => $id, 'type' => $type, 'identifier' => $identifier];
     }
@@ -160,11 +138,6 @@ class SitecheckResult
         return $this->checkedAt;
     }
 
-    /**
-     * Get the checked url.
-     *
-     * @return \DateTime
-     */
     public function setCheckedAt($date)
     {
         $this->checkedAt = $date;
@@ -281,73 +254,16 @@ class SitecheckResult
     }
 
     /**
-     * Is the company of the checked url powered by a green energy provider?
-     *
-     * @return bool
+     * @param array $called
      */
-    public function isPoweredBy()
-    {
-        return $this->poweredby;
-    }
-
-    /**
-     * @param $provider
-     * @param $organisation
-     */
-    public function setPoweredBy($provider, $organisation)
-    {
-        $this->poweredby = true;
-        $this->energyProvider = $provider;
-        $this->organisation = $organisation;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getEnergyProviderId()
-    {
-        if ($this->isPoweredBy()) {
-            return $this->energyProvider->getId();
-        }
-
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getEnergyProvider()
-    {
-        if ($this->isPoweredBy()) {
-            return $this->energyProvider;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return bool|string
-     */
-    public function getOrganisation()
-    {
-        if ($this->isPoweredBy()) {
-            return $this->organisation;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param $called
-     */
-    public function setCalledFrom($called)
+    public function setCalledFrom(array $called): void
     {
         $this->calledfrom = $called;
     }
 
     /**
-     * @param $key
-     * @return bool
+     * @param string $key
+     * @return bool|array
      */
     public function getCalledFrom($key)
     {

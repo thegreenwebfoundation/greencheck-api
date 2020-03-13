@@ -33,10 +33,10 @@ class Aschecker
     }
 
     /**
-     * @param $asoutput
-     * @return mixed
+     * @param array $asoutput
+     * @return array
      */
-    private function parseAsOutput($asoutput)
+    private function parseAsOutput($asoutput): array
     {
         $data = explode('|', str_replace('"', '', $asoutput['txt']));
         $as = explode(' ', trim($data[0])); // It's possible to have multiple as numbers in the return, store them in an array
@@ -52,12 +52,12 @@ class Aschecker
     }
 
     /**
-     * @param $output
-     * @param $ip
-     * @param $type
-     * @return array|mixed|null
+     * @param array $output
+     * @param string $ip
+     * @param string $type
+     * @return array|null
      */
-    private function getAsFromOutput($output, $ip, $type)
+    private function getAsFromOutput($output, $ip, $type): ?array
     {
         $result = [];
         if (is_countable($output) && count($output) > 0) {
@@ -109,7 +109,7 @@ class Aschecker
      *
      * @return array
      */
-    public function getAsForIpv4($ip)
+    public function getAsForIpv4($ip): array
     {
         if ($result = $this->getCache('aslookups')->fetch(sha1('as'.$ip))) {
             $result['cached'] = true;
@@ -153,7 +153,7 @@ class Aschecker
     }
 
     /**
-     * @param $ip
+     * @param string $ip
      * @return string
      */
     public static function ipv4ToReverseDnsAdressNotation($ip)
@@ -164,7 +164,7 @@ class Aschecker
     }
 
     /**
-     * @param $ipaddr
+     * @param string $ipaddr
      * @return string
      */
     public static function ipv6ToReverseDnsAdressNotation($ipaddr)

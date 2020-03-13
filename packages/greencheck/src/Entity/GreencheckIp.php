@@ -27,7 +27,7 @@ class GreencheckIp
     private $id;
 
     /**
-     * @var int
+     * @var string (decimal format)
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="ip_start", type="decimal", precision=39, nullable=false)
@@ -42,7 +42,7 @@ class GreencheckIp
     protected $ipStart;
 
     /**
-     * @var int
+     * @var string (decimal format)
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="ip_eind", type="decimal", precision=39, nullable=false)
@@ -57,7 +57,7 @@ class GreencheckIp
     protected $ipEind;
 
     /**
-     * @var int
+     * @var bool
      *
      * @Gedmo\Versioned
      * @ORM\Column(name="active", type="boolean", nullable=false)
@@ -140,7 +140,7 @@ class GreencheckIp
     /**
      * Set ipStartLong.
      *
-     * @param int $ipStartLong
+     * @param string $ipStartLong
      *
      * @return GreencheckIp
      */
@@ -154,7 +154,7 @@ class GreencheckIp
     /**
      * Get ipStartLong.
      *
-     * @return int
+     * @return string
      */
     public function getIpStartLong()
     {
@@ -164,7 +164,7 @@ class GreencheckIp
     /**
      * Set ipEindLong.
      *
-     * @param int $ipEindLong
+     * @param string $ipEindLong
      *
      * @return GreencheckIp
      */
@@ -178,7 +178,7 @@ class GreencheckIp
     /**
      * Get ipEindLong.
      *
-     * @return int
+     * @return string
      */
     public function getIpEindLong()
     {

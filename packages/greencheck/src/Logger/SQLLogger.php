@@ -14,7 +14,7 @@ class SQLLogger implements SQLLoggerInterface
     /**
      * {@inheritdoc}
      */
-    public function startQuery($sql, array $params = null, array $types = null)
+    public function startQuery($sql, array $params = null, array $types = null): void
     {
         $this->queries[] = [$sql, $params, $types];
         /*echo $sql . PHP_EOL;
@@ -28,24 +28,19 @@ class SQLLogger implements SQLLoggerInterface
         }*/
     }
 
-    public function getQueries()
+    public function getQueries(): array
     {
         return $this->queries;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function stopQuery()
+    public function stopQuery(): void
     {
     }
 
     /**
      * Clear the queries array to start over.
-     *
-     * @return [type] [description]
      */
-    public function clearQueries()
+    public function clearQueries(): void
     {
         $this->queries = [];
     }

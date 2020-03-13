@@ -9,6 +9,7 @@ class IpRangeValidator extends ConstraintValidator
 {
     public function validate($ip, Constraint $constraint)
     {
+        /** @var IpRange $constraint */
         if (false == $ip->isValidIpRange()) {
             $this->context->addViolation($constraint->message, ['%ipstart%' => $ip->getIpStart(), '%ipeind%' => $ip->getIpEind()]);
 

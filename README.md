@@ -2,6 +2,7 @@
 
 In this repo you can find the source code for the API and checking code that the Green Web Foundation servers use to check the power a domain uses.
 
+[![Build Status](https://travis-ci.com/thegreenwebfoundation/thegreenwebfoundation.svg?branch=master)](https://travis-ci.com/thegreenwebfoundation/thegreenwebfoundation)
 ## Overview
 
 Following [Simon Brown's C4 model](http://c4model.com/) this repo includes the API server code in `apps/api`, along with the green check worker code in `packages/greencheck`.

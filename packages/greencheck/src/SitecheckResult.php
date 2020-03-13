@@ -72,6 +72,7 @@ class SitecheckResult
      */
     private $matchtype = [];
 
+    /** @var array */
     private $calledfrom;
 
     /**
@@ -253,16 +254,16 @@ class SitecheckResult
     }
 
     /**
-     * @param string $called
+     * @param array $called
      */
-    public function setCalledFrom(string $called): void
+    public function setCalledFrom(array $called): void
     {
         $this->calledfrom = $called;
     }
 
     /**
      * @param string $key
-     * @return bool|string
+     * @return bool|array
      */
     public function getCalledFrom($key)
     {

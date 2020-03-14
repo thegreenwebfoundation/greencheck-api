@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
+        "php": "^7.3",
         "doctrine/orm": "~2.3",
         "gedmo/doctrine-extensions": "~2.3",
         "laminas/laminas-dependency-plugin": "^1.0",

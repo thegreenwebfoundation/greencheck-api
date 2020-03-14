@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f89be57e96701370342a194eb54d7d5",
+    "content-hash": "fb9dc4e1a31ad93cd5477c6e7c1eac03",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -6470,10 +6470,10 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/publicsuffix",
-                "reference": "5d530dd2a258955eef7bd1a03b63a0860bd9b1c9"
+                "reference": "14aa8610ad7bcfbc6fe01ebbd7ead0607422dd17"
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": "^7.3"
             },
             "suggest": {
                 "predis/predis": "Needed for the redis rulestore storage"
@@ -7558,7 +7558,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.2.0"
+        "php": "^7.3.0"
     },
     "platform-dev": []
 }

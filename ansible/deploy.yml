@@ -22,7 +22,7 @@
     composer_home_path: /opt/composer
     composer_home_owner: root
     composer_home_group: root
-    project_composer_binary: "/usr/local/bin/composer --working-dir={{ deploy_helper.new_release_path }}/apps/api"
+    project_composer_binary: "/usr/local/bin/composer"
     restart_supervisor: false
 
     project_environment:
@@ -31,8 +31,8 @@
       APP_DEBUG: 0
 
     project_shared_children:
-      - path: "apps/api/var/log"
-        src: "apps/api/var/log"
+      - path: "var/log"
+        src: "var/log"
 
     project_unwanted_items:
       - .git
@@ -40,9 +40,9 @@
     project_has_composer: yes
 
     project_post_build_commands:
-      - "mkdir -p apps/api/var/cache/prod"
-      - "mkdir -p apps/api/var/log"
-      - "chmod 777 -R apps/api/var"
+      - "mkdir -p var/cache/prod"
+      - "mkdir -p var/log"
+      - "chmod 777 -R var"
 
     project_finalize: true
 

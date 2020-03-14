@@ -18,11 +18,11 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../../packages/publicsuffix"
+            "url": "./packages/publicsuffix"
         },
         {
             "type": "path",
-            "url": "../../packages/greencheck"
+            "url": "./packages/greencheck"
         }
     ],
     "minimum-stability" : "stable",

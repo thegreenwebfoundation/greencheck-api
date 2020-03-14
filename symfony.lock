@@ -20,8 +20,11 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "1.0",
-            "ref": "cb4152ebcadbe620ea2261da1a1c5a9b8cea7672"
-        }
+            "ref": "a2759dd6123694c8d901d0ec80006e044c2e6457"
+        },
+        "files": [
+            "config/routes/annotations.yaml"
+        ]
     },
     "doctrine/cache": {
         "version": "v1.8.0"
@@ -39,13 +42,19 @@
         "version": "v2.9.2"
     },
     "doctrine/doctrine-bundle": {
-        "version": "1.6",
+        "version": "2.0",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "1.6",
-            "ref": "453e89b78ded666f351617baca5ae40d20622351"
-        }
+            "version": "2.0",
+            "ref": "a9f2463b9f73efe74482f831f03a204a41328555"
+        },
+        "files": [
+            "config/packages/doctrine.yaml",
+            "config/packages/prod/doctrine.yaml",
+            "src/Entity/.gitignore",
+            "src/Repository/.gitignore"
+        ]
     },
     "doctrine/event-manager": {
         "version": "v1.0.0"
@@ -101,7 +110,7 @@
             "repo": "github.com/symfony/recipes-contrib",
             "branch": "master",
             "version": "0.9",
-            "ref": "a025d0d707c6a7fefb8903f1c9844700dc69ee9d"
+            "ref": "c6ec89b63f963d10ad0d7a7bea170359c119c8bc"
         },
         "files": [
             "config/packages/enqueue.yaml",
@@ -126,7 +135,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "2.2",
-            "ref": "81dee417d2cc60cd1c9d6208dff2ec22a1103e93"
+            "ref": "cc05ab6abf6894bddb9bbd6a252459010ebe040b"
         },
         "files": [
             ".php_cs.dist"
@@ -373,25 +382,36 @@
         "version": "v4.2.4"
     },
     "symfony/monolog-bundle": {
-        "version": "3.1",
+        "version": "3.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "3.1",
-            "ref": "18ebf5a940573a20de06f9c4060101eeb438cf3d"
-        }
+            "version": "3.3",
+            "ref": "877bdb4223245783d00ed1f7429aa7ebc606d914"
+        },
+        "files": [
+            "config/packages/dev/monolog.yaml",
+            "config/packages/prod/monolog.yaml",
+            "config/packages/test/monolog.yaml"
+        ]
     },
     "symfony/options-resolver": {
         "version": "v4.2.4"
     },
     "symfony/phpunit-bridge": {
-        "version": "4.1",
+        "version": "4.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "4.1",
-            "ref": "0e548dd90adba18fabd4ef419b14d361fe4d6c74"
-        }
+            "version": "4.3",
+            "ref": "6d0e35f749d5f4bfe1f011762875275cd3f9874f"
+        },
+        "files": [
+            ".env.test",
+            "bin/phpunit",
+            "phpunit.xml.dist",
+            "tests/bootstrap.php"
+        ]
     },
     "symfony/polyfill-ctype": {
         "version": "v1.10.0"
@@ -426,8 +446,13 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "4.2",
-            "ref": "5374e24d508ba8fd6ba9eb15170255fdb778316a"
-        }
+            "ref": "683dcb08707ba8d41b7e34adb0344bfd68d248a7"
+        },
+        "files": [
+            "config/packages/prod/routing.yaml",
+            "config/packages/routing.yaml",
+            "config/routes.yaml"
+        ]
     },
     "symfony/security-core": {
         "version": "v4.2.9"
@@ -459,13 +484,17 @@
         ]
     },
     "symfony/validator": {
-        "version": "4.1",
+        "version": "4.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "4.1",
-            "ref": "0cdc982334f45d554957a6167e030482795bf9d7"
-        }
+            "version": "4.3",
+            "ref": "d902da3e4952f18d3bf05aab29512eb61cabd869"
+        },
+        "files": [
+            "config/packages/test/validator.yaml",
+            "config/packages/validator.yaml"
+        ]
     },
     "symfony/var-dumper": {
         "version": "v4.2.4"

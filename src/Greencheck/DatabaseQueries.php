@@ -3,14 +3,14 @@
 namespace App\Greencheck;
 
 use Doctrine\DBAL\Connection;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
 class DatabaseQueries
 {
     /** @var Connection */
     private $connection;
 
-    public function __construct(RegistryInterface $doctrine)
+    public function __construct(ManagerRegistry $doctrine)
     {
         $this->connection = $doctrine->getConnection();
     }
@@ -206,6 +206,7 @@ class DatabaseQueries
                        ORDER BY countryname
                        ";
         $rows = $this->connection->fetchAll($query);
+        $tlds = [];
         foreach ($rows as $row) {
             $tlds[$row['iso']] = $row;
         }
@@ -282,6 +283,7 @@ class DatabaseQueries
                  ORDER BY datum DESC 
                  LIMIT 52";
         $result = $this->connection->fetchAll($query);
+        $data = [];
         foreach ($result as $row) {
             if (is_null($row['datum'])) {
                 continue;

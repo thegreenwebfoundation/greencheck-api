@@ -47,9 +47,6 @@
             "ref": "453e89b78ded666f351617baca5ae40d20622351"
         }
     },
-    "doctrine/doctrine-cache-bundle": {
-        "version": "1.3.5"
-    },
     "doctrine/event-manager": {
         "version": "v1.0.0"
     },
@@ -172,7 +169,10 @@
             "branch": "master",
             "version": "1.6",
             "ref": "4cd9b2466b6064c057d63b2075e210bbae4d460f"
-        }
+        },
+        "files": [
+            "config/packages/liuggio_stats_d_client.yaml"
+        ]
     },
     "liuggio/statsd-php-client": {
         "version": "v1.0.18"
@@ -234,6 +234,9 @@
     "psr/container": {
         "version": "1.0.0"
     },
+    "psr/event-dispatcher": {
+        "version": "1.0.0"
+    },
     "psr/http-client": {
         "version": "1.0.0"
     },
@@ -289,20 +292,17 @@
         "version": "v4.2.4"
     },
     "symfony/console": {
-        "version": "3.3",
+        "version": "4.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "3.3",
-            "ref": "0fa049c19069a65f52c1c181d64be3de672c1504"
+            "version": "4.4",
+            "ref": "ea8c0eda34fda57e7d5cd8cbd889e2a387e3472c"
         },
         "files": [
             "bin/console",
             "config/bootstrap.php"
         ]
-    },
-    "symfony/debug": {
-        "version": "v4.2.4"
     },
     "symfony/dependency-injection": {
         "version": "v4.2.4"
@@ -341,18 +341,19 @@
         ]
     },
     "symfony/framework-bundle": {
-        "version": "4.2",
+        "version": "4.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "4.2",
-            "ref": "9aafbc8edf7558dfe213e9d51d0217cbd78acc5a"
+            "version": "4.4",
+            "ref": "23ecaccc551fe2f74baf613811ae529eb07762fa"
         },
         "files": [
             "config/bootstrap.php",
             "config/packages/cache.yaml",
             "config/packages/framework.yaml",
             "config/packages/test/framework.yaml",
+            "config/routes/dev/framework.yaml",
             "config/services.yaml",
             "public/index.php",
             "src/Controller/.gitignore",

@@ -23,30 +23,34 @@
         {
             "type": "path",
             "url": "./packages/greencheck"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/arendjantetteroo/StatsDClientBundle"
         }
     ],
     "minimum-stability" : "stable",
     "require": {
         "php": "^7.2.0",
         "doctrine/data-fixtures": "1.4.*",
-        "doctrine/doctrine-bundle": "~1.2",
+        "doctrine/doctrine-bundle": "~2.0",
         "doctrine/orm": "~2.3",
-        "enqueue/amqp-ext": "^0.9.2",
-        "enqueue/amqp-lib": "^0.9.8",
-        "enqueue/enqueue-bundle": "^0.9.8",
-        "enqueue/fs": "^0.9.8",
+        "enqueue/amqp-ext": "^0.10",
+        "enqueue/amqp-lib": "^0.10",
+        "enqueue/enqueue-bundle": "^0.10",
+        "enqueue/fs": "^0.10",
         "gedmo/doctrine-extensions": "~2.3",
-        "liuggio/statsd-client-bundle": "*@dev",
+        "liuggio/statsd-client-bundle": "dev-symfony5-support",
         "predis/predis": "1.1.*",
         "sentry/sentry-symfony": "^3.0",
-        "symfony/console": "^4.0",
-        "symfony/dotenv": "^4.0",
+        "symfony/console": "^5.0",
+        "symfony/dotenv": "^5.0",
         "symfony/flex": "^1.1",
-        "symfony/framework-bundle": "^4.0",
+        "symfony/framework-bundle": "^5.0",
         "symfony/monolog-bundle": "~3.3",
         "symfony/polyfill-php73": "^1.11",
         "symfony/web-server-bundle": "^4.0",
-        "symfony/yaml": "^4.0",
+        "symfony/yaml": "^5.0",
         "thegreenwebfoundation/greencheck": "*@dev",
         "thegreenwebfoundation/publicsuffix": "*@dev"
     },
@@ -83,7 +87,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "4.4.*"
+            "require": "5.0.*"
         }
     }
 }

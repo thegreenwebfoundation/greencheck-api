@@ -181,7 +181,7 @@ class DefaultController extends AbstractController
 
         if ('' == $url) {
             // Url in get request? Some strange hackery needed for Symfony2
-            return $this->handleEmptyUrl($request, $url);
+            return $this->handleEmptyUrl($request);
         }
 
         $result = $this->doGreencheck($url, $ip, $browser, 'api');

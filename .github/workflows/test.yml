@@ -9,7 +9,7 @@ jobs:
       - name: Install dependencies
         uses: php-actions/composer@v1
         with:
-          command: composer install -d packages/greencheck
+          command: install -d packages/greencheck
       - name: PHPStan
         uses: docker://oskarstark/phpstan-ga:with-extensions
         with:

@@ -10,4 +10,5 @@ return [
     Sentry\SentryBundle\SentryBundle::class => ['all' => true],
     Enqueue\Bundle\EnqueueBundle::class => ['all' => true],
     Liuggio\StatsDClientBundle\LiuggioStatsDClientBundle::class => ['all' => true],
+    Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
 ];

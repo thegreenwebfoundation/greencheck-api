@@ -120,7 +120,7 @@ h1, h2, h3, h4, h5, h6 { text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15); }
   background-image: linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
   position: relative;
   list-style: none;
-  margin: 0 0 16px 0;
+  margin: 0 0 16px;
   padding: 0;
   float: left;
   width: 100%;
@@ -238,7 +238,7 @@ h1, h2, h3, h4, h5, h6 { text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15); }
 #post-nav .post-next { float: right; width: 50%; text-align: right; }
 #post-nav .post-next a { float: right; }
 
-#comments-nav { clear: both; margin: 0 0 1.5em 0; *display: inline-block; }
+#comments-nav { clear: both; margin: 0 0 1.5em; *display: inline-block; }
 #comments-nav:after { content: "\0020"; display: block; height: 0; clear: both; visibility: hidden; overflow: hidden; }
 #comments-nav .comments-previous { float: left; width: 50%; }
 #comments-nav .comments-next { float: right; width: 50%; text-align: right; }
@@ -303,7 +303,7 @@ figure.gallery-item figcaption { display: none; }
 .gform_wrapper .gform_heading { width: 100%; margin-bottom: 1.5em; }
 .gform_wrapper .gsection .gfield_label, .gform_wrapper h2.gsection_title, .gform_wrapper h3.gform_title { font-size: 1.5em; font-weight: 400; }
 .gform_wrapper h3.gform_title { margin-top: 0; }
-.gform_wrapper .top_label .gfield_label { margin: 6px 0 0 0; }
+.gform_wrapper .top_label .gfield_label { margin: 6px 0 0; }
 .gform_wrapper .top_label input.medium { padding-right: 0; }
 .gform_wrapper .left_label .gfield_label,
 .gform_wrapper .right_label .gfield_label { margin: 10px 10px 0 0; }
@@ -378,7 +378,7 @@ figure.gallery-item figcaption { display: none; }
   font-size: 0.9em;
   font-weight: 400;
   letter-spacing: 0;
-  margin: 0 0 6px 0;
+  margin: 0 0 6px;
 }
 .gform_wrapper .gfield_checkbox li input[type=checkbox],
 .gform_wrapper .gfield_radio li input[type=radio],
@@ -396,8 +396,8 @@ img.ui-datepicker-trigger { vertical-align: middle; }
 .gform_wrapper .gf_step span.gf_step_number { font-family: sans-serif; }
 .gform_wrapper .gsection  { border-bottom: 1px dashed #ddd; }
 .gform_wrapper .gform_page_footer { border-top: 1px dashed #ddd; }
-.gform_wrapper .gform_footer { margin: 6px 0 0 0; padding: 0; }
-.gform_wrapper .gform_footer.right_label, .gform_wrapper .gform_footer.left_label { margin: 6px 0 0 0; padding: 0 0 0 31%; }
+.gform_wrapper .gform_footer { margin: 6px 0 0; padding: 0; }
+.gform_wrapper .gform_footer.right_label, .gform_wrapper .gform_footer.left_label { margin: 6px 0 0; padding: 0 0 0 31%; }
 .gform_footer input.button { *padding: 8px 16px; }
 .gform_wrapper .gform_edit_link { display: none; }
 .gform_wrapper .validation_error { font-size: 1em; font-weight: 400; padding: 0.8em; margin-bottom: 1.5em; background: #fbe3e4; color: #8a1f11; border: 2px solid #fbc2c4; }
@@ -455,7 +455,7 @@ img.ui-datepicker-trigger { vertical-align: middle; }
 .alignleft { margin: 0 1.5em 1.5em 0; float: left; }
 .alignright { margin: 0 0 1.5em 1.5em; float: right; }
 
-.wp-caption { border: 1px solid #ddd; text-align: center; background: #eee; padding: 14px 10px 6px 10px; margin: 15px 10px; }
+.wp-caption { border: 1px solid #ddd; text-align: center; background: #eee; padding: 14px 10px 6px; margin: 15px 10px; }
 .wp-caption-text { margin: 0; }
 
 

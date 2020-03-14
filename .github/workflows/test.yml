@@ -7,10 +7,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
-        uses: zhuorg/composer@v1
+        uses: arendjantetteroo/composer@v1
         with:
-          command: install
-          args: -d packages/greencheck
+          command: install -d packages/greencheck
       - name: PHPStan
         uses: docker://oskarstark/phpstan-ga:with-extensions
         with:

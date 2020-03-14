@@ -11,8 +11,3 @@ php ./tests/doctrine-cli.php orm:schema-tool:create
 
 # run the test command
 ./bin/phpunit -c phpunit.xml.dist
-
-# Run api tests
-cd ../..
-composer install
-./bin/phpunit

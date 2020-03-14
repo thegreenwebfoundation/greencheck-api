@@ -9,10 +9,15 @@ services:
   - mysql
   - redis
   - postgresql
+  - rabbitmq
 script:
   - sh ./scripts/greencheck-runphpstan.sh
   - sh ./scripts/greencheck-runtests.sh
+  - sh ./scripts/api-runtests.sh
 before_install:
+  - sudo apt-get update
+  - sudo apt install librabbitmq-dev
+  - printf "\n" | pecl install amqp
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - mysql -e 'CREATE DATABASE tgwf_test;'
   - psql -c 'create database tgwf_test;' -U postgres

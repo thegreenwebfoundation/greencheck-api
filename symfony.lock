@@ -294,6 +294,9 @@
             "config/packages/sentry.yaml"
         ]
     },
+    "symfony/browser-kit": {
+        "version": "v5.0.5"
+    },
     "symfony/cache": {
         "version": "v4.2.4"
     },
@@ -316,11 +319,17 @@
             "config/bootstrap.php"
         ]
     },
+    "symfony/css-selector": {
+        "version": "v5.0.5"
+    },
     "symfony/dependency-injection": {
         "version": "v4.2.4"
     },
     "symfony/doctrine-bridge": {
         "version": "v4.2.4"
+    },
+    "symfony/dom-crawler": {
+        "version": "v5.0.5"
     },
     "symfony/dotenv": {
         "version": "v4.2.4"

@@ -6,7 +6,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install dependencies
+        uses: php-actions/composer@v1
+        with:
+          command: composer install -d packages/greencheck
       - name: PHPStan
-        uses: docker://oskarstark/phpstan-ga
+        uses: docker://oskarstark/phpstan-ga:with-extensions
         with:
           args: analyse packages/greencheck/src/ --level=3

@@ -1,6 +1,7 @@
 language: php
 php:
   - '7.3'
+  - '7.4'
 dist: bionic
 env:
   - TGWF_CONFIG_FILE_PATH=/config.ci.mysql.yml

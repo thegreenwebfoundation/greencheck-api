@@ -1,5 +1,5 @@
 enqueue:
     default:
-        transport: 'null:'
+        #transport: 'null:'
         client:
             traceable_producer: true

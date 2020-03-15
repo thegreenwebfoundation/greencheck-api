@@ -6,8 +6,8 @@
 
 function getConfigFilePath ()
 {
-    if (getenv('TGWF_CONFIG_FILE_PATH')) {
-        return getenv('TGWF_CONFIG_FILE_PATH');
+    if (getenv('DB')) {
+        return '/config.ci.'.getenv('DB').'.yml';
     }
     return '/config.yml';
 }

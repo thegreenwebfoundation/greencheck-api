@@ -7,7 +7,7 @@
 
   vars:
     project_root: "/var/www/api.thegreenwebfoundation.org"
-    project_git_repo: "git@github.com:thegreenwebfoundation/thegreenwebfoundation.git"
+    project_git_repo: "git@github.com:thegreenwebfoundation/greencheck-api.git"
     project_deploy_strategy: git
     project_version: "master"
     project_local_path: "../"

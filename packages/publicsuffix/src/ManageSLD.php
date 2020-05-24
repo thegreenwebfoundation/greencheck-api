@@ -19,7 +19,7 @@ namespace TGWF\PublicSuffix;
  *
  */
  
-define('PUBLIC_SUFFIX_LIST', 'http://mxr.mozilla.org/mozilla-central/source/netwerk/dns/effective_tld_names.dat?raw=1');
+define('PUBLIC_SUFFIX_LIST', 'https://publicsuffix.org/list/effective_tld_names.dat');
 
 define('PUBLIC_SUFFIX_EXCEPTION_FLAG', 1);
 define('PUBLIC_SUFFIX_CATCH_ALL_FLAG', 2);

@@ -1,0 +1,96 @@
+{
+    "name": "thegreenwebfoundation/api",
+    "description": "The Green Web Foundation API ",
+    "authors": [
+        {"name": "Arend-Jan Tetteroo", "email": "aj@arendjantetteroo.nl"}
+    ],
+    "license": "Apache-2.0",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/publicsuffix"
+        },
+        {
+            "type": "path",
+            "url": "./packages/greencheck"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/arendjantetteroo/StatsDClientBundle"
+        }
+    ],
+    "minimum-stability" : "stable",
+    "require": {
+        "php": "^7.3.0",
+        "doctrine/data-fixtures": "1.4.*",
+        "doctrine/doctrine-bundle": "~2.0",
+        "doctrine/orm": "~2.3",
+        "enqueue/amqp-ext": "^0.10",
+        "enqueue/amqp-lib": "^0.10",
+        "enqueue/enqueue-bundle": "^0.10",
+        "enqueue/fs": "^0.10",
+        "gedmo/doctrine-extensions": "~2.3",
+        "liuggio/statsd-client-bundle": "dev-symfony5-support",
+        "predis/predis": "1.1.*",
+        "sentry/sentry-symfony": "^3.0",
+        "symfony/console": "^5.0",
+        "symfony/dotenv": "^5.0",
+        "symfony/flex": "^1.1",
+        "symfony/framework-bundle": "^5.0",
+        "symfony/monolog-bundle": "~3.3",
+        "symfony/polyfill-php73": "^1.11",
+        "symfony/web-server-bundle": "^4.0",
+        "symfony/yaml": "^5.0",
+        "thegreenwebfoundation/greencheck": "*@dev",
+        "thegreenwebfoundation/publicsuffix": "*@dev"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.14",
+        "phpstan/phpstan": "^0.12.14",
+        "roave/security-advisories": "dev-master",
+        "symfony/browser-kit": "5.0.*",
+        "symfony/css-selector": "5.0.*",
+        "symfony/maker-bundle": "^1.14",
+        "symfony/phpunit-bridge": "^4.0",
+        "symfony/profiler-pack": "^1.0"
+    },
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true,
+        "discard-changes": true
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": true,
+            "require": "5.0.*"
+        }
+    }
+}

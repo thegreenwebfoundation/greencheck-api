@@ -1,0 +1,52 @@
+---
+- name: Deploy the TGWF api on prod
+  hosts:
+   - prod
+  remote_user: "deploy"
+  become: no
+
+  vars:
+    project_root: "/var/www/api.thegreenwebfoundation.org"
+    project_git_repo: "git@github.com:thegreenwebfoundation/thegreenwebfoundation.git"
+    project_deploy_strategy: git
+    project_version: "master"
+    project_local_path: "../"
+    project_has_npm: false
+    project_has_bower: false
+    project_npm_modules_path: node_modules
+    project_copy_previous_composer_vendors: false
+    project_copy_previous_npm_modules: false
+    project_copy_previous_bower_components: false
+    composer_path: /usr/local/bin/composer
+    composer_path_env: true
+    composer_home_path: /opt/composer
+    composer_home_owner: root
+    composer_home_group: root
+    project_composer_binary: "/usr/local/bin/composer"
+    restart_supervisor: false
+
+    project_environment:
+      SYMFONY_ENV: "prod"
+      APP_ENV: "prod"
+      APP_DEBUG: 0
+
+    project_shared_children:
+      - path: "var/log"
+        src: "var/log"
+
+    project_unwanted_items:
+      - .git
+
+    project_has_composer: yes
+
+    project_post_build_commands:
+      - "mkdir -p var/cache/prod"
+      - "mkdir -p var/log"
+      - "chmod 777 -R var"
+
+    project_finalize: true
+
+  roles:
+    - f500.project_deploy
+
+  post_tasks:

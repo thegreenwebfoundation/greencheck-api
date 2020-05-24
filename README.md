@@ -5,21 +5,50 @@ In this repo you can find the source code for the API and checking code that the
 [![Build Status](https://travis-ci.com/thegreenwebfoundation/thegreenwebfoundation.svg?branch=master)](https://travis-ci.com/thegreenwebfoundation/thegreenwebfoundation)
 ## Overview
 
-Following [Simon Brown's C4 model](http://c4model.com/) this repo includes the API server code in `apps/api`, along with the green check worker code in `packages/greencheck`.
+Following [Simon Brown's C4 model](http://c4model.com/) this repo includes the API server code, along with the green check worker code in `packages/greencheck`.
 
 ![API](./docs/img/containers-api.jpg)
 
-# Apps - API Server at [api.thegreenwebfoundation.org](http://api.thegreenwebfoundation.org/)
+# Apps - API Server at [api.thegreenwebfoundation.org](https://api.thegreenwebfoundation.org/)
 
-
-In `/apps/api` is the code served to you when you visit http://api.thegreenwebfoundation.org.
+This repository contains the code served to you when you visit http://api.thegreenwebfoundation.org.
 
 When requests come in, symfony accepts and validates the request, and creates a job for enqeueue to service with a worker.
 
 ![API](./docs/img/components-api-server.jpg)
 
+The greenweb api application running on https://api.thegreenwebfoundation.org
 
-See the [project readme](apps/api/Readme.md) for further installation and deployment instructions.
+This provides a backend for the browser extensions and the website on https://www.thegreenwebfoundation.org
+
+This needs:
+
+- an enqueue adapter, like fs for development, amqp for production
+- php 7.3
+- nginx
+- redis for greencheck library
+- ansible and ssh access to server for deploys
+
+Currently runs on symfony 5.x
+
+To start development:
+
+- Clone the monorepo `git clone git@github.com:thegreenwebfoundation/thegreenwebfoundation.git`
+- Configure .env.local (copy from .env) for a local mysql database
+- `composer install`
+- `bin/console server:run`
+- check the fixtures in packages/greencheck/src/TGWF/Fixtures to setup a fixture database
+
+To deploy:
+
+- `bin/deploy`
+
+To test locally:
+
+- Go to http://127.0.0.1:8000 for homepage
+- Go to http://127.0.0.1:8000/greencheck/www.nu.nl to test www.nu.nl
+- If this keeps loading, everything is correctly setup, Now run `bin/console enqueu:consume` in a seperate terminal to process the checks
+
 
 # Packages - Greencheck
 

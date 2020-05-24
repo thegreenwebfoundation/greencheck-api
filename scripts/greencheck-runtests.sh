@@ -1,3 +1,4 @@
+# Run package tests
 cd packages/greencheck
 
 composer install

@@ -1,18 +1,14 @@
 <?php
-if (!file_exists(__DIR__.'/src')) {
-    exit(0);
-}
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__)
+    ->exclude('var')
+;
 
 return PhpCsFixer\Config::create()
-    ->setRules(array(
-        '@PSR1' => true,
-        '@PSR2' => true,
+    ->setRules([
         '@Symfony' => true,
-        '@Symfony:risky' => true,
-        '@PhpCsFixer' => true,
-        'array_syntax' => array('syntax' => 'short'),
-        'protected_to_private' => false,
-        'void_return' => true
-    ))
-    ->setRiskyAllowed(true)
+        'array_syntax' => ['syntax' => 'short'],
+    ])
+    ->setFinder($finder)
 ;

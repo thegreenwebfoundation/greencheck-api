@@ -55,9 +55,9 @@ class Aschecker
      * @param array $output
      * @param string $ip
      * @param string $type
-     * @return array|null
+     * @return array
      */
-    private function getAsFromOutput($output, $ip, $type): ?array
+    private function getAsFromOutput($output, $ip, $type): array
     {
         $result = [];
         if (is_countable($output) && count($output) > 0) {
@@ -95,8 +95,6 @@ class Aschecker
 
                 return max($ipranges);
             }
-        } else {
-            $result = null;
         }
 
         return $result;

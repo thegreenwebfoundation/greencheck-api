@@ -183,9 +183,6 @@ class Hostingprovider implements \ArrayAccess
      */
     public function setModel($model)
     {
-        if (!in_array($model, [self::MODEL_COMPENSATION, self::MODEL_GREENENERGY])) {
-            throw new \InvalidArgumentException('Invalid model');
-        }
         $this->model = $model;
     }
 

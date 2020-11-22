@@ -1,0 +1,7 @@
+---
+roles:
+- geerlingguy.php
+- geerlingguy.php-versions
+- geerlingguy.redis
+- geerlingguy.certbot
+- geerlingguy.composer

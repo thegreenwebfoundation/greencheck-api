@@ -1,0 +1,136 @@
+server {
+
+    listen "{{ ansible_default_ipv4.address }}":80;
+    server_name api.thegreenwebfoundation.org nbg.api.thegreenwebfoundation.org;
+    access_log /var/log/nginx/api.thegreenwebfoundation.org-access.log api;
+    error_log /var/log/nginx/api.thegreenwebfoundation.org-error.log;
+    root /var/www/api.thegreenwebfoundation.org/current/public;
+
+    location / {
+        # try to serve file directly, fallback to index.php
+        try_files $uri /index.php$is_args$args;
+    }
+
+    location ~ ^/index\.php(/|$) {
+        fastcgi_pass unix:/var/run/php/php7.4-fpm-api.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+
+        fastcgi_cache fcgicache;
+        fastcgi_cache_valid 200 60m;
+        fastcgi_cache_use_stale error timeout updating invalid_header http_500 http_503;
+        fastcgi_cache_min_uses 1;
+        fastcgi_cache_lock on;
+        add_header X-FastCGI-Cache $upstream_cache_status;
+
+        # optionally set the value of the environment variables used in the application
+        fastcgi_param APP_ENV "{{ lookup('env', 'APP_ENV') }}";
+        fastcgi_param APP_SECRET "{{ lookup('env', 'APP_SECRET') }}";
+        fastcgi_param DATABASE_URL "{{ lookup('env', 'DATABASE_URL') }}";
+
+
+        fastcgi_param STATS_D_HOST server.thegreenwebfoundation.org;
+        fastcgi_param STATS_D_PORT 8125;
+        fastcgi_param STATS_D_PROTOCOL udp;
+
+        fastcgi_param ROLLBAR_ACCESS_TOKEN "{{ lookup('env', 'ROLLBAR_ACCESS_TOKEN') }}";
+        fastcgi_param SENTRY_DSN "{{ lookup('env', 'SENTRY_DSN') }}";
+        fastcgi_param ENQUEUE_DSN "{{ lookup('env', 'ENQUEUE_DSN') }}";
+
+
+        # When you are using symlinks to link the document root to the
+        # current version of your application, you should pass the real
+        # application path instead of the path to the symlink to PHP
+        # FPM.
+        # Otherwise, PHP's OPcache may not properly detect changes to
+        # your PHP files (see https://github.com/zendtech/ZendOptimizerPlus/issues/126
+        # for more information).
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+        # Prevents URIs that include the front controller. This will 404:
+        # http://domain.tld/index.php/some-path
+        # Remove the internal directive to allow URIs like this
+        internal;
+    }
+
+    # return 404 for all other php files not matching the front controller
+    # this prevents access to other php files you don't want to be accessible.
+    location ~ \.php$ {
+        return 404;
+    }
+
+
+}
+
+server {
+    listen "{{ ansible_default_ipv4.address }}":443 ssl http2;
+    server_name api.thegreenwebfoundation.org nbg.api.thegreenwebfoundation.org;
+    access_log /var/log/nginx/api.thegreenwebfoundation.org-access.log api;
+    error_log /var/log/nginx/api.thegreenwebfoundation.org-error.log;
+    root /var/www/api.thegreenwebfoundation.org/current/public;
+
+    ssl on;
+    ssl_certificate /etc/letsencrypt/live/thegreenwebfoundation.org-0001/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/thegreenwebfoundation.org-0001/privkey.pem; # managed by Certbot
+    ssl_trusted_certificate /etc/letsencrypt/live/thegreenwebfoundation.org-0001/chain.pem;
+
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+
+    ssl_dhparam /etc/ssl/certs/dhparam.pem;
+
+    location / {
+        # try to serve file directly, fallback to index.php
+        try_files $uri /index.php$is_args$args;
+    }
+
+    location ~ ^/index\.php(/|$) {
+        fastcgi_pass unix:/var/run/php/php7.4-fpm-api.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+
+        fastcgi_param APP_ENV "{{ lookup('env', 'APP_ENV') }}";
+        fastcgi_param APP_SECRET "{{ lookup('env', 'APP_SECRET') }}";
+        fastcgi_param DATABASE_URL "{{ lookup('env', 'DATABASE_URL') }}";
+
+        fastcgi_param STATS_D_HOST "{{ lookup('env', 'STATS_D_HOST') }}";
+        fastcgi_param STATS_D_PORT "{{ lookup('env', 'STATS_D_PORT') }}";
+        fastcgi_param STATS_D_PROTOCOL "{{ lookup('env', 'STATS_D_PROTOCOL') }}";;
+
+        fastcgi_param ROLLBAR_ACCESS_TOKEN "{{ lookup('env', 'ROLLBAR_ACCESS_TOKEN') }}";
+        fastcgi_param SENTRY_DSN "{{ lookup('env', 'SENTRY_DSN') }}";
+        fastcgi_param ENQUEUE_DSN "{{ lookup('env', 'ENQUEUE_DSN') }}";
+
+        fastcgi_cache fcgicache;
+        fastcgi_cache_valid 200 60m;
+        fastcgi_cache_use_stale error timeout updating invalid_header http_500 http_503;
+        fastcgi_cache_min_uses 1;
+        fastcgi_cache_lock on;
+        add_header X-FastCGI-Cache $upstream_cache_status;
+
+        # When you are using symlinks to link the document root to the
+        # current version of your application, you should pass the real
+        # application path instead of the path to the symlink to PHP
+        # FPM.
+        # Otherwise, PHP's OPcache may not properly detect changes to
+        # your PHP files (see https://github.com/zendtech/ZendOptimizerPlus/issues/126
+        # for more information).
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+        # Prevents URIs that include the front controller. This will 404:
+        # http://domain.tld/index.php/some-path
+        # Remove the internal directive to allow URIs like this
+        internal;
+    }
+
+    # return 404 for all other php files not matching the front controller
+    # this prevents access to other php files you don't want to be accessible.
+    location ~ \.php$ {
+        return 404;
+    }
+
+
+}
+

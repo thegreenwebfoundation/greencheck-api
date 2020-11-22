@@ -1,0 +1,9 @@
+[program:greencheck_logger]
+command=/var/www/api.thegreenwebfoundation.org/current/bin/console enqueue:consume --setup-broker --time-limit=now+15minutes default
+numprocs=1
+process_name=%(process_num)s
+directory=/var/www/api.thegreenwebfoundation.org/current
+stdout_logfile=/var/log/greenchecklog_enqueue.log
+autostart=true
+autorestart=true
+user=deploy

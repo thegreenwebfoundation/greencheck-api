@@ -1,0 +1,125 @@
+---
+- name: set up box
+  hosts:
+    - hetzner
+
+  remote_user: deploy
+
+  tasks:
+
+    - name: setup deploy group
+      group:
+        name: deploy
+        state: present
+
+    - name: set up deploy user
+      user:
+        name: deploy
+        shell: /bin/bash
+        groups: deploy,www-data
+        create_home: yes
+        append: yes
+
+
+    - name: add nginx
+      apt:
+        pkg:
+          - nginx
+        state: present
+      become: yes
+
+    - name: add mariadb
+      apt:
+        pkg:
+          - mariadb-server
+        state: present
+      become: yes
+
+    - name: add php dependencies
+      apt:
+        pkg:
+          - php
+          - php-cli
+          - php-fpm
+          - php-json
+          - php-common
+          - php-mysql
+          - php-zip
+          - php-gd
+          - php-mbstring
+          - php-curl
+          - php-xml
+          - php-pear
+          - php-bcmath
+          - php-amqp
+          - php-redis
+          - composer
+
+    - name: make sure supervisor is available
+      apt:
+        pkg:
+          - supervisor
+      become: yes
+
+
+    - name: add nodejs for statsd
+      apt:
+        pkg:
+          - nodejs
+          - npm
+          - build-essential
+        state: present
+      become: yes
+
+
+    - name: set up directory for statsd
+      file:
+        path: /srv/statsd
+        state: directory
+        mode: '0755'
+        owner: deploy
+        group: deploy
+      become: yes
+
+    - name: install statsd from git
+      git:
+        repo: 'https://github.com/statsd/statsd.git'
+        dest: /srv/statsd
+        version: 'v0.9.0'
+        force: yes
+
+    - name: add template for statsd config
+      template:
+        src: templates/statsd.config.js.j2
+        dest: /srv/statsd/localConfig.js
+        owner: deploy
+        group: deploy
+        mode: '0755'
+
+    - name: add template for statsd supervisor job
+      template:
+        src: templates/supervisor.statsd.conf.j2
+        dest: /etc/supervisor/conf.d/statsd.conf
+        owner: root
+        group: root
+        mode: '0755'
+      become: yes
+
+
+    - name: add template for greencheck worker supervisor job
+      template:
+        src: templates/supervisor.greencheck_worker.conf.j2
+        dest: /etc/supervisor/conf.d/greencheck_worker.conf
+        owner: root
+        group: root
+        mode: '0755'
+      become: yes
+
+    - name: add template for greencheck logger supervisor job
+      template:
+        src: templates/supervisor.greencheck_logger.conf.j2
+        dest: /etc/supervisor/conf.d/greencheck_logger.conf
+        owner: root
+        group: root
+        mode: '0755'
+      become: yes

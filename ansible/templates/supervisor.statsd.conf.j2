@@ -1,0 +1,7 @@
+[program:statsd]
+command=/usr/bin/node /srv/statsd/stats.js /srv/statsd/localConfig.js
+process_name=%(program_name)s
+autostart=true
+autorestart=true
+stopsignal=QUIT
+user=www-data

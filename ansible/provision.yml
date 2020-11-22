@@ -4,6 +4,12 @@
     - hetzner
 
   remote_user: deploy
+  vars:
+    api_hostname: nbg-api.thegreenwebfoundation.org
+    api_statsd_server_host: server.thegreenwebfoundation.org
+    api_statsd_server_port: 8125
+
+
 
   tasks:
 
@@ -27,6 +33,14 @@
           - nginx
         state: present
       become: yes
+
+    - name: add certbot
+      apt:
+        pkg:
+          - nginx
+        state: present
+      become: yes
+
 
     - name: add mariadb
       apt:
@@ -123,3 +137,26 @@
         group: root
         mode: '0755'
       become: yes
+
+
+    - name: add config for serving API behind nginx
+      template:
+        src: templates/nginx.api.tgwf.org.conf.j2
+        dest: /etc/nginx/sites-available/api.thegreenwebfoundation.org.conf
+        owner: root
+        group: root
+        mode: '0755'
+      become: yes
+      tags:
+        - wip
+
+    - name: add symlink to active nginx
+      file:
+          src: /etc/nginx/sites-available/api.thegreenwebfoundation.org.conf
+          dest: /etc/nginx/sites-enabled/api.thegreenwebfoundation.org.conf
+          state: link
+          mode: '0755'
+          owner: root
+          group: root
+      become: yes
+

@@ -8,6 +8,7 @@
     api_hostname: nbg-api.thegreenwebfoundation.org
     api_statsd_server_host: server.thegreenwebfoundation.org
     api_statsd_server_port: 8125
+    api_fcgi_cache: greencheck
 
 
 
@@ -160,3 +161,8 @@
           group: root
       become: yes
 
+    - name: Reload nginx service
+      service:
+        name: nginx
+        state: reloaded
+      become: yes

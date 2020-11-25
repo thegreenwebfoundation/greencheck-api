@@ -73,4 +73,18 @@ Vagrant.configure("2") do |config|
 
 
   SHELL
+
+  # these are the deps you'd have on the server itself, we separate them
+  # to make it easier to see where you'd split this into separate 
+  # components running on separate hosts or virtual machines
+  config.vm.provision "shell", inline: <<-SHELL
+  apt-get update
+
+  apt-get install -y redis-server
+  apt-get install -y mariadb-server
+
+  apt-get install rabbitmq-server -y --fix-missing
+
+  SHELL
+
 end

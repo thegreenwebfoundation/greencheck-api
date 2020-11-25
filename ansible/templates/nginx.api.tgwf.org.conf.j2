@@ -1,5 +1,8 @@
+fastcgi_cache_path /tmp/nginx_cache levels=1:2 keys_zone={{ api_fcgi_cache }}:100m inactive=60m;
+fastcgi_cache_key "$scheme$request_method$host$request_uri";
+
 server {
-    server_name {{ api_hostname }};
+    server_name {{ api_hostname }} {{ alternative_hostnames }};
     access_log /var/log/nginx/{{ api_hostname }}-access.log;
     error_log /var/log/nginx/{{ api_hostname }}-error.log;
     root /var/www/{{ api_hostname }}/current/public;
@@ -25,6 +28,14 @@ server {
 
         fastcgi_param SENTRY_DSN {{ lookup('env', 'SENTRY_DSN') }};
         fastcgi_param ENQUEUE_DSN {{ lookup('env', 'ENQUEUE_DSN') }};
+
+
+        fastcgi_cache {{ api_fcgi_cache }};
+        fastcgi_cache_valid 200 60m;
+        fastcgi_cache_use_stale error timeout updating invalid_header http_500 http_503;
+        fastcgi_cache_min_uses 1;
+        fastcgi_cache_lock on;
+        add_header X-FastCGI-Cache $upstream_cache_status;
 
 
         # When you are using symlinks to link the document root to the

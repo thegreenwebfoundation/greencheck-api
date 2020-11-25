@@ -5,7 +5,8 @@
 
   remote_user: deploy
   vars:
-    api_hostname: nbg-api.thegreenwebfoundation.org
+    api_hostname: api.thegreenwebfoundation.org
+    alternative_hostnames: nbg-api.thegreenwebfoundation.org
     api_statsd_server_host: server.thegreenwebfoundation.org
     api_statsd_server_port: 8125
     api_fcgi_cache: greencheck
@@ -148,8 +149,8 @@
         group: root
         mode: '0755'
       become: yes
-      tags:
-        - wip
+      # tags:
+      #   - wip
 
     - name: add symlink to active nginx
       file:
@@ -166,3 +167,22 @@
         name: nginx
         state: reloaded
       become: yes
+
+
+    # - name: Set up graphite deps
+    #   apt:
+    #     pkg:
+    #       - python3-pip
+    #     state: present
+    #   become: yes
+    #   tags:
+    #     - wip
+
+
+    - name: Set up graphite
+      pip:
+        name: graphite
+        executable: pip
+      become: yes
+      tags:
+        - wip

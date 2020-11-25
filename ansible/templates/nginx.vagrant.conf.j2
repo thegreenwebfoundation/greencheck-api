@@ -1,0 +1,63 @@
+fastcgi_cache_path /tmp/nginx_cache levels=1:2 keys_zone=vagrant.local:100m inactive=60m;
+fastcgi_cache_key "$scheme$request_method$host$request_uri";
+
+server {
+    server_name vagrant.local;
+    access_log /var/log/nginx/vagrant.local-access.log;
+    error_log /var/log/nginx/vagrant.local-error.log;
+    root /var/www/vagrant.local/current/public;
+
+    location / {
+        # try to serve file directly, fallback to index.php
+        try_files $uri /index.php$is_args$args;
+    }
+
+    location ~ ^/index\.php(/|$) {
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+
+        # # optionally set the value of the environment variables used in the application
+        # fastcgi_param APP_ENV {{ lookup('env', 'APP_ENV') }};
+        # fastcgi_param APP_SECRET {{ lookup('env', 'APP_SECRET') }};
+        # fastcgi_param DATABASE_URL {{ lookup('env', 'DATABASE_URL') }};
+
+        # fastcgi_param STATS_D_HOST {{ api_statsd_server_host }};
+        # fastcgi_param STATS_D_PORT {{ api_statsd_server_port }};
+        # fastcgi_param STATS_D_PROTOCOL udp;
+
+        # fastcgi_param SENTRY_DSN {{ lookup('env', 'SENTRY_DSN') }};
+        # fastcgi_param ENQUEUE_DSN {{ lookup('env', 'ENQUEUE_DSN') }};
+
+
+        fastcgi_cache vagrant.local;
+        fastcgi_cache_valid 200 60m;
+        fastcgi_cache_use_stale error timeout updating invalid_header http_500 http_503;
+        fastcgi_cache_min_uses 1;
+        fastcgi_cache_lock on;
+        add_header X-FastCGI-Cache $upstream_cache_status;
+
+
+        # When you are using symlinks to link the document root to the
+        # current version of your application, you should pass the real
+        # application path instead of the path to the symlink to PHP
+        # FPM.
+        # Otherwise, PHP's OPcache may not properly detect changes to
+        # your PHP files (see https://github.com/zendtech/ZendOptimizerPlus/issues/126
+        # for more information).
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+        # Prevents URIs that include the front controller. This will 404:
+        # http://domain.tld/index.php/some-path
+        # Remove the internal directive to allow URIs like this
+        internal;
+    }
+
+    # return 404 for all other php files not matching the front controller
+    # this prevents access to other php files you don't want to be accessible.
+    location ~ \.php$ {
+        return 404;
+    }
+
+    listen 80;:
+}

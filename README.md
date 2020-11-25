@@ -47,7 +47,7 @@ To test locally:
 
 - Go to http://127.0.0.1:8000 for homepage
 - Go to http://127.0.0.1:8000/greencheck/www.nu.nl to test www.nu.nl
-- If this keeps loading, everything is correctly setup, Now run `bin/console enqueu:consume` in a seperate terminal to process the checks
+- If this keeps loading, everything is correctly setup, Now run `bin/console enqueue:consume` in a seperate terminal to process the checks
 
 
 # Packages - Greencheck

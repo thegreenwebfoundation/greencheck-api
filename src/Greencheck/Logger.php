@@ -81,7 +81,7 @@ class Logger
         }
         $ip = GreencheckIp::convertIpPresentationToDecimal($ip);
 
-        $this->entityManager->getConnection()->insert("greencheck", [
+        $this->entityManager->getConnection()->insert("greencheck_2020", [
             "id_greencheck" => $match['id'],
             "id_hp" => $result->isHostingProvider() ? $result->getHostingProviderId() : 0,
             "green" => $result->isGreen(),

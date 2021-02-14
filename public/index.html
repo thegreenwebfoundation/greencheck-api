@@ -83,6 +83,49 @@ http://api.thegreenwebfoundation.org/greencheck/www.example.com
   <h2>Jquery example</h2>
   <p>View the source of this webpage to see how you can call the greencheck api service by using jquery</p>
 
+  <h2>Batch API</h2>
+  <p>If you need check more than one domain at a time, use the batch API. </p>
+  <p>Attach a csv file, listing just domain on each line, and you'll receive a CSV file with the results for each domain.</p>
+  <p>
+  For more details see the <a href="https://admin.thegreenwebfoundation.org/api-docs/">new v3 API documentation pages</a>
+  </p>
+
+   <div class='well'>
+
+    <form
+   id="greencheck-bulk"
+   action="http://localhost:9000/api/v2/batch/greencheck"
+   enctype="multipart/form-data"
+   method="post"
+   >
+
+  <dl class="zend_form">
+        <dd id="filename-element">
+          <input type="hidden" name="response_filename" value="tgwf-bulkdownload.csv"  id="filename">
+        </dd>
+
+        <dd id="file-upload">
+          <input
+            type="file"
+            id="urls"
+            name="urls"
+            accept="text/csv">
+        </dd>
+
+        <dt id="submit-label">&nbsp;</dt>
+        <dd id="submit-element">
+          <input type="submit" name="submit" id="submit" value="Submit">
+        </dd>
+    </dl>
+    </form>
+
+  </div>
+
+
+
+
+
+
   <h2>The Green Web add-ons</h2>
   There are add-ons that use this api, available at The Green Web Foundation webiste, called <a href='http://www.thegreenwebfoundation.org/add-ons'>The Green Web</a>.
   It shows you for every website you visit if it is green, and if so the hosting party.

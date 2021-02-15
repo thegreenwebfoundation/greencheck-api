@@ -93,15 +93,15 @@ http://api.thegreenwebfoundation.org/greencheck/www.example.com
    <div class='well'>
 
     <form
-   id="greencheck-bulk"
-   action="https://admin.thegreenwebfoundation.org/api/v2/batch/greencheck"
+   id="greencheck-batch"
+   action="https://admin.thegreenwebfoundation.org/api/v3/batch/greencheck"
    enctype="multipart/form-data"
    method="post"
    >
 
   <dl class="zend_form">
         <dd id="filename-element">
-          <input type="hidden" name="response_filename" value="tgwf-bulkdownload.csv"  id="filename">
+          <input type="hidden" name="response_filename" value="tgwf-batch-download.csv"  id="filename">
         </dd>
 
         <dd id="file-upload">
@@ -114,7 +114,7 @@ http://api.thegreenwebfoundation.org/greencheck/www.example.com
 
         <dt id="submit-label">&nbsp;</dt>
         <dd id="submit-element">
-          <input type="submit" name="submit" id="submit" value="Submit">
+          <input type="submit" name="submit" id="submit" value="Upload file to check.">
         </dd>
     </dl>
     </form>
@@ -135,8 +135,8 @@ http://api.thegreenwebfoundation.org/greencheck/www.example.com
   without the need to code it yourself
   <footer>
     <br /><br />
-    <p style="text-align:center;">Hosted by <a href='http://www.leaseweb.com'>LeaseWeb</a></p>
-    <p style="text-align:center;"><a href='http://www.thegreenwebfoundation.org'>&copy; The Green Web Foundation 2011-2019</a></p>
+    <p style="text-align:center;">Hosted by <a href='http://www.hetzner.com'>Hetzner</a></p>
+    <p style="text-align:center;"><a href='http://www.thegreenwebfoundation.org'>&copy; The Green Web Foundation 2011-2021</a></p>
   </footer>
 </div>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

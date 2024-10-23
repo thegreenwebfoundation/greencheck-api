@@ -1,6 +1,6 @@
 # Green Web Foundation API
 
-### This repository is now archived. If you are looking for the current codebase for the Green Web Foundation platform, [please see the 'admin-portal' repository on github](https://github.com/thegreenwebfoundation/admin-portal/), and its [corresponding documentation site](https://greenweb.readthedocs.io/en/latest/). The rest of the README file is preserved for reference only, and we can not offer any support for it.
+### This repository is now archived. If you are looking for the current codebase for the Green Web Foundation platform, [please see the 'admin-portal' repository on github](https://github.com/thegreenwebfoundation/admin-portal/), and its [corresponding documentation site](https://greenweb.readthedocs.io/en/latest/). If you have any further queries please contact the [Green Web Foundation via the dedicated contact form](https://www.thegreenwebfoundation.org/contact/) - that's the fastest way to get a response. The rest of the README file is preserved for reference only, and the Green Web Foundation can not offer any support this software in this repository.
 
 -----
 

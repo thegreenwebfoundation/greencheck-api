@@ -1,5 +1,10 @@
 # Green Web Foundation API
 
+### This repository is now archived. If you are looking for the current codebase for the Green Web Foundation platform, [please see the 'admin-portal' repository on github](https://github.com/thegreenwebfoundation/admin-portal/), and its [corresponding documentation site](https://greenweb.readthedocs.io/en/latest/). The rest of the README file is preserved for reference only, and we can not offer any support for it.
+
+-----
+
+
 In this repo you can find the source code for the API and checking code that the Green Web Foundation servers use to check the power a domain uses.
 
 [![Build Status](https://travis-ci.com/thegreenwebfoundation/greencheck-api.svg?branch=master)](https://travis-ci.com/thegreenwebfoundation/thegreenwebfoundation)
